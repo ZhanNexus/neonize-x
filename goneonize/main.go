@@ -954,7 +954,7 @@ func IsOnWhatsApp(id *C.char, numbers *C.char) *C.struct_BytesReturn {
 	if len(onWhatsApp) > 0 {
 		return_.IsOnWhatsAppResponse = onWhatsApp
 	} else {
-		return_.Error = "Function returned nothing."
+		return_.Error = proto.String("Function returned nothing.")
 	}
 	return ProtoReturnV3(&return_)
 }
