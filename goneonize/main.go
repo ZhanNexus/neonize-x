@@ -283,15 +283,15 @@ func PinMessage(id *C.char, ChatJIDByte *C.uchar, ChatJIDSize C.int, SenderJIDBy
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
 	}
-	err := proto.Unmarshal(_sender_jid, &sender_jid)
-	if err != nil {
-		fmt.Println("SendMessage: Error unmarshaling JID:", err.Error())
-		return_.Error = proto.String(err.Error())
+	err_message := proto.Unmarshal(_sender_jid, &sender_jid)
+	if err_message != nil {
+		fmt.Println("SendMessage: Error unmarshaling JID:", err_message.Error())
+		return_.Error = proto.String(err_message.Error())
 		return ProtoReturnV3(&return_)
 	}
-	chat = utils.DecodeJidProto(&chat_jid)
-	sender = utils.DecodeJidProto(&sender_jid)
-	messageId = C.GoString(messageID)
+	chat := utils.DecodeJidProto(&chat_jid)
+	sender := utils.DecodeJidProto(&sender_jid)
+	messageId := C.GoString(messageID)
 	messageKey := client.BuildMessageKey(chat, sender, messageId)
 	messageKey.Participant = proto.String(sender.ToNonAD().String())
 	pinInChatMessage := &waE2E.PinInChatMessage{
@@ -302,7 +302,7 @@ func PinMessage(id *C.char, ChatJIDByte *C.uchar, ChatJIDSize C.int, SenderJIDBy
 	message := waE2E.Message{
 		MessageContextInfo: &waE2E.MessageContextInfo{
 			MessageAddOnExpiryType:     waE2E.MessageContextInfo_STATIC.Enum(),
-			MessageAddOnDurationInSecs: proto.Uint32(int(seconds)),
+			MessageAddOnDurationInSecs: proto.Uint32(uint32(seconds)),
 		},
 		PinInChatMessage: pinInChatMessage,
 	}
