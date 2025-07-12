@@ -1778,7 +1778,7 @@ class NewAClient:
             len(chat_buf),
             sender_buf,
             len(sender_buf),
-            message_id,
+            message_id.encode(),
             seconds,
         )
         protobytes = bytes_ptr.contents.get_bytes()
