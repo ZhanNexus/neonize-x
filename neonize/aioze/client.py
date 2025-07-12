@@ -1767,6 +1767,25 @@ class NewAClient:
             raise Exception(model.Error)  # To be replaced with a custom exception
         return model.Jid
 
+    async def pin_message(self, chat_jid: JID, sender_jid: JID, message_id: str, seconds: int):
+        chat_buf = chat_jid.SerializeToString()
+        sender_buf = sender_jid.SerializeToString()
+        bytes_ptr = await self.__client.PinMessage(
+            self.uuid,
+            chat_buf,
+            len(chat_buf),
+            sender_buf,
+            len(sender_buf),
+            message_id,
+            seconds,
+        )
+        protobytes = bytes_ptr.contents.get_bytes()
+        free_bytes(bytes_ptr)
+        model = SendMessageReturnFunction.FromString(protobytes)
+        if model.Error:
+            raise SendMessageError(model.Error)
+        return model.SendResponse
+
     async def leave_group(self, jid: JID) -> str:
         """Leaves a group.
 

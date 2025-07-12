@@ -268,6 +268,55 @@ func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uch
 	return ProtoReturnV3(&return_)
 }
 
+//export PinMessage
+func PinMessage(id *C.char, ChatJIDByte *C.uchar, ChatJIDSize C.int, SenderJIDByte *C.uchar, SenderJIDSize C.int, messageID *C.char, seconds C.int) *C.struct_BytesReturn {
+	
+	client := clients[C.GoString(id)]
+	_chat_jid := getByteByAddr(ChatJIDByte, ChatJIDSize)
+	_sender_jid := getByteByAddr(SenderJIDByte, SenderJIDSize)
+	var chat_jid defproto.JID
+	var sender_jid defproto.JID
+	return_ := defproto.SendMessageReturnFunction{}
+	err := proto.Unmarshal(_chat_jid, &chat_jid)
+	if err != nil {
+		fmt.Println("SendMessage: Error unmarshaling JID:", err.Error())
+		return_.Error = proto.String(err.Error())
+		return ProtoReturnV3(&return_)
+	}
+	err := proto.Unmarshal(_sender_jid, &sender_jid)
+	if err != nil {
+		fmt.Println("SendMessage: Error unmarshaling JID:", err.Error())
+		return_.Error = proto.String(err.Error())
+		return ProtoReturnV3(&return_)
+	}
+	chat = utils.DecodeJidProto(&chat_jid)
+	sender = utils.DecodeJidProto(&sender_jid)
+	messageId = C.GoString(messageID)
+	messageKey := client.BuildMessageKey(chat, sender, messageId)
+	messageKey.Participant = proto.String(sender.ToNonAD().String())
+	pinInChatMessage := &waE2E.PinInChatMessage{
+		Key:               messageKey,
+		Type:              waE2E.PinInChatMessage_PIN_FOR_ALL.Enum(),
+		SenderTimestampMS: proto.Int64(time.Now().UnixMilli()),
+	}
+	message := waE2E.Message{
+		MessageContextInfo: &waE2E.MessageContextInfo{
+			MessageAddOnExpiryType:     waE2E.MessageContextInfo_STATIC.Enum(),
+			MessageAddOnDurationInSecs: proto.Uint32(int(seconds),
+		},
+		PinInChatMessage: pinInChatMessage,
+	}
+	sendresponse, err := client.SendMessage(context.Background(), chat, &message)
+	if err != nil {
+		fmt.Println("SendMessage: Error sending message:", err.Error())
+		return_.Error = proto.String(err.Error())
+		return ProtoReturnV3(&return_)
+	}
+	return_.SendResponse = utils.EncodeSendResponse(sendresponse)
+	return ProtoReturnV3(&return_)
+}
+
+
 //export StopAll
 func StopAll() {
 	for key := range clients {
@@ -902,7 +951,11 @@ func IsOnWhatsApp(id *C.char, numbers *C.char) *C.struct_BytesReturn {
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
 	}
-	return_.IsOnWhatsAppResponse = onWhatsApp
+	if len(onWhatsApp) > 0 {
+		return_.IsOnWhatsAppResponse = onWhatsApp
+	} else {
+		return_.Error = "Function returned nothing."
+	}
 	return ProtoReturnV3(&return_)
 }
 

@@ -66,6 +66,16 @@ if not os.environ.get("SPHINX"):
     gocode.GetLIDFromPN.restype = ctypes.POINTER(Bytes)
     gocode.GetPNFromLID.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
     gocode.GetPNFromLID.restype = ctypes.POINTER(Bytes)
+    gocode.PinMessage.argtypes = [
+        ctypes.c_char_p,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+    ]
+    gocode.PinMessage.restype = ctypes.POINTER(Bytes)
     gocode.Upload.argtypes = [
         ctypes.c_char_p,
         ctypes.c_char_p,
