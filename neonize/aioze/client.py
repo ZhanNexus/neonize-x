@@ -917,7 +917,7 @@ class NewAClient:
             is_webm = True
         elif (mime := mime.split("/"))[0] == "image":
             is_image = True
-        animated = not(is_image)
+        animated = not (is_image)
         if not passthrough and not animated_gif and is_image:
             io_save = BytesIO(sticker)
             stk = auto_sticker(io_save) if crop else original_sticker(io_save)
@@ -925,7 +925,9 @@ class NewAClient:
             # io_save.seek(0)
         elif not passthrough:
             animated = True
-            sticker, saved_exif = await convert_to_sticker(sticker, name, packname, enforce_not_broken, animated_gif, is_webm)
+            sticker, saved_exif = await convert_to_sticker(
+                sticker, name, packname, enforce_not_broken, animated_gif, is_webm
+            )
             if saved_exif:
                 io_save = BytesIO(sticker)
             else:
@@ -933,7 +935,7 @@ class NewAClient:
                 io_save = BytesIO()
         else:
             if not is_webp:
-                raise Exception ("File is not a webp, which is required for passthrough.")
+                raise Exception("File is not a webp, which is required for passthrough.")
         if not (passthrough or saved_exif):
             stk.save(
                 io_save,

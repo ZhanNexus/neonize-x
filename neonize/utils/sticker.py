@@ -3,9 +3,10 @@ import os
 import tempfile
 import uuid
 
-from .ffmpeg import AFFmpeg, FFmpeg
+from .ffmpeg import AFFmpeg
 from .iofile import TemporaryFile
 from .platform import is_executable_installed
+
 
 def add_exif(name: str = "", packname: str = "") -> bytes:
     """
@@ -33,8 +34,10 @@ def add_exif(name: str = "", packname: str = "") -> bytes:
     exif = exif[:14] + exif_length.to_bytes(4, "little") + exif[18:]
     return exif
 
+
 def webpmux_is_installed():
     return is_executable_installed("webpmux")
+
 
 max_sticker_size = 512000
 webpmux_is_available = False
@@ -42,7 +45,10 @@ if webpmux_is_installed():
     max_sticker_size = 712000
     webpmux_is_available = True
 
-async def convert_to_sticker(file: bytes, name="", packname="", enforce_not_broken=False, animated_gif=False, is_webm=False):
+
+async def convert_to_sticker(
+    file: bytes, name="", packname="", enforce_not_broken=False, animated_gif=False, is_webm=False
+):
     async with AFFmpeg(file) as ffmpeg:
         sticker = await ffmpeg.cv_to_webp(
             enforce_not_broken=enforce_not_broken,
@@ -73,4 +79,3 @@ async def convert_to_sticker(file: bytes, name="", packname="", enforce_not_brok
         buf = file.read()
     os.remove(temp)
     return buf, True
-    

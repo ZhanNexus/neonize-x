@@ -15,7 +15,7 @@ import waAdv.WAAdv_pb2
 import waCommon.WACommon_pb2
 import waCompanionReg.WACompanionReg_pb2
 import waMmsRetry.WAMmsRetry_pb2
-import waStatusAttributions.WAWebProtobufsStatusAttributions_pb2
+import waStatusAttributions.WAStatusAttributions_pb2
 
 if sys.version_info >= (3, 10):
     import typing as typing_extensions
@@ -56,6 +56,7 @@ class _PeerDataOperationRequestTypeEnumTypeWrapper(google.protobuf.internal.enum
     FULL_HISTORY_SYNC_ON_DEMAND: _PeerDataOperationRequestType.ValueType  # 6
     COMPANION_META_NONCE_FETCH: _PeerDataOperationRequestType.ValueType  # 7
     COMPANION_SYNCD_SNAPSHOT_FATAL_RECOVERY: _PeerDataOperationRequestType.ValueType  # 8
+    COMPANION_CANONICAL_USER_NONCE_FETCH: _PeerDataOperationRequestType.ValueType  # 9
 
 class PeerDataOperationRequestType(_PeerDataOperationRequestType, metaclass=_PeerDataOperationRequestTypeEnumTypeWrapper): ...
 
@@ -68,6 +69,7 @@ WAFFLE_LINKING_NONCE_FETCH: PeerDataOperationRequestType.ValueType  # 5
 FULL_HISTORY_SYNC_ON_DEMAND: PeerDataOperationRequestType.ValueType  # 6
 COMPANION_META_NONCE_FETCH: PeerDataOperationRequestType.ValueType  # 7
 COMPANION_SYNCD_SNAPSHOT_FATAL_RECOVERY: PeerDataOperationRequestType.ValueType  # 8
+COMPANION_CANONICAL_USER_NONCE_FETCH: PeerDataOperationRequestType.ValueType  # 9
 global___PeerDataOperationRequestType = PeerDataOperationRequestType
 
 class _BotMetricsEntryPoint:
@@ -101,6 +103,7 @@ class _BotMetricsEntryPointEnumTypeWrapper(google.protobuf.internal.enum_type_wr
     UGC_CHAT_SHORTCUT_AI_STUDIO: _BotMetricsEntryPoint.ValueType  # 23
     NEW_CHAT_AI_STUDIO: _BotMetricsEntryPoint.ValueType  # 24
     AIVOICE_FAVICON_CALL_HISTORY: _BotMetricsEntryPoint.ValueType  # 25
+    ASK_META_AI_CONTEXT_MENU: _BotMetricsEntryPoint.ValueType  # 26
 
 class BotMetricsEntryPoint(_BotMetricsEntryPoint, metaclass=_BotMetricsEntryPointEnumTypeWrapper): ...
 
@@ -129,6 +132,7 @@ META_AI_CHAT_SHORTCUT_AI_STUDIO: BotMetricsEntryPoint.ValueType  # 22
 UGC_CHAT_SHORTCUT_AI_STUDIO: BotMetricsEntryPoint.ValueType  # 23
 NEW_CHAT_AI_STUDIO: BotMetricsEntryPoint.ValueType  # 24
 AIVOICE_FAVICON_CALL_HISTORY: BotMetricsEntryPoint.ValueType  # 25
+ASK_META_AI_CONTEXT_MENU: BotMetricsEntryPoint.ValueType  # 26
 global___BotMetricsEntryPoint = BotMetricsEntryPoint
 
 class _BotMetricsThreadEntryPoint:
@@ -141,6 +145,7 @@ class _BotMetricsThreadEntryPointEnumTypeWrapper(google.protobuf.internal.enum_t
     AI_HOME_THREAD: _BotMetricsThreadEntryPoint.ValueType  # 2
     AI_DEEPLINK_IMMERSIVE_THREAD: _BotMetricsThreadEntryPoint.ValueType  # 3
     AI_DEEPLINK_THREAD: _BotMetricsThreadEntryPoint.ValueType  # 4
+    ASK_META_AI_CONTEXT_MENU_THREAD: _BotMetricsThreadEntryPoint.ValueType  # 5
 
 class BotMetricsThreadEntryPoint(_BotMetricsThreadEntryPoint, metaclass=_BotMetricsThreadEntryPointEnumTypeWrapper): ...
 
@@ -148,6 +153,7 @@ AI_TAB_THREAD: BotMetricsThreadEntryPoint.ValueType  # 1
 AI_HOME_THREAD: BotMetricsThreadEntryPoint.ValueType  # 2
 AI_DEEPLINK_IMMERSIVE_THREAD: BotMetricsThreadEntryPoint.ValueType  # 3
 AI_DEEPLINK_THREAD: BotMetricsThreadEntryPoint.ValueType  # 4
+ASK_META_AI_CONTEXT_MENU_THREAD: BotMetricsThreadEntryPoint.ValueType  # 5
 global___BotMetricsThreadEntryPoint = BotMetricsThreadEntryPoint
 
 class _BotSessionSource:
@@ -1852,6 +1858,20 @@ class PeerDataOperationRequestResponseMessage(google.protobuf.message.Message):
             def ClearField(self, field_name: typing.Literal["collectionSnapshot", b"collectionSnapshot", "isCompressed", b"isCompressed"]) -> None: ...
 
         @typing.final
+        class CompanionCanonicalUserNonceFetchResponse(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            NONCE_FIELD_NUMBER: builtins.int
+            nonce: builtins.str
+            def __init__(
+                self,
+                *,
+                nonce: builtins.str | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing.Literal["nonce", b"nonce"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing.Literal["nonce", b"nonce"]) -> None: ...
+
+        @typing.final
         class CompanionMetaNonceFetchResponse(google.protobuf.message.Message):
             DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1987,6 +2007,7 @@ class PeerDataOperationRequestResponseMessage(google.protobuf.message.Message):
         FULLHISTORYSYNCONDEMANDREQUESTRESPONSE_FIELD_NUMBER: builtins.int
         COMPANIONMETANONCEFETCHREQUESTRESPONSE_FIELD_NUMBER: builtins.int
         SYNCDSNAPSHOTFATALRECOVERYRESPONSE_FIELD_NUMBER: builtins.int
+        COMPANIONCANONICALUSERNONCEFETCHREQUESTRESPONSE_FIELD_NUMBER: builtins.int
         mediaUploadResult: waMmsRetry.WAMmsRetry_pb2.MediaRetryNotification.ResultType.ValueType
         @property
         def stickerMessage(self) -> global___StickerMessage: ...
@@ -2002,6 +2023,8 @@ class PeerDataOperationRequestResponseMessage(google.protobuf.message.Message):
         def companionMetaNonceFetchRequestResponse(self) -> global___PeerDataOperationRequestResponseMessage.PeerDataOperationResult.CompanionMetaNonceFetchResponse: ...
         @property
         def syncdSnapshotFatalRecoveryResponse(self) -> global___PeerDataOperationRequestResponseMessage.PeerDataOperationResult.SyncDSnapshotFatalRecoveryResponse: ...
+        @property
+        def companionCanonicalUserNonceFetchRequestResponse(self) -> global___PeerDataOperationRequestResponseMessage.PeerDataOperationResult.CompanionCanonicalUserNonceFetchResponse: ...
         def __init__(
             self,
             *,
@@ -2013,9 +2036,10 @@ class PeerDataOperationRequestResponseMessage(google.protobuf.message.Message):
             fullHistorySyncOnDemandRequestResponse: global___PeerDataOperationRequestResponseMessage.PeerDataOperationResult.FullHistorySyncOnDemandRequestResponse | None = ...,
             companionMetaNonceFetchRequestResponse: global___PeerDataOperationRequestResponseMessage.PeerDataOperationResult.CompanionMetaNonceFetchResponse | None = ...,
             syncdSnapshotFatalRecoveryResponse: global___PeerDataOperationRequestResponseMessage.PeerDataOperationResult.SyncDSnapshotFatalRecoveryResponse | None = ...,
+            companionCanonicalUserNonceFetchRequestResponse: global___PeerDataOperationRequestResponseMessage.PeerDataOperationResult.CompanionCanonicalUserNonceFetchResponse | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["companionMetaNonceFetchRequestResponse", b"companionMetaNonceFetchRequestResponse", "fullHistorySyncOnDemandRequestResponse", b"fullHistorySyncOnDemandRequestResponse", "linkPreviewResponse", b"linkPreviewResponse", "mediaUploadResult", b"mediaUploadResult", "placeholderMessageResendResponse", b"placeholderMessageResendResponse", "stickerMessage", b"stickerMessage", "syncdSnapshotFatalRecoveryResponse", b"syncdSnapshotFatalRecoveryResponse", "waffleNonceFetchRequestResponse", b"waffleNonceFetchRequestResponse"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["companionMetaNonceFetchRequestResponse", b"companionMetaNonceFetchRequestResponse", "fullHistorySyncOnDemandRequestResponse", b"fullHistorySyncOnDemandRequestResponse", "linkPreviewResponse", b"linkPreviewResponse", "mediaUploadResult", b"mediaUploadResult", "placeholderMessageResendResponse", b"placeholderMessageResendResponse", "stickerMessage", b"stickerMessage", "syncdSnapshotFatalRecoveryResponse", b"syncdSnapshotFatalRecoveryResponse", "waffleNonceFetchRequestResponse", b"waffleNonceFetchRequestResponse"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["companionCanonicalUserNonceFetchRequestResponse", b"companionCanonicalUserNonceFetchRequestResponse", "companionMetaNonceFetchRequestResponse", b"companionMetaNonceFetchRequestResponse", "fullHistorySyncOnDemandRequestResponse", b"fullHistorySyncOnDemandRequestResponse", "linkPreviewResponse", b"linkPreviewResponse", "mediaUploadResult", b"mediaUploadResult", "placeholderMessageResendResponse", b"placeholderMessageResendResponse", "stickerMessage", b"stickerMessage", "syncdSnapshotFatalRecoveryResponse", b"syncdSnapshotFatalRecoveryResponse", "waffleNonceFetchRequestResponse", b"waffleNonceFetchRequestResponse"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["companionCanonicalUserNonceFetchRequestResponse", b"companionCanonicalUserNonceFetchRequestResponse", "companionMetaNonceFetchRequestResponse", b"companionMetaNonceFetchRequestResponse", "fullHistorySyncOnDemandRequestResponse", b"fullHistorySyncOnDemandRequestResponse", "linkPreviewResponse", b"linkPreviewResponse", "mediaUploadResult", b"mediaUploadResult", "placeholderMessageResendResponse", b"placeholderMessageResendResponse", "stickerMessage", b"stickerMessage", "syncdSnapshotFatalRecoveryResponse", b"syncdSnapshotFatalRecoveryResponse", "waffleNonceFetchRequestResponse", b"waffleNonceFetchRequestResponse"]) -> None: ...
 
     PEERDATAOPERATIONREQUESTTYPE_FIELD_NUMBER: builtins.int
     STANZAID_FIELD_NUMBER: builtins.int
@@ -3629,7 +3653,7 @@ class ContextInfo(google.protobuf.message.Message):
     @property
     def memberLabel(self) -> global___MemberLabel: ...
     @property
-    def statusAttributions(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waStatusAttributions.WAWebProtobufsStatusAttributions_pb2.StatusAttribution]: ...
+    def statusAttributions(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waStatusAttributions.WAStatusAttributions_pb2.StatusAttribution]: ...
     def __init__(
         self,
         *,
@@ -3680,7 +3704,7 @@ class ContextInfo(google.protobuf.message.Message):
         memberLabel: global___MemberLabel | None = ...,
         isQuestion: builtins.bool | None = ...,
         statusSourceType: global___ContextInfo.StatusSourceType.ValueType | None = ...,
-        statusAttributions: collections.abc.Iterable[waStatusAttributions.WAWebProtobufsStatusAttributions_pb2.StatusAttribution] | None = ...,
+        statusAttributions: collections.abc.Iterable[waStatusAttributions.WAStatusAttributions_pb2.StatusAttribution] | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["actionLink", b"actionLink", "alwaysShowAdAttribution", b"alwaysShowAdAttribution", "businessMessageForwardInfo", b"businessMessageForwardInfo", "conversionData", b"conversionData", "conversionDelaySeconds", b"conversionDelaySeconds", "conversionSource", b"conversionSource", "ctwaPayload", b"ctwaPayload", "ctwaSignals", b"ctwaSignals", "dataSharingContext", b"dataSharingContext", "disappearingMode", b"disappearingMode", "entryPointConversionApp", b"entryPointConversionApp", "entryPointConversionDelaySeconds", b"entryPointConversionDelaySeconds", "entryPointConversionExternalMedium", b"entryPointConversionExternalMedium", "entryPointConversionExternalSource", b"entryPointConversionExternalSource", "entryPointConversionSource", b"entryPointConversionSource", "ephemeralSettingTimestamp", b"ephemeralSettingTimestamp", "ephemeralSharedSecret", b"ephemeralSharedSecret", "expiration", b"expiration", "externalAdReply", b"externalAdReply", "featureEligibilities", b"featureEligibilities", "forwardedAiBotMessageInfo", b"forwardedAiBotMessageInfo", "forwardedNewsletterMessageInfo", b"forwardedNewsletterMessageInfo", "forwardingScore", b"forwardingScore", "groupSubject", b"groupSubject", "isForwarded", b"isForwarded", "isQuestion", b"isQuestion", "isSampled", b"isSampled", "memberLabel", b"memberLabel", "pairedMediaType", b"pairedMediaType", "parentGroupJID", b"parentGroupJID", "participant", b"participant", "placeholderKey", b"placeholderKey", "quotedAd", b"quotedAd", "quotedMessage", b"quotedMessage", "rankingVersion", b"rankingVersion", "remoteJID", b"remoteJID", "smbClientCampaignID", b"smbClientCampaignID", "smbServerCampaignID", b"smbServerCampaignID", "stanzaID", b"stanzaID", "statusAttributionType", b"statusAttributionType", "statusSourceType", b"statusSourceType", "trustBannerAction", b"trustBannerAction", "trustBannerType", b"trustBannerType", "urlTrackingMap", b"urlTrackingMap", "utm", b"utm"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["actionLink", b"actionLink", "alwaysShowAdAttribution", b"alwaysShowAdAttribution", "businessMessageForwardInfo", b"businessMessageForwardInfo", "conversionData", b"conversionData", "conversionDelaySeconds", b"conversionDelaySeconds", "conversionSource", b"conversionSource", "ctwaPayload", b"ctwaPayload", "ctwaSignals", b"ctwaSignals", "dataSharingContext", b"dataSharingContext", "disappearingMode", b"disappearingMode", "entryPointConversionApp", b"entryPointConversionApp", "entryPointConversionDelaySeconds", b"entryPointConversionDelaySeconds", "entryPointConversionExternalMedium", b"entryPointConversionExternalMedium", "entryPointConversionExternalSource", b"entryPointConversionExternalSource", "entryPointConversionSource", b"entryPointConversionSource", "ephemeralSettingTimestamp", b"ephemeralSettingTimestamp", "ephemeralSharedSecret", b"ephemeralSharedSecret", "expiration", b"expiration", "externalAdReply", b"externalAdReply", "featureEligibilities", b"featureEligibilities", "forwardedAiBotMessageInfo", b"forwardedAiBotMessageInfo", "forwardedNewsletterMessageInfo", b"forwardedNewsletterMessageInfo", "forwardingScore", b"forwardingScore", "groupMentions", b"groupMentions", "groupSubject", b"groupSubject", "isForwarded", b"isForwarded", "isQuestion", b"isQuestion", "isSampled", b"isSampled", "memberLabel", b"memberLabel", "mentionedJID", b"mentionedJID", "pairedMediaType", b"pairedMediaType", "parentGroupJID", b"parentGroupJID", "participant", b"participant", "placeholderKey", b"placeholderKey", "quotedAd", b"quotedAd", "quotedMessage", b"quotedMessage", "rankingVersion", b"rankingVersion", "remoteJID", b"remoteJID", "smbClientCampaignID", b"smbClientCampaignID", "smbServerCampaignID", b"smbServerCampaignID", "stanzaID", b"stanzaID", "statusAttributionType", b"statusAttributionType", "statusAttributions", b"statusAttributions", "statusSourceType", b"statusSourceType", "trustBannerAction", b"trustBannerAction", "trustBannerType", b"trustBannerType", "urlTrackingMap", b"urlTrackingMap", "utm", b"utm"]) -> None: ...
@@ -3795,6 +3819,42 @@ class BotLinkedAccount(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["type", b"type"]) -> None: ...
 
 global___BotLinkedAccount = BotLinkedAccount
+
+@typing.final
+class BotSignatureVerificationUseCaseProof(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    class _BotSignatureUseCase:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _BotSignatureUseCaseEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[BotSignatureVerificationUseCaseProof._BotSignatureUseCase.ValueType], builtins.type):
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        WA_BOT_MSG: BotSignatureVerificationUseCaseProof._BotSignatureUseCase.ValueType  # 0
+
+    class BotSignatureUseCase(_BotSignatureUseCase, metaclass=_BotSignatureUseCaseEnumTypeWrapper): ...
+    WA_BOT_MSG: BotSignatureVerificationUseCaseProof.BotSignatureUseCase.ValueType  # 0
+
+    VERSION_FIELD_NUMBER: builtins.int
+    USECASE_FIELD_NUMBER: builtins.int
+    SIGNATURE_FIELD_NUMBER: builtins.int
+    CERTIFICATECHAIN_FIELD_NUMBER: builtins.int
+    version: builtins.int
+    useCase: global___BotSignatureVerificationUseCaseProof.BotSignatureUseCase.ValueType
+    signature: builtins.bytes
+    certificateChain: builtins.bytes
+    def __init__(
+        self,
+        *,
+        version: builtins.int | None = ...,
+        useCase: global___BotSignatureVerificationUseCaseProof.BotSignatureUseCase.ValueType | None = ...,
+        signature: builtins.bytes | None = ...,
+        certificateChain: builtins.bytes | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["certificateChain", b"certificateChain", "signature", b"signature", "useCase", b"useCase", "version", b"version"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["certificateChain", b"certificateChain", "signature", b"signature", "useCase", b"useCase", "version", b"version"]) -> None: ...
+
+global___BotSignatureVerificationUseCaseProof = BotSignatureVerificationUseCaseProof
 
 @typing.final
 class AIRichResponseMessage(google.protobuf.message.Message):
@@ -4729,6 +4789,8 @@ class BotCapabilityMetadata(google.protobuf.message.Message):
         PROACTIVE_MESSAGE: BotCapabilityMetadata._BotCapabilityType.ValueType  # 33
         RICH_RESPONSE_UNIFIED_RESPONSE: BotCapabilityMetadata._BotCapabilityType.ValueType  # 34
         PROMOTION_MESSAGE: BotCapabilityMetadata._BotCapabilityType.ValueType  # 35
+        SIMPLIFIED_PROFILE_PAGE: BotCapabilityMetadata._BotCapabilityType.ValueType  # 36
+        RICH_RESPONSE_SOURCES_IN_MESSAGE: BotCapabilityMetadata._BotCapabilityType.ValueType  # 37
 
     class BotCapabilityType(_BotCapabilityType, metaclass=_BotCapabilityTypeEnumTypeWrapper): ...
     UNKNOWN: BotCapabilityMetadata.BotCapabilityType.ValueType  # 0
@@ -4767,6 +4829,8 @@ class BotCapabilityMetadata(google.protobuf.message.Message):
     PROACTIVE_MESSAGE: BotCapabilityMetadata.BotCapabilityType.ValueType  # 33
     RICH_RESPONSE_UNIFIED_RESPONSE: BotCapabilityMetadata.BotCapabilityType.ValueType  # 34
     PROMOTION_MESSAGE: BotCapabilityMetadata.BotCapabilityType.ValueType  # 35
+    SIMPLIFIED_PROFILE_PAGE: BotCapabilityMetadata.BotCapabilityType.ValueType  # 36
+    RICH_RESPONSE_SOURCES_IN_MESSAGE: BotCapabilityMetadata.BotCapabilityType.ValueType  # 37
 
     CAPABILITIES_FIELD_NUMBER: builtins.int
     @property
@@ -4924,12 +4988,14 @@ class BotSourcesMetadata(google.protobuf.message.Message):
         SOURCEQUERY_FIELD_NUMBER: builtins.int
         FAVICONCDNURL_FIELD_NUMBER: builtins.int
         CITATIONNUMBER_FIELD_NUMBER: builtins.int
+        SOURCETITLE_FIELD_NUMBER: builtins.int
         provider: global___BotSourcesMetadata.BotSourceItem.SourceProvider.ValueType
         thumbnailCDNURL: builtins.str
         sourceProviderURL: builtins.str
         sourceQuery: builtins.str
         faviconCDNURL: builtins.str
         citationNumber: builtins.int
+        sourceTitle: builtins.str
         def __init__(
             self,
             *,
@@ -4939,9 +5005,10 @@ class BotSourcesMetadata(google.protobuf.message.Message):
             sourceQuery: builtins.str | None = ...,
             faviconCDNURL: builtins.str | None = ...,
             citationNumber: builtins.int | None = ...,
+            sourceTitle: builtins.str | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["citationNumber", b"citationNumber", "faviconCDNURL", b"faviconCDNURL", "provider", b"provider", "sourceProviderURL", b"sourceProviderURL", "sourceQuery", b"sourceQuery", "thumbnailCDNURL", b"thumbnailCDNURL"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["citationNumber", b"citationNumber", "faviconCDNURL", b"faviconCDNURL", "provider", b"provider", "sourceProviderURL", b"sourceProviderURL", "sourceQuery", b"sourceQuery", "thumbnailCDNURL", b"thumbnailCDNURL"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["citationNumber", b"citationNumber", "faviconCDNURL", b"faviconCDNURL", "provider", b"provider", "sourceProviderURL", b"sourceProviderURL", "sourceQuery", b"sourceQuery", "sourceTitle", b"sourceTitle", "thumbnailCDNURL", b"thumbnailCDNURL"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["citationNumber", b"citationNumber", "faviconCDNURL", b"faviconCDNURL", "provider", b"provider", "sourceProviderURL", b"sourceProviderURL", "sourceQuery", b"sourceQuery", "sourceTitle", b"sourceTitle", "thumbnailCDNURL", b"thumbnailCDNURL"]) -> None: ...
 
     SOURCES_FIELD_NUMBER: builtins.int
     @property
@@ -7215,12 +7282,14 @@ class Call(google.protobuf.message.Message):
     CTWASIGNALS_FIELD_NUMBER: builtins.int
     CTWAPAYLOAD_FIELD_NUMBER: builtins.int
     CONTEXTINFO_FIELD_NUMBER: builtins.int
+    NATIVEFLOWCALLBUTTONPAYLOAD_FIELD_NUMBER: builtins.int
     callKey: builtins.bytes
     conversionSource: builtins.str
     conversionData: builtins.bytes
     conversionDelaySeconds: builtins.int
     ctwaSignals: builtins.str
     ctwaPayload: builtins.bytes
+    nativeFlowCallButtonPayload: builtins.str
     @property
     def contextInfo(self) -> global___ContextInfo: ...
     def __init__(
@@ -7233,9 +7302,10 @@ class Call(google.protobuf.message.Message):
         ctwaSignals: builtins.str | None = ...,
         ctwaPayload: builtins.bytes | None = ...,
         contextInfo: global___ContextInfo | None = ...,
+        nativeFlowCallButtonPayload: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["callKey", b"callKey", "contextInfo", b"contextInfo", "conversionData", b"conversionData", "conversionDelaySeconds", b"conversionDelaySeconds", "conversionSource", b"conversionSource", "ctwaPayload", b"ctwaPayload", "ctwaSignals", b"ctwaSignals"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["callKey", b"callKey", "contextInfo", b"contextInfo", "conversionData", b"conversionData", "conversionDelaySeconds", b"conversionDelaySeconds", "conversionSource", b"conversionSource", "ctwaPayload", b"ctwaPayload", "ctwaSignals", b"ctwaSignals"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["callKey", b"callKey", "contextInfo", b"contextInfo", "conversionData", b"conversionData", "conversionDelaySeconds", b"conversionDelaySeconds", "conversionSource", b"conversionSource", "ctwaPayload", b"ctwaPayload", "ctwaSignals", b"ctwaSignals", "nativeFlowCallButtonPayload", b"nativeFlowCallButtonPayload"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["callKey", b"callKey", "contextInfo", b"contextInfo", "conversionData", b"conversionData", "conversionDelaySeconds", b"conversionDelaySeconds", "conversionSource", b"conversionSource", "ctwaPayload", b"ctwaPayload", "ctwaSignals", b"ctwaSignals", "nativeFlowCallButtonPayload", b"nativeFlowCallButtonPayload"]) -> None: ...
 
 global___Call = Call
 
@@ -7677,6 +7747,22 @@ class BotMemoryFact(google.protobuf.message.Message):
 global___BotMemoryFact = BotMemoryFact
 
 @typing.final
+class BotSignatureVerificationMetadata(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    PROOFS_FIELD_NUMBER: builtins.int
+    @property
+    def proofs(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___BotSignatureVerificationUseCaseProof]: ...
+    def __init__(
+        self,
+        *,
+        proofs: collections.abc.Iterable[global___BotSignatureVerificationUseCaseProof] | None = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["proofs", b"proofs"]) -> None: ...
+
+global___BotSignatureVerificationMetadata = BotSignatureVerificationMetadata
+
+@typing.final
 class BotRenderingMetadata(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -7815,12 +7901,15 @@ class BotMetadata(google.protobuf.message.Message):
     BOTQUOTAMETADATA_FIELD_NUMBER: builtins.int
     BOTAGECOLLECTIONMETADATA_FIELD_NUMBER: builtins.int
     CONVERSATIONSTARTERPROMPTID_FIELD_NUMBER: builtins.int
+    BOTRESPONSEID_FIELD_NUMBER: builtins.int
+    VERIFICATIONMETADATA_FIELD_NUMBER: builtins.int
     personaID: builtins.str
     invokerJID: builtins.str
     timezone: builtins.str
     messageDisclaimerText: builtins.str
     aiConversationContext: builtins.bytes
     conversationStarterPromptID: builtins.str
+    botResponseID: builtins.str
     @property
     def avatarMetadata(self) -> global___BotAvatarMetadata: ...
     @property
@@ -7859,6 +7948,8 @@ class BotMetadata(google.protobuf.message.Message):
     def botQuotaMetadata(self) -> global___BotQuotaMetadata: ...
     @property
     def botAgeCollectionMetadata(self) -> global___BotAgeCollectionMetadata: ...
+    @property
+    def verificationMetadata(self) -> global___BotSignatureVerificationMetadata: ...
     def __init__(
         self,
         *,
@@ -7887,9 +7978,11 @@ class BotMetadata(google.protobuf.message.Message):
         botQuotaMetadata: global___BotQuotaMetadata | None = ...,
         botAgeCollectionMetadata: global___BotAgeCollectionMetadata | None = ...,
         conversationStarterPromptID: builtins.str | None = ...,
+        botResponseID: builtins.str | None = ...,
+        verificationMetadata: global___BotSignatureVerificationMetadata | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "botResponseID", b"botResponseID", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone", "verificationMetadata", b"verificationMetadata"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "botResponseID", b"botResponseID", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone", "verificationMetadata", b"verificationMetadata"]) -> None: ...
 
 global___BotMetadata = BotMetadata
 

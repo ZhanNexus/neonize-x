@@ -217,7 +217,12 @@ class AFFmpeg:
         return self.filename.path.__str__()
 
     async def cv_to_webp(
-        self, animated: bool = True, enforce_not_broken: bool = False, animated_gif: bool = False, max_sticker_size: int = 0, is_webm=False
+        self,
+        animated: bool = True,
+        enforce_not_broken: bool = False,
+        animated_gif: bool = False,
+        max_sticker_size: int = 0,
+        is_webm=False,
     ) -> bytes:
         """
         This function converts a given file to webp format using ffmpeg.

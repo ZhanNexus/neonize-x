@@ -23,6 +23,7 @@ from .enum import (
     ReceiptType,
 )
 
+
 def gen_vcard(name: str, phone_number: str) -> str:
     """
     Generates a vCard string for a contact.

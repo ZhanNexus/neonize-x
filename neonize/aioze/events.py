@@ -48,7 +48,6 @@ from ..proto.Neonize_pb2 import (
 from google.protobuf.message import Message
 from typing import Awaitable, Dict, Callable, Type, TypeVar, TYPE_CHECKING, Coroutine
 from asyncio import Event as IOEvent
-import threading
 
 event_global_loop = asyncio.new_event_loop()
 
@@ -241,7 +240,7 @@ class EventsManager:
         return callback
 
 
-#threading.Thread(
+# threading.Thread(
 #    target=event_global_loop.run_forever,
 #    daemon=True,
-#).start()
+# ).start()
