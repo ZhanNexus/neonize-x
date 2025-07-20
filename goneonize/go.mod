@@ -6,6 +6,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/mattn/go-sqlite3 v1.14.28
 	go.mau.fi/whatsmeow v0.0.0-20250717084138-aecc878ab213
+	github.com/Nubuki-all/whatsmeow v0.0.0-20250717084138-aecc878ab213
 	google.golang.org/protobuf v1.36.6
 )
 
