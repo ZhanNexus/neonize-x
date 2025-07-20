@@ -27,18 +27,51 @@ class StatusAttribution(google.protobuf.message.Message):
 
     class _TypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[StatusAttribution._Type.ValueType], builtins.type):
         DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
-        RESHARE: StatusAttribution._Type.ValueType  # 0
-        EXTERNAL_SHARE: StatusAttribution._Type.ValueType  # 1
-        MUSIC: StatusAttribution._Type.ValueType  # 2
-        STATUS_MENTION: StatusAttribution._Type.ValueType  # 3
-        GROUP_STATUS: StatusAttribution._Type.ValueType  # 4
+        UNKNOWN: StatusAttribution._Type.ValueType  # 0
+        RESHARE: StatusAttribution._Type.ValueType  # 1
+        EXTERNAL_SHARE: StatusAttribution._Type.ValueType  # 2
+        MUSIC: StatusAttribution._Type.ValueType  # 3
+        STATUS_MENTION: StatusAttribution._Type.ValueType  # 4
+        GROUP_STATUS: StatusAttribution._Type.ValueType  # 5
+        RL_ATTRIBUTION: StatusAttribution._Type.ValueType  # 6
 
     class Type(_Type, metaclass=_TypeEnumTypeWrapper): ...
-    RESHARE: StatusAttribution.Type.ValueType  # 0
-    EXTERNAL_SHARE: StatusAttribution.Type.ValueType  # 1
-    MUSIC: StatusAttribution.Type.ValueType  # 2
-    STATUS_MENTION: StatusAttribution.Type.ValueType  # 3
-    GROUP_STATUS: StatusAttribution.Type.ValueType  # 4
+    UNKNOWN: StatusAttribution.Type.ValueType  # 0
+    RESHARE: StatusAttribution.Type.ValueType  # 1
+    EXTERNAL_SHARE: StatusAttribution.Type.ValueType  # 2
+    MUSIC: StatusAttribution.Type.ValueType  # 3
+    STATUS_MENTION: StatusAttribution.Type.ValueType  # 4
+    GROUP_STATUS: StatusAttribution.Type.ValueType  # 5
+    RL_ATTRIBUTION: StatusAttribution.Type.ValueType  # 6
+
+    @typing.final
+    class RLAttribution(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _Source:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _SourceEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[StatusAttribution.RLAttribution._Source.ValueType], builtins.type):
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            UNKNOWN: StatusAttribution.RLAttribution._Source.ValueType  # 0
+            RAY_BAN_META_GLASSES: StatusAttribution.RLAttribution._Source.ValueType  # 1
+            OAKLEY_META_GLASSES: StatusAttribution.RLAttribution._Source.ValueType  # 2
+
+        class Source(_Source, metaclass=_SourceEnumTypeWrapper): ...
+        UNKNOWN: StatusAttribution.RLAttribution.Source.ValueType  # 0
+        RAY_BAN_META_GLASSES: StatusAttribution.RLAttribution.Source.ValueType  # 1
+        OAKLEY_META_GLASSES: StatusAttribution.RLAttribution.Source.ValueType  # 2
+
+        SOURCE_FIELD_NUMBER: builtins.int
+        source: global___StatusAttribution.RLAttribution.Source.ValueType
+        def __init__(
+            self,
+            *,
+            source: global___StatusAttribution.RLAttribution.Source.ValueType | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing.Literal["source", b"source"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["source", b"source"]) -> None: ...
 
     @typing.final
     class ExternalShare(google.protobuf.message.Message):
@@ -191,6 +224,7 @@ class StatusAttribution(google.protobuf.message.Message):
     EXTERNALSHARE_FIELD_NUMBER: builtins.int
     MUSIC_FIELD_NUMBER: builtins.int
     GROUPSTATUS_FIELD_NUMBER: builtins.int
+    RLATTRIBUTION_FIELD_NUMBER: builtins.int
     TYPE_FIELD_NUMBER: builtins.int
     ACTIONURL_FIELD_NUMBER: builtins.int
     type: global___StatusAttribution.Type.ValueType
@@ -203,6 +237,8 @@ class StatusAttribution(google.protobuf.message.Message):
     def music(self) -> global___StatusAttribution.Music: ...
     @property
     def groupStatus(self) -> global___StatusAttribution.GroupStatus: ...
+    @property
+    def rlAttribution(self) -> global___StatusAttribution.RLAttribution: ...
     def __init__(
         self,
         *,
@@ -210,11 +246,12 @@ class StatusAttribution(google.protobuf.message.Message):
         externalShare: global___StatusAttribution.ExternalShare | None = ...,
         music: global___StatusAttribution.Music | None = ...,
         groupStatus: global___StatusAttribution.GroupStatus | None = ...,
+        rlAttribution: global___StatusAttribution.RLAttribution | None = ...,
         type: global___StatusAttribution.Type.ValueType | None = ...,
         actionURL: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["actionURL", b"actionURL", "attributionData", b"attributionData", "externalShare", b"externalShare", "groupStatus", b"groupStatus", "music", b"music", "statusReshare", b"statusReshare", "type", b"type"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["actionURL", b"actionURL", "attributionData", b"attributionData", "externalShare", b"externalShare", "groupStatus", b"groupStatus", "music", b"music", "statusReshare", b"statusReshare", "type", b"type"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["attributionData", b"attributionData"]) -> typing.Literal["statusReshare", "externalShare", "music", "groupStatus"] | None: ...
+    def HasField(self, field_name: typing.Literal["actionURL", b"actionURL", "attributionData", b"attributionData", "externalShare", b"externalShare", "groupStatus", b"groupStatus", "music", b"music", "rlAttribution", b"rlAttribution", "statusReshare", b"statusReshare", "type", b"type"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["actionURL", b"actionURL", "attributionData", b"attributionData", "externalShare", b"externalShare", "groupStatus", b"groupStatus", "music", b"music", "rlAttribution", b"rlAttribution", "statusReshare", b"statusReshare", "type", b"type"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing.Literal["attributionData", b"attributionData"]) -> typing.Literal["statusReshare", "externalShare", "music", "groupStatus", "rlAttribution"] | None: ...
 
 global___StatusAttribution = StatusAttribution
