@@ -1,32 +1,24 @@
 package utils
 
 import (
-	"go.mau.fi/whatsmeow"
+	// "go.mau.fi/whatsmeow"
+	"github.com/Nubuki-all/whatsmeow"
 	"go.mau.fi/whatsmeow/types"
 )
 
-// var MediaType = []whatsmeow.MediaType{
-//	whatsmeow.MediaImage,
-//	whatsmeow.MediaVideo,
-//	whatsmeow.MediaAudio,
-//	whatsmeow.MediaDocument,
-//	whatsmeow.MediaHistory,
-//	whatsmeow.MediaAppState,
-//	whatsmeow.MediaLinkThumbnail,
-//}
+var MediaType = []whatsmeow.MediaType{
+	whatsmeow.MediaImage,
+	whatsmeow.MediaVideo,
+	whatsmeow.MediaAudio,
+	whatsmeow.MediaDocument,
+	whatsmeow.MediaHistory,
+	whatsmeow.MediaAppState,
+	whatsmeow.MediaLinkThumbnail,
+	whatsmeow.MediaStickerPack,
+
+}
 
 
-
-const MediaStickerPack whatsmeow.MediaType = "WhatsApp Sticker Pack Keys"
-var MediaType = append([]whatsmeow.MediaType{
-    whatsmeow.MediaImage,
-    whatsmeow.MediaVideo,
-    whatsmeow.MediaAudio,
-    whatsmeow.MediaDocument,
-    whatsmeow.MediaHistory,
-    whatsmeow.MediaAppState,
-    whatsmeow.MediaLinkThumbnail,
-}, MediaStickerPack)
 
 var ChatPresence = []types.ChatPresence{
 	types.ChatPresenceComposing,
