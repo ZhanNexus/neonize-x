@@ -9,6 +9,7 @@ from ..proto.waE2E.WAWebProtobufsE2E_pb2 import (
     StickerMessage,
     VideoMessage,
     DocumentMessage,
+    StickerPackMessage,
 )
 from .message import get_message_type
 
@@ -21,6 +22,7 @@ class MediaTypeToMMS(Enum):
     MediaHistory = "md-msg-hist"
     MediaAppState = "md-app-state"
     MediaLinkThumbnail = "thumbnail-link"
+    MediaStickerPack = "sticker-pack"
 
     @classmethod
     def from_message(cls, message: Message):
@@ -30,6 +32,7 @@ class MediaTypeToMMS(Enum):
             AudioMessage: cls.MediaAudio,
             VideoMessage: cls.MediaVideo,
             DocumentMessage: cls.MediaDocument,
+            StickerPackMessage: cls.MediaStickerPack,
         }[type(get_message_type(message))]
 
     @classmethod
@@ -50,6 +53,7 @@ class MediaType(Enum):
     MediaHistory = 4
     MediaAppState = 5
     MediaLinkThumbnail = 6
+    MediaStickerPack = 7
 
     def to_mms(self) -> MediaTypeToMMS:
         """Converts the MediaType to its corresponding MediaTypeToMMS enum member.
@@ -65,6 +69,7 @@ class MediaType(Enum):
             self.MediaHistory: MediaTypeToMMS.MediaHistory,
             self.MediaAppState: MediaTypeToMMS.MediaAppState,
             self.MediaLinkThumbnail: MediaTypeToMMS.MediaLinkThumbnail,
+            self.MediaStickerPack: MediaTypeToMMS.MediaStickerPack,
         }[self]
 
     @classmethod
@@ -96,6 +101,7 @@ class MediaType(Enum):
             AudioMessage: cls.MediaAudio,
             VideoMessage: cls.MediaVideo,
             DocumentMessage: cls.MediaDocument,
+            StickerPackMessage: cls.MediaStickerPack,
         }[type(get_message_type(message))]
 
 

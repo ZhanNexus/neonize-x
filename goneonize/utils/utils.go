@@ -5,15 +5,28 @@ import (
 	"go.mau.fi/whatsmeow/types"
 )
 
-var MediaType = []whatsmeow.MediaType{
-	whatsmeow.MediaImage,
-	whatsmeow.MediaVideo,
-	whatsmeow.MediaAudio,
-	whatsmeow.MediaDocument,
-	whatsmeow.MediaHistory,
-	whatsmeow.MediaAppState,
-	whatsmeow.MediaLinkThumbnail,
-}
+// var MediaType = []whatsmeow.MediaType{
+//	whatsmeow.MediaImage,
+//	whatsmeow.MediaVideo,
+//	whatsmeow.MediaAudio,
+//	whatsmeow.MediaDocument,
+//	whatsmeow.MediaHistory,
+//	whatsmeow.MediaAppState,
+//	whatsmeow.MediaLinkThumbnail,
+//}
+
+
+
+const MediaStickerPack whatsmeow.MediaType = "WhatsApp Sticker Pack Keys"
+var MediaType = append([]whatsmeow.MediaType{
+    whatsmeow.MediaImage,
+    whatsmeow.MediaVideo,
+    whatsmeow.MediaAudio,
+    whatsmeow.MediaDocument,
+    whatsmeow.MediaHistory,
+    whatsmeow.MediaAppState,
+    whatsmeow.MediaLinkThumbnail,
+}, MediaStickerPack)
 
 var ChatPresence = []types.ChatPresence{
 	types.ChatPresenceComposing,
