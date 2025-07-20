@@ -10,6 +10,8 @@ require (
 	google.golang.org/protobuf v1.36.6
 )
 
+replace go.mau.fi/whatsmeow => github.com/Nubuki-all/whatsmeow
+
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
