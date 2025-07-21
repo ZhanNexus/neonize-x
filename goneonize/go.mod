@@ -9,7 +9,7 @@ require (
 	google.golang.org/protobuf v1.36.6
 )
 
-replace go.mau.fi/whatsmeow v0.0.0-20250717084138-aecc878ab213 => github.com/Nubuki-all/whatsmeow main
+replace go.mau.fi/whatsmeow v0.0.0-20250717084138-aecc878ab213 => github.com/Nubuki-all/whatsmeow v0.0.0-20250720232147-0f134620d5be
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
