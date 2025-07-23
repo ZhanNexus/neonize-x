@@ -148,4 +148,4 @@ async def aio_convert_to_webp(
             save_all=True,
             loop=0,
         )
-    return io_save, animated
+    return io_save.getvalue(), animated

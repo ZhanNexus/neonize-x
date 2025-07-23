@@ -1067,7 +1067,7 @@ class NewAClient:
 
     async def _process_single_pack(
         self,
-        stickers: List[bytes],
+        stickers: List[List[bytes, bool]],
         pack_name: str,
         publisher: str = "",
         quoted: Optional[neonize_proto.Message] = None,
