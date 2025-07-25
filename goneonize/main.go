@@ -2046,7 +2046,7 @@ func PutArchived(id *C.char, user *C.uchar, userSize C.int, archived C.bool) *C.
 
 //export GetAllDevices
 func GetAllDevices(db *C.char, logCb C.ptr_to_python_function_callback_bytes2) *C.char {
-	dbLog := utils.NewLogger("Database", "ERROR", logCb)
+	dbLog := utils.NewLogger("Database", "ERROR", utils.Callback(logCb))
 	container, err := getDB(db, dbLog)
 	if err != nil {
 		panic(err)
