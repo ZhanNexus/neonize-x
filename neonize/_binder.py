@@ -14,6 +14,10 @@ func_callback_bytes = ctypes.CFUNCTYPE(
     None, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int
 )  # callback_bytes
 
+func_callback_bytes2 = ctypes.CFUNCTYPE(
+    None, ctypes.c_void_p, ctypes.c_int
+)  # callback_bytes
+
 
 def load_goneonize():
     while True:
@@ -55,6 +59,7 @@ if not os.environ.get("SPHINX"):
         func_string,
         func_string,
         func_callback_bytes,
+        func_callback_bytes2,
         ctypes.c_char_p,
         ctypes.c_int,
         ctypes.c_char_p,
@@ -474,7 +479,7 @@ if not os.environ.get("SPHINX"):
     gocode.PutArchived.restype = ctypes.c_char_p
     gocode.GetChatSettings.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
     gocode.GetChatSettings.restype = ctypes.POINTER(Bytes)
-    gocode.GetAllDevices.argtypes = [ctypes.c_char_p]
+    gocode.GetAllDevices.argtypes = [ctypes.c_char_p, func_callback_bytes2]
     gocode.GetAllDevices.restype = ctypes.c_char_p
     gocode.SendFBMessage.argtypes = [
         ctypes.c_char_p,

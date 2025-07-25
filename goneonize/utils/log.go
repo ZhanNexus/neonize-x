@@ -19,6 +19,7 @@ import "C"
 import (
 	defproto "github.com/krypton-byte/neonize/defproto"
 	"google.golang.org/protobuf/proto"
+	waLog "go.mau.fi/whatsmeow/util/log"
 	"unsafe"
 )
 import (
@@ -36,6 +37,7 @@ func getBytesAndSize(data []byte) (*C.char, C.size_t) {
 
 // Logger is a simple logger interface that can have subloggers for specific areas.
 type Logger interface {
+	waLog.Logger
 	Warnf(msg string, args ...interface{})
 	Errorf(msg string, args ...interface{})
 	Infof(msg string, args ...interface{})

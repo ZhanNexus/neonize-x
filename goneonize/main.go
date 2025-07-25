@@ -342,7 +342,7 @@ func Stop(id *C.char) {
 }
 
 //export Neonize
-func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *C.char, qrCb C.ptr_to_python_function_string, logStatus C.ptr_to_python_function_string, event C.ptr_to_python_function_bytes, logCb C.ptr_to_python_function_bytes, subscribes *C.uchar, lenSubscriber C.int, devicePropsBuf *C.uchar, devicePropsSize C.int, pairphone *C.uchar, pairphoneSize C.int) { // ,
+func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *C.char, qrCb C.ptr_to_python_function_string, logStatus C.ptr_to_python_function_string, event C.ptr_to_python_function_bytes, logCb C.ptr_to_python_function_callback_bytes2, subscribes *C.uchar, lenSubscriber C.int, devicePropsBuf *C.uchar, devicePropsSize C.int, pairphone *C.uchar, pairphoneSize C.int) { // ,
 	subscribers := map[int]bool{}
 	var deviceProps waCompanionReg.DeviceProps
 	var loginStateChan = make(chan bool)
@@ -2044,8 +2044,8 @@ func PutArchived(id *C.char, user *C.uchar, userSize C.int, archived C.bool) *C.
 }
 
 //export GetAllDevices
-func GetAllDevices(db *C.char) *C.char {
-	dbLog := waLog.Stdout("Database", "ERROR", true)
+func GetAllDevices(db *C.char, logCb C.ptr_to_python_function_callback_bytes2) *C.char {
+	dbLog := utils.NewLogger("Database", "ERROR", logCB)
 	container, err := getDB(db, dbLog)
 	if err != nil {
 		panic(err)

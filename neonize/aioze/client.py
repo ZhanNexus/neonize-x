@@ -32,7 +32,7 @@ from linkpreview.exceptions import MaximumContentSizeError
 from PIL import Image, ImageSequence
 from requests.exceptions import HTTPError
 
-from .._binder import free_bytes, func_callback_bytes, func_string, gocode
+from .._binder import free_bytes, func_callback_bytes, func_callback_bytes2, func_string, gocode
 from ..builder import build_edit, build_revoke
 from ..exc import (
     BuildPollVoteCreationError,
@@ -3004,7 +3004,7 @@ class NewAClient:
             func_string(self.__onQr),
             func_string(self.__onLoginStatus),
             func_callback_bytes(self.event.execute),
-            func_callback_bytes(log_whatsmeow),
+            func_callback_bytes2(log_whatsmeow),
             (ctypes.c_char * self.event.list_func.__len__()).from_buffer(d),
             len(d),
             deviceprops,
@@ -3136,7 +3136,7 @@ class NewAClient:
             func_string(self.__onQr),
             func_string(self.__onLoginStatus),
             func_callback_bytes(self.event.execute),
-            func_callback_bytes(log_whatsmeow),
+            func_callback_bytes2(log_whatsmeow),
             (ctypes.c_char * len(self.event.list_func)).from_buffer(d),
             len(d),
             deviceprops,
@@ -3171,7 +3171,7 @@ class ClientFactory:
         :return: A list of Device-like objects representing all associated devices.
         :rtype: List[neonize_proto.Device]
         """
-        c_string = gocode.GetAllDevices(db.encode()).decode()
+        c_string = gocode.GetAllDevices(db.encode(), func_callback_bytes2(log_whatsmeow)).decode()
         if not c_string:
             return []
 
