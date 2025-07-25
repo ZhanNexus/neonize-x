@@ -30,7 +30,7 @@ logging.basicConfig(
     format="%(asctime)s.%(msecs)03d [%(name)s %(levelname)s] - %(message)s",
     datefmt="%H:%M:%S",
     level=logging.INFO,
-    handlers=[stream_handler]
+    handlers=[stream_handler],
 )
 
 clientlogger = logging.getLogger("whatsmeow.Client")
@@ -42,7 +42,7 @@ def log_whatsmeow(binary: int, size: int):
     log_msg = LogEntry.FromString(ctypes.string_at(binary, size))
     if log_msg.name == "Client":
         log = clientlogger
-    elif log_msg.name = "Database":
+    elif log_msg.name == "Database":
         log = dblogger
     else:
         log = logging.getLogger(f"whatsmeow.{log_msg.name}")
