@@ -1,14 +1,6 @@
 package main
 
-/*
 
-   #include <stdlib.h>
-   #include <stdbool.h>
-   #include <stdint.h>
-   #include <string.h>
-   #include "header/cstruct.h"
-   #include "python/pythonptr.h"
-*/
 import "C"
 import (
 	"context"
@@ -2045,7 +2037,7 @@ func PutArchived(id *C.char, user *C.uchar, userSize C.int, archived C.bool) *C.
 
 //export GetAllDevices
 func GetAllDevices(db *C.char, logCb C.ptr_to_python_function_callback_bytes2) *C.char {
-	dbLog := utils.NewLogger("Database", "ERROR", logCB)
+	dbLog := utils.NewLogger("Database", "ERROR", logCb)
 	container, err := getDB(db, dbLog)
 	if err != nil {
 		panic(err)
