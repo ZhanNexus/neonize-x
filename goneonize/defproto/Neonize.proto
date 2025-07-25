@@ -920,9 +920,9 @@ message BuildMessageReturnFunction{
 }
 
 message LogEntry {
-  required string message = 1;
-  required string level = 2;
-  required string name = 3;
+  required string Message = 1;
+  required string Level = 2;
+  required string Name = 3;
 }
 
 message Stop{}

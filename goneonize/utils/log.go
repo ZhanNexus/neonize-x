@@ -79,16 +79,16 @@ func (s *stdoutLogger) outputf(level, msg string, args ...interface{}) {
 		return
 	}
 	log_msg := defproto.LogEntry{
-		message: msg,
-		level: level,
-		name: s.mod,
+		Message: msg,
+		Level: level,
+		Name: s.mod,
 	}
 	buff, err := proto.Marshal(&log_msg)
 	if err != nil {
 		panic(err)
 	}
 	uchars, size := getBytesAndSize(buff)
-	C.call_c_func_callback_bytes(callback, uchars, size)
+	C.call_c_func_callback_bytes2(s.callback, uchars, size)
 	// var colorStart, colorReset string
 	// if s.color {
 		//  colorStart = colors[level]
@@ -110,6 +110,6 @@ func (s *stdoutLogger) Sub(mod string) Logger {
 // minLevel specifies the minimum log level to output. An empty string will output all logs.
 //
 // If color is true, then info, warn and error logs will be colored cyan, yellow and red respectively using ANSI color escape codes.
-func NewLogger(module string, minLevel string, callback C.ptr_to_python_function_bytes) Logger {
+func NewLogger(module string, minLevel string, callback C.ptr_to_python_function_bytes2) Logger {
 	return &stdoutLogger{mod: module, min: levelToInt[strings.ToUpper(minLevel)], callback: callback}
 }

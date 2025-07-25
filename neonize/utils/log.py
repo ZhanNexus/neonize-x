@@ -39,10 +39,10 @@ dblogger = logging.getLogger("Whatsmeow.Database")
 
 def log_whatsmeow(binary: int, size: int):
     log_msg = LogEntry.FromString(ctypes.string_at(binary, size))
-    if log_msg.name == "Client":
+    if log_msg.Name == "Client":
         log = clientlogger
-    elif log_msg.name == "Database":
+    elif log_msg.Name == "Database":
         log = dblogger
     else:
-        log = logging.getLogger(f"whatsmeow.{log_msg.name}")
-    getattr(log, log_msg.level.lower())(log_msg.message)
+        log = logging.getLogger(f"whatsmeow.{log_msg.Name}")
+    getattr(log, log_msg.Level.lower())(log_msg.Message)
