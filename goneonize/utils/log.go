@@ -50,7 +50,7 @@ func (n *noopLogger) Errorf(_ string, _ ...interface{}) {}
 func (n *noopLogger) Warnf(_ string, _ ...interface{})  {}
 func (n *noopLogger) Infof(_ string, _ ...interface{})  {}
 func (n *noopLogger) Debugf(_ string, _ ...interface{}) {}
-func (n *noopLogger) Sub(_ string) Logger               { return n }
+func (n *noopLogger) Sub(_ string) waLog.Logger               { return n }
 
 // Noop is a no-op Logger implementation that silently drops everything.
 var Noop Logger = &noopLogger{}
@@ -103,7 +103,7 @@ func (s *stdoutLogger) Errorf(msg string, args ...interface{}) { s.outputf("ERRO
 func (s *stdoutLogger) Warnf(msg string, args ...interface{})  { s.outputf("WARN", msg, args...) }
 func (s *stdoutLogger) Infof(msg string, args ...interface{})  { s.outputf("INFO", msg, args...) }
 func (s *stdoutLogger) Debugf(msg string, args ...interface{}) { s.outputf("DEBUG", msg, args...) }
-func (s *stdoutLogger) Sub(mod string) Logger {
+func (s *stdoutLogger) Sub(mod string) waLog.Logger {
 	return &stdoutLogger{mod: fmt.Sprintf("%s/%s", s.mod, mod), callback: s.callback, min: s.min}
 }
 
