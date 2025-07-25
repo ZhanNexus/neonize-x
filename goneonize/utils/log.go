@@ -6,16 +6,17 @@ package utils
 
 
 /*
-   #cgo CFLAGS: -I${SRCDIR}/header -I${SRCDIR}/python
+
    #include <stdlib.h>
    #include <stdbool.h>
    #include <stdint.h>
    #include <string.h>
-   #include "cstruct.h"
-   #include "pythonptr.h"
+   #include "../header/cstruct.h"
+   #include "../python/pythonptr.h"
 */
+import "C"
+
 import (
-	"C"
 	defproto "github.com/krypton-byte/neonize/defproto"
 	"google.golang.org/protobuf/proto"
 	"unsafe"
