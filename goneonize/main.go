@@ -1,6 +1,15 @@
 package main
 
 
+/*
+
+   #include <stdlib.h>
+   #include <stdbool.h>
+   #include <stdint.h>
+   #include <string.h>
+   #include "header/cstruct.h"
+   #include "python/pythonptr.h"
+*/
 import "C"
 import (
 	"context"
@@ -347,7 +356,7 @@ func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *
 	for _, s := range getByteByAddr(subscribes, lenSubscriber) {
 		subscribers[int(s)] = true
 	}
-	dbLog := utils.NewLogger("Database", C.GoString(logLevel), logCb)
+	dbLog := utils.NewLogger("Database", C.GoString(logLevel), utils.Callback(logCb))
 	// Make sure you add appropriate DB connector imports, e.g. github.com/mattn/go-sqlite3 for SQLite
 	container, err := getDB(db, dbLog)
 	uuid := C.GoString(id)
@@ -373,7 +382,7 @@ func Neonize(db *C.char, id *C.char, JIDByte *C.uchar, JIDSize C.int, logLevel *
 		panic(err_device)
 	}
 	proto.Merge(store.DeviceProps, &deviceProps)
-	clientLog := utils.NewLogger("Client", C.GoString(logLevel), logCb)
+	clientLog := utils.NewLogger("Client", C.GoString(logLevel), utils.Callback(logCb))
 	client := whatsmeow.NewClient(deviceStore, clientLog)
 	clients[uuid] = client
 	eventHandler := func(evt interface{}) {

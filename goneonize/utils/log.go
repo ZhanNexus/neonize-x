@@ -107,11 +107,9 @@ func (s *stdoutLogger) Sub(mod string) waLog.Logger {
 	return &stdoutLogger{mod: fmt.Sprintf("%s/%s", s.mod, mod), callback: s.callback, min: s.min}
 }
 
-// Stdout is a simple Logger implementation that outputs to stdout. The module name given is included in log lines.
-//
-// minLevel specifies the minimum log level to output. An empty string will output all logs.
-//
-// If color is true, then info, warn and error logs will be colored cyan, yellow and red respectively using ANSI color escape codes.
-func NewLogger(module string, minLevel string, callback C.ptr_to_python_function_callback_bytes2) Logger {
+type Callback = C.ptr_to_python_function_callback_bytes2
+
+
+func NewLogger(module string, minLevel string, callback Callback) Logger {
 	return &stdoutLogger{mod: module, min: levelToInt[strings.ToUpper(minLevel)], callback: callback}
 }
