@@ -9710,9 +9710,9 @@ func (x *BuildMessageReturnFunction) GetMessage() *waE2E.Message {
 
 type LogEntry struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       *string                `protobuf:"bytes,1,req,name=message" json:"message,omitempty"`
-	Level         *string                `protobuf:"bytes,2,req,name=level" json:"level,omitempty"`
-	Name          *string                `protobuf:"bytes,3,req,name=name" json:"name,omitempty"`
+	Message       *string                `protobuf:"bytes,1,req,name=Message" json:"Message,omitempty"`
+	Level         *string                `protobuf:"bytes,2,req,name=Level" json:"Level,omitempty"`
+	Name          *string                `protobuf:"bytes,3,req,name=Name" json:"Name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -10527,9 +10527,9 @@ const file_Neonize_proto_rawDesc = "" +
 	"\x05Error\x18\x01 \x01(\tR\x05Error\x124\n" +
 	"\aMessage\x18\x02 \x02(\v2\x1a.WAWebProtobufsE2E.MessageR\aMessage\"N\n" +
 	"\bLogEntry\x12\x18\n" +
-	"\amessage\x18\x01 \x02(\tR\amessage\x12\x14\n" +
-	"\x05level\x18\x02 \x02(\tR\x05level\x12\x12\n" +
-	"\x04name\x18\x03 \x02(\tR\x04name\"\x06\n" +
+	"\aMessage\x18\x01 \x02(\tR\aMessage\x12\x14\n" +
+	"\x05Level\x18\x02 \x02(\tR\x05Level\x12\x12\n" +
+	"\x04Name\x18\x03 \x02(\tR\x04Name\"\x06\n" +
 	"\x04Stop*!\n" +
 	"\x0eAddressingMode\x12\x06\n" +
 	"\x02PN\x10\x01\x12\a\n" +

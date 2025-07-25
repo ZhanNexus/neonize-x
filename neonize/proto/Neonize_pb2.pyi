@@ -3658,18 +3658,18 @@ class LogEntry(google.protobuf.message.Message):
     MESSAGE_FIELD_NUMBER: builtins.int
     LEVEL_FIELD_NUMBER: builtins.int
     NAME_FIELD_NUMBER: builtins.int
-    message: builtins.str
-    level: builtins.str
-    name: builtins.str
+    Message: builtins.str
+    Level: builtins.str
+    Name: builtins.str
     def __init__(
         self,
         *,
-        message: builtins.str | None = ...,
-        level: builtins.str | None = ...,
-        name: builtins.str | None = ...,
+        Message: builtins.str | None = ...,
+        Level: builtins.str | None = ...,
+        Name: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["level", b"level", "message", b"message", "name", b"name"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["level", b"level", "message", b"message", "name", b"name"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["Level", b"Level", "Message", b"Message", "Name", b"Name"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["Level", b"Level", "Message", b"Message", "Name", b"Name"]) -> None: ...
 
 global___LogEntry = LogEntry
 
