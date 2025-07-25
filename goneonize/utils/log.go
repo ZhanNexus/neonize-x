@@ -80,7 +80,7 @@ func (s *stdoutLogger) outputf(level, msg string, args ...interface{}) {
 	log_msg := defproto.LogEntry{
 		message: msg,
 		level: level,
-		module: s.mod,
+		name: s.mod,
 	}
 	buff, err := proto.Marshal(&log_msg)
 	if err != nil {
