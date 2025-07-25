@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 if ColoredFormatter:
     formatter = ColoredFormatter(
-        "%(asctime)s.%(msecs)03d %(log_color)s%[%(name)s %(levelname)s] - %(message)s%(reset)s",
+        "%(asctime)s.%(msecs)03d %(log_color)s[%(name)s %(levelname)s] - %(message)s%(reset)s",
         datefmt="%H:%M:%S",
         log_colors={
             "INFO": "cyan",
