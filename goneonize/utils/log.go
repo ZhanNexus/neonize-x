@@ -56,8 +56,9 @@ var Noop Logger = &noopLogger{}
 
 type stdoutLogger struct {
 	mod   string
-	color bool
 	min   int
+	
+	callback  C.ptr_to_python_function_callback_bytes2
 }
 
 var colors = map[string]string{
@@ -79,9 +80,9 @@ func (s *stdoutLogger) outputf(level, msg string, args ...interface{}) {
 		return
 	}
 	log_msg := defproto.LogEntry{
-		Message: msg,
-		Level: level,
-		Name: s.mod,
+		Message: proto.String(msg),
+		Level:   proto.String(level),
+		Name:    proto.String(s.mod),
 	}
 	buff, err := proto.Marshal(&log_msg)
 	if err != nil {
@@ -102,7 +103,7 @@ func (s *stdoutLogger) Warnf(msg string, args ...interface{})  { s.outputf("WARN
 func (s *stdoutLogger) Infof(msg string, args ...interface{})  { s.outputf("INFO", msg, args...) }
 func (s *stdoutLogger) Debugf(msg string, args ...interface{}) { s.outputf("DEBUG", msg, args...) }
 func (s *stdoutLogger) Sub(mod string) Logger {
-	return &stdoutLogger{mod: fmt.Sprintf("%s/%s", s.mod, mod), color: s.color, min: s.min}
+	return &stdoutLogger{mod: fmt.Sprintf("%s/%s", s.mod, mod), callback: s.callback, min: s.min}
 }
 
 // Stdout is a simple Logger implementation that outputs to stdout. The module name given is included in log lines.
