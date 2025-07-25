@@ -7,7 +7,7 @@ package utils
 
 /*
 
-	#cgo CFLAGS: -I${SRCDIR}/../header -I${SRCDIR}/../python
+   #cgo CFLAGS: -I${SRCDIR}/../header -I${SRCDIR}/../python
    #include <stdlib.h>
    #include <stdbool.h>
    #include <stdint.h>
