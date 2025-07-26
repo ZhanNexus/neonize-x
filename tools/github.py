@@ -21,7 +21,8 @@ class Github(httpx.Client):
         """
         self.base_url = "https://api.github.com"
         self.versioning = Version()
-        self.username, self.repository = self.versioning.github_url.split("/")[-2:]
+        self.username, self.repository = self.versioning.github_url.split(
+            "/")[-2:]
         super().__init__(base_url=self.base_url)
 
     def get_last_version(self) -> str:
@@ -32,7 +33,8 @@ class Github(httpx.Client):
             str: The latest release tag name.
         """
 
-        r = self.get(f"/repos/{self.username}/{self.repository}/releases").json()
+        r = self.get(
+            f"/repos/{self.username}/{self.repository}/releases").json()
         if isinstance(r, dict) and r.get("status") == "404":
             return "0.0.0"
         for data in r:
@@ -75,7 +77,8 @@ class Github(httpx.Client):
         Raises:
             TypeError: If no release with assets is found.
         """
-        r = self.get(f"/repos/{self.username}/{self.repository}/releases").json()
+        r = self.get(
+            f"/repos/{self.username}/{self.repository}/releases").json()
         if isinstance(r, dict) and r.get("status") == "404":
             return "0.0.0"
         for data in r:
