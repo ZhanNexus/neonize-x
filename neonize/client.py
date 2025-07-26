@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import ctypes
+import logging
 import re
 import struct
 import time
@@ -17,7 +18,7 @@ from typing import Optional, List, Sequence, overload
 from uuid import uuid4
 
 import magic
-from PIL import Image
+from PIL import Image, ImageSequence
 from google.protobuf.internal.containers import RepeatedCompositeFieldContainer
 from linkpreview import link_preview
 from threading import Thread
@@ -73,6 +74,7 @@ from .exc import (
     MarkReadError,
     NewsletterMarkViewedError,
     NewsletterSendReactionError,
+    BuildPollVoteCreationError,
 )
 from .exc import (
     GetContactQrLinkError,
@@ -133,6 +135,7 @@ from .proto.Neonize_pb2 import (
     ReturnFunctionWithError,
     LocalChatSettings,
     BuildMessageReturnFunction,
+    GetJIDFromStoreReturnFunction,
 )
 from .proto.waCompanionReg.WAWebProtobufsCompanionReg_pb2 import DeviceProps
 from .proto.waE2E.WAWebProtobufsE2E_pb2 import (
@@ -152,7 +155,7 @@ from .proto.waE2E.WAWebProtobufsE2E_pb2 import (
 from .proto.waConsumerApplication.WAConsumerApplication_pb2 import ConsumerApplication
 from .proto.waMsgApplication.WAMsgApplication_pb2 import MessageApplication
 from .types import MessageServerID, MessageWithContextInfo
-from .utils import add_exif, gen_vcard, log, log_whatsmeow, validate_link
+from .utils import add_exif, gen_vcard, get_message_type, log, log_whatsmeow, validate_link
 from .utils.enum import (
     BlocklistAction,
     MediaType,
@@ -170,7 +173,7 @@ from .utils.enum import (
 )
 from .utils.ffmpeg import FFmpeg
 from .utils.iofile import get_bytes_from_name_or_url, prepare_zip_file_content
-from .utils.jid import Jid2String, JIDToNonAD, build_jid
+from .utils.jid import Jid2String, JIDToNonAD, build_jid, jid_is_lid
 from .utils.sticker import convert_to_sticker, convert_to_webp
 
 _log_ = logging.getLogger(__name__)
@@ -403,7 +406,7 @@ class NewClient:
         """
         self.event._qr(self, ctypes.string_at(qr_protoaddr))
 
-    def _parse_mention(self, text: Optional[str] = None) -> list[str]:
+    def _parse_mention(self, text: Optional[str] = None, are_lids: bool = False) -> list[str]:
         """
         This function parses a given text and returns a list of 'mentions' in the format of 'mention@s.whatsapp.net'.
         A 'mention' is defined as a sequence of numbers (5 to 16 digits long) that is prefixed by '@' in the text.
@@ -1089,23 +1092,22 @@ class NewClient:
     ) -> List[Message]:
         p_func = partial(
             convert_to_webp,
-            packname=name,
-            publisher=packname,
+            name=packname,
+            packname=publisher,
             crop=crop,
             passthrough=passthrough,
-            animated_gif=transparent,
+            transparent=animated_gif,
         )
         def ensure_non_broken_packs(stickers):
             return [sticker for sticker in stickers if len(sticker[0]) < 1000000]
         with ProcessPoolExecutor(max_workers=20) as executor:
             stickers = list(executor.map(p_func, files))
-        stickers = await asyncio.gather(*funcs)
         stickers = ensure_non_broken_packs(
             stickers
         )  # prevents broken packs by removing invalid stickers
         CHUNK_SIZE = 60
         chunks = [stickers[i : i + CHUNK_SIZE] for i in range(0, len(stickers), CHUNK_SIZE)]
-        arg_list = []
+        args_list = []
 
         for idx, chunk in enumerate(chunks):
             pack_suffix = f" ({idx + 1})" if len(chunks) > 1 else ""
