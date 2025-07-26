@@ -11,6 +11,7 @@ except Exception:
     ColoredFormatter = None
 
 log = logging.getLogger(__name__)
+_log_ = log
 
 if ColoredFormatter:
     formatter = ColoredFormatter(
@@ -59,7 +60,7 @@ def _worker():
             level_fn = getattr(log, log_msg.Level.lower(), log.info)
             level_fn(log_msg.Message)
         except Exception:
-            log.exception("Failed to handle WhatsMeow log")
+            _log_.exception("Failed to handle WhatsMeow log")
         finally:
             _log_queue.task_done()
 
