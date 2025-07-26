@@ -41,9 +41,9 @@ jobs:
       run: |
         pip3 install autopep8 autoflake isort black
     - name: Check for showstoppers
-      run: autopep8 --verbose --in-place --recursive --aggressive --aggressive .
+      run: autopep8 --verbose --in-place --recursive --aggressive --exclude='*/proto/*' .
     - name: Remove unused imports and variables
-      run: autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports .
+      run: autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --exclude "*/proto/*" --ignore-init-module-imports .
     - name: lint with isort and black
       run: |
         isort neonize --skip "neonize/proto"
