@@ -3,19 +3,34 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: set release version
-        required: true
-      goneonize:
-        description: build binaries
+      version_major:
+        description: Specify whether the major version (<major>.minor.patch.post) should be updated.
         type: boolean
-        required: true
+        required: false
+        default: false
+      version_minor:
+        description: Specify whether the minor version (major.<minor>.patch.post) should be updated.
+        type: boolean
+        required: false
+        default: false
+      version_patch:
+        description: Specify whether the patch version (major.minor.<patch>.post) should be updated.
+        type: boolean
+        required: false
+      version_post:
+        description: Specify whether the post version (major.minor.patch.<post>) should be updated.
+        type: boolean
+        required: false
         default: true
+
 env:
  UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
+ VERSION_MAJOR: ${{ github.event.inputs.version_major }}
+ VERSION_MINOR: ${{ github.event.inputs.version_minor }}
+ VERSION_PATCH: ${{ github.event.inputs.version_patch }}
+ VERSION_POST: ${{ github.event.inputs.version_post }}
 jobs:
   android:
-    if: ${{ github.event.inputs.goneonize }}
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
@@ -28,13 +43,20 @@ jobs:
     
     - name: Install uv
       uses: astral-sh/setup-uv@v5
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/.venv
+        key: ${{ runner.os }}-${{ hashFiles('**/uv.lock') }}
     - name: install deps
       run: |
         uv sync --dev
-        uv run task version neonize --set-version ${{ github.event.inputs.version }}
-        uv run task version goneonize --set-version ${{ github.event.inputs.version }}
+        uv run task version --set-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" info
+        bash bump_version.sh
     - name: build
       run: |
+        # uv run task goneonize_changed
         export CGO_ENABLED=1
         wget https://dl.google.com/android/repository/android-ndk-r26b-linux.zip > /dev/null
         unzip android-ndk-r26b-linux.zip > /dev/null
@@ -64,13 +86,13 @@ jobs:
         export GOOS=android
         export GOARCH=386
         uv run task build goneonize
+      continue-on-error: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with: 
         name: Android
         path: neonize/*.so
   zig:
-    if: ${{ github.event.inputs.goneonize }}
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
@@ -83,13 +105,20 @@ jobs:
     - uses: mlugg/setup-zig@v2
     - name: Install uv
       uses: astral-sh/setup-uv@v5
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/.venv
+        key: ${{ runner.os }}-${{ hashFiles('**/uv.lock') }}
     - name: install deps
       run: |
         uv sync --dev
-        uv run task version neonize --set-version ${{ github.event.inputs.version }}
-        uv run task version goneonize --set-version ${{ github.event.inputs.version }}
+        uv run task version --set-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" info
+        bash bump_version.sh
     - name: build
       run: |
+        # uv run task goneonize_changed
         mkdir LIBS
         export CGO_ENABLED=1
         #AMD64
@@ -124,16 +153,18 @@ jobs:
         uv build
         uv run task repack
         mv neonize/*.so LIBS
-        # uv publish
+        cp dist/*.whl LIBS/
+        if [[ $UV_PUBLISH_TOKEN ]];then
+          uv publish
+        fi
+      continue-on-error: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with: 
         name: Zig
         path: |
-          LIBS/*.so
-          LIBS/*.dll
+          LIBS/*
   linux:
-    if: ${{ github.event.inputs.goneonize }}
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
@@ -145,15 +176,22 @@ jobs:
         python-version: "3.11"
     - name: Install uv
       uses: astral-sh/setup-uv@v5
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/.venv
+        key: ${{ runner.os }}-${{ hashFiles('**/uv.lock') }}
     - name: install deps
       run: |
         uv sync --dev
-        uv run task version neonize --set-version ${{ github.event.inputs.version }}
-        uv run task version goneonize --set-version ${{ github.event.inputs.version }}
+        uv run task version --set-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" info
+        bash bump_version.sh
     - name: Installing Dev Package
       run: sudo apt update && sudo apt install wget gcc-aarch64-linux-gnu gcc-s390x-linux-gnu gcc-riscv64-linux-gnu -y
     - name: build
       run: |
+        # uv run task goneonize_changed
         mkdir LIBS
         #AMD64/X86_64
         export CGO_ENABLED=1
@@ -186,15 +224,17 @@ jobs:
         uv build
         uv run task repack
         mv neonize/*.so LIBS
-        # uv publish
-
+        cp dist/*.whl LIBS/
+        if [[ $UV_PUBLISH_TOKEN ]];then
+          uv publish
+        fi
+      continue-on-error: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with: 
         name: Linux
-        path: LIBS/*.so
+        path: LIBS/*
   darwin:
-    if: ${{ github.event.inputs.goneonize }}
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
@@ -206,13 +246,20 @@ jobs:
         python-version: "3.11"
     - name: Install uv
       uses: astral-sh/setup-uv@v5
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/.venv
+        key: ${{ runner.os }}-${{ hashFiles('**/uv.lock') }}
     - name: install deps
       run: |
         uv sync --dev
-        uv run task version neonize --set-version ${{ github.event.inputs.version }}
-        uv run task version goneonize --set-version ${{ github.event.inputs.version }}
+        uv run task version --set-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" info
+        bash bump_version.sh
     - name: build
       run: |
+        # uv run task goneonize_changed
         mkdir LIBS
         export PATH="/Users/runner/.local/bin:$PATH"
         # Set necessary environment variables for building on Darwin
@@ -237,26 +284,113 @@ jobs:
         uv run task build goneonize
         uv build
         uv run task repack
+        cp dist/*.whl LIBS/
         mv neonize/*.dylib LIBS/
-        # uv publish
+        if [[ $UV_PUBLISH_TOKEN ]];then
+          uv publish
+        fi
+      continue-on-error: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with: 
         name: Darwin
-        path: LIBS/*.dylib
-
+        path: LIBS/*
+  # musl:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - arch: x86
+  #           goarch: 386
+  #         - arch: aarch64
+  #           goarch: arm64
+  #         - arch: x86_64
+  #           goarch: amd64
+  #         - arch: armv7
+  #           goarch: arm
+  #         - arch: ppc64le
+  #           goarch: ppc64le
+  #         - arch: s390x
+  #           goarch: s390x
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Setup latest Alpine Linux
+  #       uses: jirutka/setup-alpine@v1
+  #       with:
+  #         alpine-version: 'latest'
+  #         arch: ${{ matrix.arch }}
+  #         chroot: true
+  #         packages: |
+  #           linux-headers
+  #           python3-dev
+  #           go
+  #           python3
+  #           uv
+  #           musl
+  #           musl-dev
+  #           musl-utils
+  #           git
+  #           gcc
+  #           py3-pillow
+  #           build-base
+  #           zlib-dev
+  #           jpeg-dev
+  #           freetype-dev
+  #           lcms2-dev
+  #           bash
+  #     - name: Run script inside Alpine chroot as the default user (unprivileged)
+  #       run: |
+  #         export CGO_ENABLED=1
+  #         export GOARCH=${{ matrix.goarch }}
+  #         go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+  #         go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+  #         ls -la  # as you would expect, you're in your workspace directory
+  #         uv sync
+  #         uv sync --dev
+  #         uv run task version --set-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" info
+  #         bash bump_version.sh
+  #         uv run task build goneonize
+  #         uv build
+  #         uv run task repack
+  #       shell: alpine.sh {0}
+  #     - name: push to pypi
+  #       run: |
+  #         export UV_PUBLISH_TOKEN=${UV_PUBLISH_TOKEN}
+  #         if [[ $UV_PUBLISH_TOKEN ]];then
+  #           uv publish
+  #         fi
+  #         mkdir LIBS
+  #         mv dist/*.whl LIBS/
+  #       shell: alpine.sh {0}
+  #     - name: Upload Artifact
+  #       uses: actions/upload-artifact@v4
+  #       with: 
+  #         name: Musl ${{ matrix.arch }}
+  #         path: LIBS/*
   release:
     runs-on: ubuntu-latest
     needs: [android, zig, linux, darwin]
     steps:
-    - if: ${{ github.event.inputs.goneonize }}
-      name: Download Artifact
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    - name: Download Artifact
       uses: actions/download-artifact@v4
       with:
         merge-multiple: true
         path: sharedlib
-    - if: ${{ github.event.inputs.goneonize }}
-      name: Upload shared library to draft release
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+    - name: install deps
+      run: |
+        uv sync --dev
+        uv run task version --set-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" info
+        bash bump_version.sh
+        echo "TAG_NAME=$(uv run task version neonize)" >> $GITHUB_ENV
+        ls -R
+        ls -lah sharedlib
+    - name: Upload shared library to draft release
       uses: softprops/action-gh-release@v1
       with:
         draft: false
@@ -264,23 +398,11 @@ jobs:
           sharedlib/*.so
           sharedlib/*.dll
           sharedlib/*.dylib
+          sharedlib/*.whl
         generate_release_notes: true
-        tag_name: ${{ github.event.inputs.version }}
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-    - name: Install uv
-      uses: astral-sh/setup-uv@v5
-    - name: install deps
-      run: |
-        uv sync --dev
-        uv run task version neonize --set-version ${{ github.event.inputs.version }}
-    - if: ${{ github.event.inputs.goneonize }}
-      name: set target goneonize to ${{ github.event.inputs.version }}
-      run: uv run task version goneonize --set-version ${{ github.event.inputs.version }}
-    - if: ${{ !github.event.inputs.goneonize }}
-      name: set target goneonize to last release
-      run: uv run task version goneonize --last
+        tag_name: ${{ env.TAG_NAME }}
     - name: Publish
-      run: echo "Skipped" # uv build && uv publish
+      run: |
+        if [[ $UV_PUBLISH_TOKEN ]];then
+          uv build && uv publish
+        fi
