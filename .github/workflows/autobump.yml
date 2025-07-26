@@ -39,6 +39,12 @@ jobs:
       run: ruff check --fix && ruff format .
     - name: update golang dependencies
       run: cd goneonize && go get -u && go mod tidy
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        version: v1.58.1 # Specify a golangci-lint version
+        args: --issues-exit-code=0 # Exit with 0 even if issues are found, useful for reformatting
+              
     - name: Create Pull Request
       id: cpr
       uses: peter-evans/create-pull-request@v7
