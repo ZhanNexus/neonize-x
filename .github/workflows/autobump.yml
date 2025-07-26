@@ -46,8 +46,8 @@ jobs:
       run: autoflake --in-place --recursive --remove-all-unused-imports --remove-unused-variables --ignore-init-module-imports .
     - name: lint with isort and black
       run: |
-        isort neonize
-        black --fast neonize
+        isort neonize --skip "neonize/proto"
+        black neonize  --exclude "neonize/proto"
     - name: update golang dependencies
       run: cd goneonize && go get -u && go mod tidy
     - name: Run golangci-lint
