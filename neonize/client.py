@@ -1175,13 +1175,15 @@ class NewClient:
             for idx, chunk in enumerate(chunks):
                 suffix = f" ({idx + 1})" if total > 1 else ""
                 full_name = packname + suffix
-                futures.append(executor.submit(
-                    self._process_single_pack,
-                    stickers=chunk,
-                    pack_name=full_name,
-                    publisher=publisher,
-                    quoted=quoted,
-                ))
+                futures.append(
+                    executor.submit(
+                        self._process_single_pack,
+                        stickers=chunk,
+                        pack_name=full_name,
+                        publisher=publisher,
+                        quoted=quoted,
+                    )
+                )
             return [future.result() for future in futures]
 
     def send_stickerpack(
@@ -1586,11 +1588,12 @@ class NewClient:
 
             messages = [fut.result() for fut in futures]
 
-
         responses = []
         with ThreadPoolExecutor(max_workers=25) as executor:
             send_futures = [
-                executor.submit(self.send_message, to, msg, add_msg_secret=add_msg_secret)
+                executor.submit(
+                    self.send_message, to, msg, add_msg_secret=add_msg_secret
+                )
                 for msg in messages
             ]
             responses = [fut.result() for fut in send_futures]
