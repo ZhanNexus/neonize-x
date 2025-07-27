@@ -1508,7 +1508,7 @@ class NewAClient:
             add_msg_secret=add_msg_secret,
         )
 
-    async def build_album_content(self, file, media_type, msg_association, **kwargs):
+    async def build_album_content(self, file, media_type, msg_association, **kwargs) -> Message:
         build_message = (
             self.build_image_message
             if media_type == "image"
@@ -1548,15 +1548,17 @@ class NewAClient:
             medias.append((file, media_type))
         if not (image_count or video_count):
             raise SendMessageError("No media found to send!")
-        message = AlbumMessage(
-            expectedImageCount=image_count,
-            expectedVideoCount=video_count,
-            contextInfo=ContextInfo(
-                mentionedJID=self._parse_mention(
-                    (ghost_mentions or caption), mentions_are_lids
+        message = Message(
+            albumMessage=AlbumMessage(
+                expectedImageCount=image_count,
+                expectedVideoCount=video_count,
+                contextInfo=ContextInfo(
+                    mentionedJID=self._parse_mention(
+                        (ghost_mentions or caption), mentions_are_lids
+                    ),
+                    groupMentions=(await self._parse_group_mention(caption)),
                 ),
-                groupMentions=(await self._parse_group_mention(caption)),
-            ),
+            )
         )
         if quoted:
             message.albumMessage.contextInfo.MergeFrom(
