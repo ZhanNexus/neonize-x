@@ -1535,7 +1535,7 @@ class NewClient:
         if not (image_count or video_count):
             raise SendMessageError("No media found to send!")
         elif len(medias) < 2:
-            raise SendMessageError("No enough media to send an album")
+            raise SendMessageError("Not enough media to send an album")
         message = Message(
             albumMessage=AlbumMessage(
                 expectedImageCount=image_count,
