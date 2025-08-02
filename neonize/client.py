@@ -1590,14 +1590,10 @@ class NewClient:
 
             messages = [fut.result() for fut in futures]
 
-        with ThreadPoolExecutor(max_workers=25) as executor:
-            send_futures = [
-                executor.submit(
-                    self.send_message, to, msg, add_msg_secret=add_msg_secret
-                )
-                for msg in messages
-            ]
-            responses = [fut.result() for fut in send_futures]
+        responses = []
+        for message in messages:
+            resp = self.send_message(to, message, add_msg_secret=add_msg_secret)
+            responses.append(resp)
         return [response, responses]
 
     def build_audio_message(
