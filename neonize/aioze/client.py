@@ -1324,10 +1324,11 @@ class NewAClient:
             thumbnail = await ffmpeg.extract_thumbnail()
         if spoiler:
             img = Image.open(BytesIO(thumbnail))
+            if img.mode != "RGB":
+                img = img.convert("RGB")
             img = img.filter(ImageFilter.GaussianBlur(radius=12))
             thumbnail = BytesIO()
-            img_saveable = img if img.mode == "RGB" else img.convert("RGB")
-            img_saveable.save(thumbnail, format="jpeg")
+            img.save(thumbnail, format="jpeg")
             thumbnail = thumbnail.getvalue()
         upload = await self.upload(buff)
         message = Message(
