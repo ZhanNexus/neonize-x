@@ -30,7 +30,7 @@ import magic
 from google.protobuf.internal.containers import RepeatedCompositeFieldContainer
 from linkpreview import link_preview as fallback_link_preview
 from linkpreview.exceptions import MaximumContentSizeError
-from PIL import Image, ImageSequence
+from PIL import Image, ImageFilter, ImageSequence
 from requests.exceptions import HTTPError
 
 from .._binder import (
@@ -1406,6 +1406,7 @@ class NewAClient:
         caption: Optional[str] = None,
         quoted: Optional[neonize_proto.Message] = None,
         viewonce: bool = False,
+        spoiler: bool = False,
         ghost_mentions: Optional[str] = None,
         mentions_are_lids: bool = False,
     ) -> Message:
@@ -1432,6 +1433,8 @@ class NewAClient:
         n_file = await get_bytes_from_name_or_url_async(file)
         img = Image.open(BytesIO(n_file))
         img.thumbnail(AspectRatioMethod(*img.size, res=200))
+        if spoiler:
+            img = im.filter(ImageFilter.GaussianBlur(radius=12))
         thumbnail = BytesIO()
         img_saveable = img if img.mode == "RGB" else img.convert("RGB")
         img_saveable.save(thumbnail, format="jpeg")
@@ -1472,6 +1475,7 @@ class NewAClient:
         caption: Optional[str] = None,
         quoted: Optional[neonize_proto.Message] = None,
         viewonce: bool = False,
+        spoiler: bool = False,
         ghost_mentions: Optional[str] = None,
         mentions_are_lids: bool = False,
         add_msg_secret: bool = False,
@@ -1503,6 +1507,7 @@ class NewAClient:
                 quoted,
                 viewonce=viewonce,
                 ghost_mentions=ghost_mentions,
+                spoiler=spoiler,
                 mentions_are_lids=mentions_are_lids,
             ),
             add_msg_secret=add_msg_secret,
