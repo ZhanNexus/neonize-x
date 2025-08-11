@@ -1456,6 +1456,8 @@ class NewAClient:
         img = Image.open(BytesIO(n_file))
         img.thumbnail(AspectRatioMethod(*img.size, res=200))
         if spoiler:
+            if img.mode != "RGB":
+                img = img.convert("RGB")
             img = img.filter(ImageFilter.GaussianBlur(radius=12))
         thumbnail = BytesIO()
         img_saveable = img if img.mode == "RGB" else img.convert("RGB")
