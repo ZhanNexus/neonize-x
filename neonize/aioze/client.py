@@ -1653,7 +1653,11 @@ class NewAClient:
         funcs.extend(
             [
                 self.build_album_content(
-                    file, media_type, msg_association, quoted=quoted, spoiler=spoiler,
+                    file,
+                    media_type,
+                    msg_association,
+                    quoted=quoted,
+                    spoiler=spoiler,
                 )
                 for file, media_type in medias[1:]
             ]

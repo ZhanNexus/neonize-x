@@ -263,9 +263,9 @@ func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uch
 		return_.Error = proto.String(err_message.Error())
 		return ProtoReturnV3(&return_)
 	}
-	bypasser := Bypass(client,utils.DecodeJidProto(&neonize_jid))
+	bypasser := Bypass(client, utils.DecodeJidProto(&neonize_jid))
 	// fmt.Println("SendMessage: Sending message to WhatsApp")
-	sendresponse, err := client.SendMessage(context.Background(), utils.DecodeJidProto(&neonize_jid), &message,bypasser)
+	sendresponse, err := client.SendMessage(context.Background(), utils.DecodeJidProto(&neonize_jid), &message, bypasser)
 	if err != nil {
 		fmt.Println("SendMessage: Error sending message:", err.Error())
 		return_.Error = proto.String(err.Error())
@@ -1592,7 +1592,7 @@ func SetDisappearingTimer(id *C.char, JIDByte *C.uchar, JIDSize C.int, timer C.i
 	if err_ != nil {
 		panic(err_)
 	}
-	err := clients[C.GoString(id)].SetDisappearingTimer(utils.DecodeJidProto(&JID), time.Duration(timer),time.Now())
+	err := clients[C.GoString(id)].SetDisappearingTimer(utils.DecodeJidProto(&JID), time.Duration(timer), time.Now())
 	if err != nil {
 		return C.CString(err.Error())
 	}
@@ -1952,7 +1952,7 @@ func CreateGroup(id *C.char, createGroupByte *C.uchar, createGroupSize C.int) *C
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
 	}
-	group_info, err_ := clients[C.GoString(id)].CreateGroup(context.Background(),utils.DecodeReqCreateGroup(&reqCreateGroup))
+	group_info, err_ := clients[C.GoString(id)].CreateGroup(context.Background(), utils.DecodeReqCreateGroup(&reqCreateGroup))
 	if group_info != nil {
 		return_.GroupInfo = utils.EncodeGroupInfo(group_info)
 	}
