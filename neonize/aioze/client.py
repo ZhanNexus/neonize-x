@@ -1691,14 +1691,12 @@ class NewAClient:
         io.seek(0)
         buff = io.read()
         
-        # If ptt is True, convert the audio to PTT format using AFFmpeg
         if ptt:
             async with AFFmpeg(buff) as ffmpeg:
                 buff = await ffmpeg.to_ptt()
         
         upload = await self.upload(buff)
         
-        # Extract duration after conversion if needed
         async with AFFmpeg(buff) as ffmpeg:
             duration = int((await ffmpeg.extract_info()).format.duration)
         
