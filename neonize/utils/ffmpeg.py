@@ -369,24 +369,24 @@ class AFFmpeg:
 
     async def to_ptt(self) -> bytes:
         """
-        Converts the input file to a WhatsApp-compatible PTT (voice note) format.
-        Produces OGG container with Opus codec: audio/ogg; codecs=opus
+        Convert input audio/video to WhatsApp-compatible PTT (voice note) format.
+        Uses libopus codec in OGG container, mono channel, 16kHz sample rate.
         """
+        import os, tempfile, uuid
+    
         temp = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.ogg")
     
         await self.call(
             [
                 "ffmpeg",
-                "-y",                 # overwrite otomatis
+                "-y",                 # overwrite output file if exists
                 "-i", self.filepath,  # input file
-                "-vn",                # nonaktifkan video stream
-                "-c:a", "libopus",    # codec audio Opus
-                "-b:a", "64k",        # bitrate standar WhatsApp
-                "-ar", "48000",       # sample rate wajib 48000 Hz
+                "-vn",                # disable video
+                "-c:a", "libopus",    # use Opus audio codec
+                "-ar", "16000",       # sample rate 16 kHz
                 "-ac", "1",           # mono channel
-                "-vbr", "on",         # variable bitrate
-                "-application", "voip",  # mode voip (lebih cocok untuk PTT)
-                temp,                 # output file
+                "-b:a", "64k",        # bitrate 64 kbps
+                temp,                 # output path
             ]
         )
     
@@ -394,7 +394,7 @@ class AFFmpeg:
             buf = file.read()
         os.remove(temp)
         return buf
-
+    
     async def extract_thumbnail(
         self,
         format: ImageFormat = ImageFormat.JPG,
