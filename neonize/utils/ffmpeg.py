@@ -369,25 +369,27 @@ class AFFmpeg:
 
     async def to_ptt(self) -> bytes:
         """
-        Converts the input file to a PTT (Push-to-Talk) audio format (AMR-NB).
-        This is commonly used for voice messages in WhatsApp and other platforms.
+        Converts the input file to a WhatsApp-compatible PTT (voice note) format.
+        Produces OGG container with Opus codec: audio/ogg; codecs=opus
         """
-        temp = tempfile.gettempdir() + "/" + uuid.uuid4().__str__() + ".ogg"
-        # ffmpeg -i dj.mp3 -c:a libopus -b:a 128k -vbr on -compression_level 10 -application audio -ar 48000 -ac 2 output_audio.opus
+        temp = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.ogg")
+    
         await self.call(
             [
                 "ffmpeg",
-                "-y",                 # overwrite otomatis (opsional tapi aman)
+                "-y",                 # overwrite otomatis
                 "-i", self.filepath,  # input file
                 "-vn",                # nonaktifkan video stream
-                "-c:a", "libopus",    # codec audio: Opus
-                "-b:a", "64k",        # bitrate audio
-                "-ar", "48000",       # sample rate WA
-                "-ac", "1",           # mono (1 channel)
-                "-vbr", "on",         # aktifkan variable bitrate
+                "-c:a", "libopus",    # codec audio Opus
+                "-b:a", "64k",        # bitrate standar WhatsApp
+                "-ar", "48000",       # sample rate wajib 48000 Hz
+                "-ac", "1",           # mono channel
+                "-vbr", "on",         # variable bitrate
+                "-application", "voip",  # mode voip (lebih cocok untuk PTT)
                 temp,                 # output file
             ]
         )
+    
         with open(temp, "rb") as file:
             buf = file.read()
         os.remove(temp)
