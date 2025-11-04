@@ -89,7 +89,7 @@ func Bypass(client *whatsmeow.Client, chatJID types.JID) whatsmeow.SendRequestEx
 		ownID := client.Store.ID
 		if ownID != nil {
 			extra.TargetJID = []types.JID{*ownID}
-			extra.ID = GenerateMessageIDV2(context.Background(),ownID)
+			extra.ID = GenerateMessageIDV2(context.Background(),client.Store.GetJID())
 		}
 	}
 	return extra
