@@ -1426,8 +1426,6 @@ class NewAClient:
         body="",
         footer=""
     ):
-        """Mengirim pesan karosel interaktif secara asinkron."""
-        
         carousel_cards = []
         
         for data in cards:
