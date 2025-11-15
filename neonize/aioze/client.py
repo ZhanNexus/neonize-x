@@ -1421,11 +1421,12 @@ class NewAClient:
 
     async def send_carousel_message(
         self,
-        to, 
-        cards: List[Dict[str, str]],
-        body: str = "", 
-        footer: str = ""
-    ) -> None:
+        to,
+        cards, 
+        body="",
+        footer=""
+    ):
+        """Mengirim pesan karosel interaktif secara asinkron."""
         
         carousel_cards = []
         
@@ -1433,7 +1434,7 @@ class NewAClient:
             card = {
                 "header": {
                     "title": data.get('title', ''),
-                    "hasMediaAttachment": True,
+                    "hasMediaAttachment": True, 
                 },
                 "body": {
                     "text": data.get('card_body', '')
@@ -1442,31 +1443,38 @@ class NewAClient:
                     "text": data.get('card_footer', '')
                 },
                 "nativeFlowMessage": {
-                    "buttons": data.get('buttons',[])
+                    "buttons": data.get('buttons', [])
                 }
             }
-            if data["image_url"]:
-                card["header"]["imageMessage"]=(await self.build_image_message(data["image_url"])).imageMessage
+            
+            image_url = data.get("image_url","")
+            video_url = data.get("video_url","")
+            
+            if image_url:
+                image_message = await self.build_image_message(image_url)
+                card["header"]["imageMessage"] = image_message.imageMessage
                 
-            elif data["video_url"]:
-                card["header"]["videoMessage"]=(await self.build_video_message(data["video_url"])).videoMessage
+            elif video_url:
+                video_message = await self.build_video_message(video_url)
+                card["header"]["videoMessage"] = video_message.videoMessage
                 
             carousel_cards.append(card)
-    
+            
         payload = {
             "body": {
-                "text": body or ""
+                "text": body
             },
             "footer": {
-                "text": footer or ""
+                "text": footer
             },
             "carouselMessage": {
                 "cards": carousel_cards,
                 "messageVersion": 1
             }
         }
+        
+        return await self.send_message(to, Message(interactiveMessage=payload))
     
-        return await self.send_message(to,Message(interactiveMessage=payload))
     
     async def build_image_message(
         self,
