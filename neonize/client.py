@@ -1305,7 +1305,55 @@ class NewClient:
                 self._make_quoted_message(quoted)
             )
         return message
-
+    def send_carousel_message(
+        self,
+        to, 
+        cards: List[Dict[str, str]],
+        body: str = "", 
+        footer: str = ""
+    ) -> None:
+        
+        carousel_cards = []
+        
+        for data in cards:
+            card = {
+                "header": {
+                    "title": data.get('title', ''),
+                    "hasMediaAttachment": True,
+                },
+                "body": {
+                    "text": data.get('card_body', '')
+                },
+                "footer": {
+                    "text": data.get('card_footer', '')
+                },
+                "nativeFlowMessage": {
+                    "buttons": data.get('buttons',[])
+                }
+            }
+            if data["image_url"]:
+                card["header"]["imageMessage"]=(self.build_image_message(data["image_url"])).imageMessage
+                
+            elif data["video_url"]:
+                card["header"]["videoMessage"]=(self.build_video_message(data["video_url"])).videoMessage
+                
+            carousel_cards.append(card)
+    
+        payload = {
+            "body": {
+                "text": body or ""
+            },
+            "footer": {
+                "text": footer or ""
+            },
+            "carouselMessage": {
+                "cards": carousel_cards,
+                "messageVersion": 1
+            }
+        }
+    
+        return self.send_message(to,Message(interactiveMessage=payload))
+        
     def send_video(
         self,
         to: JID,
