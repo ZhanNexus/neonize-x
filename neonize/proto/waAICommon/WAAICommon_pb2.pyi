@@ -63,6 +63,8 @@ class _BotMetricsEntryPointEnumTypeWrapper(google.protobuf.internal.enum_type_wr
     MESSAGE_QUICK_ACTION_GROUP_CHAT: _BotMetricsEntryPoint.ValueType  # 34
     ATTACHMENT_TRAY_1_ON_1_CHAT: _BotMetricsEntryPoint.ValueType  # 35
     ATTACHMENT_TRAY_GROUP_CHAT: _BotMetricsEntryPoint.ValueType  # 36
+    ASK_META_AI_MEDIA_VIEWER_1ON1: _BotMetricsEntryPoint.ValueType  # 37
+    ASK_META_AI_MEDIA_VIEWER_GROUP: _BotMetricsEntryPoint.ValueType  # 38
 
 class BotMetricsEntryPoint(_BotMetricsEntryPoint, metaclass=_BotMetricsEntryPointEnumTypeWrapper): ...
 
@@ -103,6 +105,8 @@ MESSAGE_QUICK_ACTION_1_ON_1_CHAT: BotMetricsEntryPoint.ValueType  # 33
 MESSAGE_QUICK_ACTION_GROUP_CHAT: BotMetricsEntryPoint.ValueType  # 34
 ATTACHMENT_TRAY_1_ON_1_CHAT: BotMetricsEntryPoint.ValueType  # 35
 ATTACHMENT_TRAY_GROUP_CHAT: BotMetricsEntryPoint.ValueType  # 36
+ASK_META_AI_MEDIA_VIEWER_1ON1: BotMetricsEntryPoint.ValueType  # 37
+ASK_META_AI_MEDIA_VIEWER_GROUP: BotMetricsEntryPoint.ValueType  # 38
 global___BotMetricsEntryPoint = BotMetricsEntryPoint
 
 class _BotMetricsThreadEntryPoint:
@@ -196,6 +200,21 @@ AI_RICH_RESPONSE_MAP: AIRichResponseSubMessageType.ValueType  # 7
 AI_RICH_RESPONSE_LATEX: AIRichResponseSubMessageType.ValueType  # 8
 AI_RICH_RESPONSE_CONTENT_ITEMS: AIRichResponseSubMessageType.ValueType  # 9
 global___AIRichResponseSubMessageType = AIRichResponseSubMessageType
+
+class _SessionTransparencyType:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _SessionTransparencyTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_SessionTransparencyType.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    UNKNOWN_TYPE: _SessionTransparencyType.ValueType  # 0
+    NY_AI_SAFETY_DISCLAIMER: _SessionTransparencyType.ValueType  # 1
+
+class SessionTransparencyType(_SessionTransparencyType, metaclass=_SessionTransparencyTypeEnumTypeWrapper): ...
+
+UNKNOWN_TYPE: SessionTransparencyType.ValueType  # 0
+NY_AI_SAFETY_DISCLAIMER: SessionTransparencyType.ValueType  # 1
+global___SessionTransparencyType = SessionTransparencyType
 
 @typing.final
 class BotPluginMetadata(google.protobuf.message.Message):
@@ -529,16 +548,19 @@ class BotModelMetadata(google.protobuf.message.Message):
 
     MODELTYPE_FIELD_NUMBER: builtins.int
     PREMIUMMODELSTATUS_FIELD_NUMBER: builtins.int
+    MODELNAMEOVERRIDE_FIELD_NUMBER: builtins.int
     modelType: global___BotModelMetadata.ModelType.ValueType
     premiumModelStatus: global___BotModelMetadata.PremiumModelStatus.ValueType
+    modelNameOverride: builtins.str
     def __init__(
         self,
         *,
         modelType: global___BotModelMetadata.ModelType.ValueType | None = ...,
         premiumModelStatus: global___BotModelMetadata.PremiumModelStatus.ValueType | None = ...,
+        modelNameOverride: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["modelType", b"modelType", "premiumModelStatus", b"premiumModelStatus"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["modelType", b"modelType", "premiumModelStatus", b"premiumModelStatus"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["modelNameOverride", b"modelNameOverride", "modelType", b"modelType", "premiumModelStatus", b"premiumModelStatus"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["modelNameOverride", b"modelNameOverride", "modelType", b"modelType", "premiumModelStatus", b"premiumModelStatus"]) -> None: ...
 
 global___BotModelMetadata = BotModelMetadata
 
@@ -767,6 +789,10 @@ class BotCapabilityMetadata(google.protobuf.message.Message):
         RICH_RESPONSE_UR_INLINE_REELS_ENABLED: BotCapabilityMetadata._BotCapabilityType.ValueType  # 43
         RICH_RESPONSE_UR_MEDIA_GRID_ENABLED: BotCapabilityMetadata._BotCapabilityType.ValueType  # 44
         RICH_RESPONSE_UR_TIMESTAMP_PLACEHOLDER: BotCapabilityMetadata._BotCapabilityType.ValueType  # 45
+        RICH_RESPONSE_IN_APP_SURVEY: BotCapabilityMetadata._BotCapabilityType.ValueType  # 46
+        AI_RESPONSE_MODEL_BRANDING: BotCapabilityMetadata._BotCapabilityType.ValueType  # 47
+        SESSION_TRANSPARENCY_SYSTEM_MESSAGE: BotCapabilityMetadata._BotCapabilityType.ValueType  # 48
+        RICH_RESPONSE_UR_REASONING: BotCapabilityMetadata._BotCapabilityType.ValueType  # 49
 
     class BotCapabilityType(_BotCapabilityType, metaclass=_BotCapabilityTypeEnumTypeWrapper): ...
     UNKNOWN: BotCapabilityMetadata.BotCapabilityType.ValueType  # 0
@@ -815,6 +841,10 @@ class BotCapabilityMetadata(google.protobuf.message.Message):
     RICH_RESPONSE_UR_INLINE_REELS_ENABLED: BotCapabilityMetadata.BotCapabilityType.ValueType  # 43
     RICH_RESPONSE_UR_MEDIA_GRID_ENABLED: BotCapabilityMetadata.BotCapabilityType.ValueType  # 44
     RICH_RESPONSE_UR_TIMESTAMP_PLACEHOLDER: BotCapabilityMetadata.BotCapabilityType.ValueType  # 45
+    RICH_RESPONSE_IN_APP_SURVEY: BotCapabilityMetadata.BotCapabilityType.ValueType  # 46
+    AI_RESPONSE_MODEL_BRANDING: BotCapabilityMetadata.BotCapabilityType.ValueType  # 47
+    SESSION_TRANSPARENCY_SYSTEM_MESSAGE: BotCapabilityMetadata.BotCapabilityType.ValueType  # 48
+    RICH_RESPONSE_UR_REASONING: BotCapabilityMetadata.BotCapabilityType.ValueType  # 49
 
     CAPABILITIES_FIELD_NUMBER: builtins.int
     @property
@@ -1233,21 +1263,137 @@ class BotFeedbackMessage(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
         @typing.final
+        class SidebySideSurveyMetaAiAnalyticsData(google.protobuf.message.Message):
+            DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+            @typing.final
+            class SideBySideSurveyAbandonEventData(google.protobuf.message.Message):
+                DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+                ABANDONDWELLTIMEMSSTRING_FIELD_NUMBER: builtins.int
+                abandonDwellTimeMSString: builtins.str
+                def __init__(
+                    self,
+                    *,
+                    abandonDwellTimeMSString: builtins.str | None = ...,
+                ) -> None: ...
+                def HasField(self, field_name: typing.Literal["abandonDwellTimeMSString", b"abandonDwellTimeMSString"]) -> builtins.bool: ...
+                def ClearField(self, field_name: typing.Literal["abandonDwellTimeMSString", b"abandonDwellTimeMSString"]) -> None: ...
+
+            @typing.final
+            class SideBySideSurveyResponseEventData(google.protobuf.message.Message):
+                DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+                RESPONSEDWELLTIMEMSSTRING_FIELD_NUMBER: builtins.int
+                SELECTEDRESPONSEID_FIELD_NUMBER: builtins.int
+                responseDwellTimeMSString: builtins.str
+                selectedResponseID: builtins.str
+                def __init__(
+                    self,
+                    *,
+                    responseDwellTimeMSString: builtins.str | None = ...,
+                    selectedResponseID: builtins.str | None = ...,
+                ) -> None: ...
+                def HasField(self, field_name: typing.Literal["responseDwellTimeMSString", b"responseDwellTimeMSString", "selectedResponseID", b"selectedResponseID"]) -> builtins.bool: ...
+                def ClearField(self, field_name: typing.Literal["responseDwellTimeMSString", b"responseDwellTimeMSString", "selectedResponseID", b"selectedResponseID"]) -> None: ...
+
+            @typing.final
+            class SideBySideSurveyCardImpressionEventData(google.protobuf.message.Message):
+                DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+                def __init__(
+                    self,
+                ) -> None: ...
+
+            @typing.final
+            class SideBySideSurveyCTAClickEventData(google.protobuf.message.Message):
+                DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+                ISSURVEYEXPIRED_FIELD_NUMBER: builtins.int
+                CLICKDWELLTIMEMSSTRING_FIELD_NUMBER: builtins.int
+                isSurveyExpired: builtins.bool
+                clickDwellTimeMSString: builtins.str
+                def __init__(
+                    self,
+                    *,
+                    isSurveyExpired: builtins.bool | None = ...,
+                    clickDwellTimeMSString: builtins.str | None = ...,
+                ) -> None: ...
+                def HasField(self, field_name: typing.Literal["clickDwellTimeMSString", b"clickDwellTimeMSString", "isSurveyExpired", b"isSurveyExpired"]) -> builtins.bool: ...
+                def ClearField(self, field_name: typing.Literal["clickDwellTimeMSString", b"clickDwellTimeMSString", "isSurveyExpired", b"isSurveyExpired"]) -> None: ...
+
+            @typing.final
+            class SideBySideSurveyCTAImpressionEventData(google.protobuf.message.Message):
+                DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+                ISSURVEYEXPIRED_FIELD_NUMBER: builtins.int
+                isSurveyExpired: builtins.bool
+                def __init__(
+                    self,
+                    *,
+                    isSurveyExpired: builtins.bool | None = ...,
+                ) -> None: ...
+                def HasField(self, field_name: typing.Literal["isSurveyExpired", b"isSurveyExpired"]) -> builtins.bool: ...
+                def ClearField(self, field_name: typing.Literal["isSurveyExpired", b"isSurveyExpired"]) -> None: ...
+
+            SURVEYID_FIELD_NUMBER: builtins.int
+            PRIMARYRESPONSEID_FIELD_NUMBER: builtins.int
+            TESTARMNAME_FIELD_NUMBER: builtins.int
+            TIMESTAMPMSSTRING_FIELD_NUMBER: builtins.int
+            CTAIMPRESSIONEVENT_FIELD_NUMBER: builtins.int
+            CTACLICKEVENT_FIELD_NUMBER: builtins.int
+            CARDIMPRESSIONEVENT_FIELD_NUMBER: builtins.int
+            RESPONSEEVENT_FIELD_NUMBER: builtins.int
+            ABANDONEVENT_FIELD_NUMBER: builtins.int
+            surveyID: builtins.int
+            primaryResponseID: builtins.str
+            testArmName: builtins.str
+            timestampMSString: builtins.str
+            @property
+            def ctaImpressionEvent(self) -> global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyCTAImpressionEventData: ...
+            @property
+            def ctaClickEvent(self) -> global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyCTAClickEventData: ...
+            @property
+            def cardImpressionEvent(self) -> global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyCardImpressionEventData: ...
+            @property
+            def responseEvent(self) -> global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyResponseEventData: ...
+            @property
+            def abandonEvent(self) -> global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyAbandonEventData: ...
+            def __init__(
+                self,
+                *,
+                surveyID: builtins.int | None = ...,
+                primaryResponseID: builtins.str | None = ...,
+                testArmName: builtins.str | None = ...,
+                timestampMSString: builtins.str | None = ...,
+                ctaImpressionEvent: global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyCTAImpressionEventData | None = ...,
+                ctaClickEvent: global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyCTAClickEventData | None = ...,
+                cardImpressionEvent: global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyCardImpressionEventData | None = ...,
+                responseEvent: global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyResponseEventData | None = ...,
+                abandonEvent: global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData.SideBySideSurveyAbandonEventData | None = ...,
+            ) -> None: ...
+            def HasField(self, field_name: typing.Literal["abandonEvent", b"abandonEvent", "cardImpressionEvent", b"cardImpressionEvent", "ctaClickEvent", b"ctaClickEvent", "ctaImpressionEvent", b"ctaImpressionEvent", "primaryResponseID", b"primaryResponseID", "responseEvent", b"responseEvent", "surveyID", b"surveyID", "testArmName", b"testArmName", "timestampMSString", b"timestampMSString"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing.Literal["abandonEvent", b"abandonEvent", "cardImpressionEvent", b"cardImpressionEvent", "ctaClickEvent", b"ctaClickEvent", "ctaImpressionEvent", b"ctaImpressionEvent", "primaryResponseID", b"primaryResponseID", "responseEvent", b"responseEvent", "surveyID", b"surveyID", "testArmName", b"testArmName", "timestampMSString", b"timestampMSString"]) -> None: ...
+
+        @typing.final
         class SideBySideSurveyAnalyticsData(google.protobuf.message.Message):
             DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
             TESSAEVENT_FIELD_NUMBER: builtins.int
             TESSASESSIONFBID_FIELD_NUMBER: builtins.int
+            SIMONSESSIONFBID_FIELD_NUMBER: builtins.int
             tessaEvent: builtins.str
             tessaSessionFbid: builtins.str
+            simonSessionFbid: builtins.str
             def __init__(
                 self,
                 *,
                 tessaEvent: builtins.str | None = ...,
                 tessaSessionFbid: builtins.str | None = ...,
+                simonSessionFbid: builtins.str | None = ...,
             ) -> None: ...
-            def HasField(self, field_name: typing.Literal["tessaEvent", b"tessaEvent", "tessaSessionFbid", b"tessaSessionFbid"]) -> builtins.bool: ...
-            def ClearField(self, field_name: typing.Literal["tessaEvent", b"tessaEvent", "tessaSessionFbid", b"tessaSessionFbid"]) -> None: ...
+            def HasField(self, field_name: typing.Literal["simonSessionFbid", b"simonSessionFbid", "tessaEvent", b"tessaEvent", "tessaSessionFbid", b"tessaSessionFbid"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing.Literal["simonSessionFbid", b"simonSessionFbid", "tessaEvent", b"tessaEvent", "tessaSessionFbid", b"tessaSessionFbid"]) -> None: ...
 
         SELECTEDREQUESTID_FIELD_NUMBER: builtins.int
         SURVEYID_FIELD_NUMBER: builtins.int
@@ -1257,6 +1403,7 @@ class BotFeedbackMessage(google.protobuf.message.Message):
         ISSELECTEDRESPONSEPRIMARY_FIELD_NUMBER: builtins.int
         MESSAGEIDTOEDIT_FIELD_NUMBER: builtins.int
         ANALYTICSDATA_FIELD_NUMBER: builtins.int
+        METAAIANALYTICSDATA_FIELD_NUMBER: builtins.int
         selectedRequestID: builtins.str
         surveyID: builtins.int
         simonSessionFbid: builtins.str
@@ -1266,6 +1413,8 @@ class BotFeedbackMessage(google.protobuf.message.Message):
         messageIDToEdit: builtins.str
         @property
         def analyticsData(self) -> global___BotFeedbackMessage.SideBySideSurveyMetadata.SideBySideSurveyAnalyticsData: ...
+        @property
+        def metaAiAnalyticsData(self) -> global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData: ...
         def __init__(
             self,
             *,
@@ -1277,9 +1426,10 @@ class BotFeedbackMessage(google.protobuf.message.Message):
             isSelectedResponsePrimary: builtins.bool | None = ...,
             messageIDToEdit: builtins.str | None = ...,
             analyticsData: global___BotFeedbackMessage.SideBySideSurveyMetadata.SideBySideSurveyAnalyticsData | None = ...,
+            metaAiAnalyticsData: global___BotFeedbackMessage.SideBySideSurveyMetadata.SidebySideSurveyMetaAiAnalyticsData | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["analyticsData", b"analyticsData", "isSelectedResponsePrimary", b"isSelectedResponsePrimary", "messageIDToEdit", b"messageIDToEdit", "responseOtid", b"responseOtid", "responseTimestampMSString", b"responseTimestampMSString", "selectedRequestID", b"selectedRequestID", "simonSessionFbid", b"simonSessionFbid", "surveyID", b"surveyID"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["analyticsData", b"analyticsData", "isSelectedResponsePrimary", b"isSelectedResponsePrimary", "messageIDToEdit", b"messageIDToEdit", "responseOtid", b"responseOtid", "responseTimestampMSString", b"responseTimestampMSString", "selectedRequestID", b"selectedRequestID", "simonSessionFbid", b"simonSessionFbid", "surveyID", b"surveyID"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["analyticsData", b"analyticsData", "isSelectedResponsePrimary", b"isSelectedResponsePrimary", "messageIDToEdit", b"messageIDToEdit", "metaAiAnalyticsData", b"metaAiAnalyticsData", "responseOtid", b"responseOtid", "responseTimestampMSString", b"responseTimestampMSString", "selectedRequestID", b"selectedRequestID", "simonSessionFbid", b"simonSessionFbid", "surveyID", b"surveyID"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["analyticsData", b"analyticsData", "isSelectedResponsePrimary", b"isSelectedResponsePrimary", "messageIDToEdit", b"messageIDToEdit", "metaAiAnalyticsData", b"metaAiAnalyticsData", "responseOtid", b"responseOtid", "responseTimestampMSString", b"responseTimestampMSString", "selectedRequestID", b"selectedRequestID", "simonSessionFbid", b"simonSessionFbid", "surveyID", b"surveyID"]) -> None: ...
 
     MESSAGEKEY_FIELD_NUMBER: builtins.int
     KIND_FIELD_NUMBER: builtins.int
@@ -1523,6 +1673,108 @@ class AIRichResponseContentItemsMetadata(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["contentType", b"contentType", "itemsMetadata", b"itemsMetadata"]) -> None: ...
 
 global___AIRichResponseContentItemsMetadata = AIRichResponseContentItemsMetadata
+
+@typing.final
+class BotDocumentMessageMetadata(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    class _DocumentPluginType:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _DocumentPluginTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[BotDocumentMessageMetadata._DocumentPluginType.ValueType], builtins.type):
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        TEXT_EXTRACTION: BotDocumentMessageMetadata._DocumentPluginType.ValueType  # 0
+        OCR_AND_IMAGES: BotDocumentMessageMetadata._DocumentPluginType.ValueType  # 1
+
+    class DocumentPluginType(_DocumentPluginType, metaclass=_DocumentPluginTypeEnumTypeWrapper): ...
+    TEXT_EXTRACTION: BotDocumentMessageMetadata.DocumentPluginType.ValueType  # 0
+    OCR_AND_IMAGES: BotDocumentMessageMetadata.DocumentPluginType.ValueType  # 1
+
+    PLUGINTYPE_FIELD_NUMBER: builtins.int
+    pluginType: global___BotDocumentMessageMetadata.DocumentPluginType.ValueType
+    def __init__(
+        self,
+        *,
+        pluginType: global___BotDocumentMessageMetadata.DocumentPluginType.ValueType | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["pluginType", b"pluginType"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["pluginType", b"pluginType"]) -> None: ...
+
+global___BotDocumentMessageMetadata = BotDocumentMessageMetadata
+
+@typing.final
+class AIHomeState(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    @typing.final
+    class AIHomeOption(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        class _AIHomeActionType:
+            ValueType = typing.NewType("ValueType", builtins.int)
+            V: typing_extensions.TypeAlias = ValueType
+
+        class _AIHomeActionTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[AIHomeState.AIHomeOption._AIHomeActionType.ValueType], builtins.type):
+            DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+            PROMPT: AIHomeState.AIHomeOption._AIHomeActionType.ValueType  # 0
+            CREATE_IMAGE: AIHomeState.AIHomeOption._AIHomeActionType.ValueType  # 1
+            ANIMATE_PHOTO: AIHomeState.AIHomeOption._AIHomeActionType.ValueType  # 2
+            ANALYZE_FILE: AIHomeState.AIHomeOption._AIHomeActionType.ValueType  # 3
+
+        class AIHomeActionType(_AIHomeActionType, metaclass=_AIHomeActionTypeEnumTypeWrapper): ...
+        PROMPT: AIHomeState.AIHomeOption.AIHomeActionType.ValueType  # 0
+        CREATE_IMAGE: AIHomeState.AIHomeOption.AIHomeActionType.ValueType  # 1
+        ANIMATE_PHOTO: AIHomeState.AIHomeOption.AIHomeActionType.ValueType  # 2
+        ANALYZE_FILE: AIHomeState.AIHomeOption.AIHomeActionType.ValueType  # 3
+
+        TYPE_FIELD_NUMBER: builtins.int
+        TITLE_FIELD_NUMBER: builtins.int
+        PROMPTTEXT_FIELD_NUMBER: builtins.int
+        SESSIONID_FIELD_NUMBER: builtins.int
+        IMAGEWDSIDENTIFIER_FIELD_NUMBER: builtins.int
+        IMAGETINTCOLOR_FIELD_NUMBER: builtins.int
+        IMAGEBACKGROUNDCOLOR_FIELD_NUMBER: builtins.int
+        type: global___AIHomeState.AIHomeOption.AIHomeActionType.ValueType
+        title: builtins.str
+        promptText: builtins.str
+        sessionID: builtins.str
+        imageWdsIdentifier: builtins.str
+        imageTintColor: builtins.str
+        imageBackgroundColor: builtins.str
+        def __init__(
+            self,
+            *,
+            type: global___AIHomeState.AIHomeOption.AIHomeActionType.ValueType | None = ...,
+            title: builtins.str | None = ...,
+            promptText: builtins.str | None = ...,
+            sessionID: builtins.str | None = ...,
+            imageWdsIdentifier: builtins.str | None = ...,
+            imageTintColor: builtins.str | None = ...,
+            imageBackgroundColor: builtins.str | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing.Literal["imageBackgroundColor", b"imageBackgroundColor", "imageTintColor", b"imageTintColor", "imageWdsIdentifier", b"imageWdsIdentifier", "promptText", b"promptText", "sessionID", b"sessionID", "title", b"title", "type", b"type"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["imageBackgroundColor", b"imageBackgroundColor", "imageTintColor", b"imageTintColor", "imageWdsIdentifier", b"imageWdsIdentifier", "promptText", b"promptText", "sessionID", b"sessionID", "title", b"title", "type", b"type"]) -> None: ...
+
+    LASTFETCHTIME_FIELD_NUMBER: builtins.int
+    CAPABILITYOPTIONS_FIELD_NUMBER: builtins.int
+    CONVERSATIONOPTIONS_FIELD_NUMBER: builtins.int
+    lastFetchTime: builtins.int
+    @property
+    def capabilityOptions(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___AIHomeState.AIHomeOption]: ...
+    @property
+    def conversationOptions(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___AIHomeState.AIHomeOption]: ...
+    def __init__(
+        self,
+        *,
+        lastFetchTime: builtins.int | None = ...,
+        capabilityOptions: collections.abc.Iterable[global___AIHomeState.AIHomeOption] | None = ...,
+        conversationOptions: collections.abc.Iterable[global___AIHomeState.AIHomeOption] | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["lastFetchTime", b"lastFetchTime"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["capabilityOptions", b"capabilityOptions", "conversationOptions", b"conversationOptions", "lastFetchTime", b"lastFetchTime"]) -> None: ...
+
+global___AIHomeState = AIHomeState
 
 @typing.final
 class BotAvatarMetadata(google.protobuf.message.Message):
@@ -1866,6 +2118,7 @@ class InThreadSurveyMetadata(google.protobuf.message.Message):
     PRIVACYSTATEMENTFULL_FIELD_NUMBER: builtins.int
     PRIVACYSTATEMENTPARTS_FIELD_NUMBER: builtins.int
     FEEDBACKTOASTTEXT_FIELD_NUMBER: builtins.int
+    STARTQUESTIONINDEX_FIELD_NUMBER: builtins.int
     tessaSessionID: builtins.str
     simonSessionID: builtins.str
     simonSurveyID: builtins.str
@@ -1881,6 +2134,7 @@ class InThreadSurveyMetadata(google.protobuf.message.Message):
     surveySubmitButtonText: builtins.str
     privacyStatementFull: builtins.str
     feedbackToastText: builtins.str
+    startQuestionIndex: builtins.int
     @property
     def questions(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___InThreadSurveyMetadata.InThreadSurveyQuestion]: ...
     @property
@@ -1905,9 +2159,10 @@ class InThreadSurveyMetadata(google.protobuf.message.Message):
         privacyStatementFull: builtins.str | None = ...,
         privacyStatementParts: collections.abc.Iterable[global___InThreadSurveyMetadata.InThreadSurveyPrivacyStatementPart] | None = ...,
         feedbackToastText: builtins.str | None = ...,
+        startQuestionIndex: builtins.int | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["feedbackToastText", b"feedbackToastText", "invitationBodyText", b"invitationBodyText", "invitationCtaText", b"invitationCtaText", "invitationCtaURL", b"invitationCtaURL", "invitationHeaderText", b"invitationHeaderText", "privacyStatementFull", b"privacyStatementFull", "requestID", b"requestID", "simonSessionID", b"simonSessionID", "simonSurveyID", b"simonSurveyID", "surveyContinueButtonText", b"surveyContinueButtonText", "surveySubmitButtonText", b"surveySubmitButtonText", "surveyTitle", b"surveyTitle", "tessaEvent", b"tessaEvent", "tessaRootID", b"tessaRootID", "tessaSessionID", b"tessaSessionID"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["feedbackToastText", b"feedbackToastText", "invitationBodyText", b"invitationBodyText", "invitationCtaText", b"invitationCtaText", "invitationCtaURL", b"invitationCtaURL", "invitationHeaderText", b"invitationHeaderText", "privacyStatementFull", b"privacyStatementFull", "privacyStatementParts", b"privacyStatementParts", "questions", b"questions", "requestID", b"requestID", "simonSessionID", b"simonSessionID", "simonSurveyID", b"simonSurveyID", "surveyContinueButtonText", b"surveyContinueButtonText", "surveySubmitButtonText", b"surveySubmitButtonText", "surveyTitle", b"surveyTitle", "tessaEvent", b"tessaEvent", "tessaRootID", b"tessaRootID", "tessaSessionID", b"tessaSessionID"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["feedbackToastText", b"feedbackToastText", "invitationBodyText", b"invitationBodyText", "invitationCtaText", b"invitationCtaText", "invitationCtaURL", b"invitationCtaURL", "invitationHeaderText", b"invitationHeaderText", "privacyStatementFull", b"privacyStatementFull", "requestID", b"requestID", "simonSessionID", b"simonSessionID", "simonSurveyID", b"simonSurveyID", "startQuestionIndex", b"startQuestionIndex", "surveyContinueButtonText", b"surveyContinueButtonText", "surveySubmitButtonText", b"surveySubmitButtonText", "surveyTitle", b"surveyTitle", "tessaEvent", b"tessaEvent", "tessaRootID", b"tessaRootID", "tessaSessionID", b"tessaSessionID"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["feedbackToastText", b"feedbackToastText", "invitationBodyText", b"invitationBodyText", "invitationCtaText", b"invitationCtaText", "invitationCtaURL", b"invitationCtaURL", "invitationHeaderText", b"invitationHeaderText", "privacyStatementFull", b"privacyStatementFull", "privacyStatementParts", b"privacyStatementParts", "questions", b"questions", "requestID", b"requestID", "simonSessionID", b"simonSessionID", "simonSurveyID", b"simonSurveyID", "startQuestionIndex", b"startQuestionIndex", "surveyContinueButtonText", b"surveyContinueButtonText", "surveySubmitButtonText", b"surveySubmitButtonText", "surveyTitle", b"surveyTitle", "tessaEvent", b"tessaEvent", "tessaRootID", b"tessaRootID", "tessaSessionID", b"tessaSessionID"]) -> None: ...
 
 global___InThreadSurveyMetadata = InThreadSurveyMetadata
 
@@ -1958,14 +2213,17 @@ class BotUnifiedResponseMutation(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
         PRIMARYRESPONSEID_FIELD_NUMBER: builtins.int
+        SURVEYCTAHASRENDERED_FIELD_NUMBER: builtins.int
         primaryResponseID: builtins.str
+        surveyCtaHasRendered: builtins.bool
         def __init__(
             self,
             *,
             primaryResponseID: builtins.str | None = ...,
+            surveyCtaHasRendered: builtins.bool | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["primaryResponseID", b"primaryResponseID"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["primaryResponseID", b"primaryResponseID"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["primaryResponseID", b"primaryResponseID", "surveyCtaHasRendered", b"surveyCtaHasRendered"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["primaryResponseID", b"primaryResponseID", "surveyCtaHasRendered", b"surveyCtaHasRendered"]) -> None: ...
 
     SBSMETADATA_FIELD_NUMBER: builtins.int
     MEDIADETAILSMETADATALIST_FIELD_NUMBER: builtins.int
@@ -2019,6 +2277,9 @@ class BotMetadata(google.protobuf.message.Message):
     BOTMESSAGEORIGINMETADATA_FIELD_NUMBER: builtins.int
     INTHREADSURVEYMETADATA_FIELD_NUMBER: builtins.int
     BOTTHREADINFO_FIELD_NUMBER: builtins.int
+    REGENERATEMETADATA_FIELD_NUMBER: builtins.int
+    SESSIONTRANSPARENCYMETADATA_FIELD_NUMBER: builtins.int
+    BOTDOCUMENTMESSAGEMETADATA_FIELD_NUMBER: builtins.int
     INTERNALMETADATA_FIELD_NUMBER: builtins.int
     personaID: builtins.str
     invokerJID: builtins.str
@@ -2076,6 +2337,12 @@ class BotMetadata(google.protobuf.message.Message):
     def inThreadSurveyMetadata(self) -> global___InThreadSurveyMetadata: ...
     @property
     def botThreadInfo(self) -> global___AIThreadInfo: ...
+    @property
+    def regenerateMetadata(self) -> global___AIRegenerateMetadata: ...
+    @property
+    def sessionTransparencyMetadata(self) -> global___SessionTransparencyMetadata: ...
+    @property
+    def botDocumentMessageMetadata(self) -> global___BotDocumentMessageMetadata: ...
     def __init__(
         self,
         *,
@@ -2110,10 +2377,13 @@ class BotMetadata(google.protobuf.message.Message):
         botMessageOriginMetadata: global___BotMessageOriginMetadata | None = ...,
         inThreadSurveyMetadata: global___InThreadSurveyMetadata | None = ...,
         botThreadInfo: global___AIThreadInfo | None = ...,
+        regenerateMetadata: global___AIRegenerateMetadata | None = ...,
+        sessionTransparencyMetadata: global___SessionTransparencyMetadata | None = ...,
+        botDocumentMessageMetadata: global___BotDocumentMessageMetadata | None = ...,
         internalMetadata: builtins.bytes | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMessageOriginMetadata", b"botMessageOriginMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "botResponseID", b"botResponseID", "botThreadInfo", b"botThreadInfo", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "inThreadSurveyMetadata", b"inThreadSurveyMetadata", "internalMetadata", b"internalMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone", "unifiedResponseMutation", b"unifiedResponseMutation", "verificationMetadata", b"verificationMetadata"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMessageOriginMetadata", b"botMessageOriginMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "botResponseID", b"botResponseID", "botThreadInfo", b"botThreadInfo", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "inThreadSurveyMetadata", b"inThreadSurveyMetadata", "internalMetadata", b"internalMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone", "unifiedResponseMutation", b"unifiedResponseMutation", "verificationMetadata", b"verificationMetadata"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botDocumentMessageMetadata", b"botDocumentMessageMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMessageOriginMetadata", b"botMessageOriginMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "botResponseID", b"botResponseID", "botThreadInfo", b"botThreadInfo", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "inThreadSurveyMetadata", b"inThreadSurveyMetadata", "internalMetadata", b"internalMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "regenerateMetadata", b"regenerateMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "sessionTransparencyMetadata", b"sessionTransparencyMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone", "unifiedResponseMutation", b"unifiedResponseMutation", "verificationMetadata", b"verificationMetadata"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["aiConversationContext", b"aiConversationContext", "avatarMetadata", b"avatarMetadata", "botAgeCollectionMetadata", b"botAgeCollectionMetadata", "botDocumentMessageMetadata", b"botDocumentMessageMetadata", "botLinkedAccountsMetadata", b"botLinkedAccountsMetadata", "botMessageOriginMetadata", b"botMessageOriginMetadata", "botMetricsMetadata", b"botMetricsMetadata", "botModeSelectionMetadata", b"botModeSelectionMetadata", "botPromotionMessageMetadata", b"botPromotionMessageMetadata", "botQuotaMetadata", b"botQuotaMetadata", "botResponseID", b"botResponseID", "botThreadInfo", b"botThreadInfo", "capabilityMetadata", b"capabilityMetadata", "conversationStarterPromptID", b"conversationStarterPromptID", "imagineMetadata", b"imagineMetadata", "inThreadSurveyMetadata", b"inThreadSurveyMetadata", "internalMetadata", b"internalMetadata", "invokerJID", b"invokerJID", "memoryMetadata", b"memoryMetadata", "memuMetadata", b"memuMetadata", "messageDisclaimerText", b"messageDisclaimerText", "modelMetadata", b"modelMetadata", "personaID", b"personaID", "pluginMetadata", b"pluginMetadata", "progressIndicatorMetadata", b"progressIndicatorMetadata", "regenerateMetadata", b"regenerateMetadata", "reminderMetadata", b"reminderMetadata", "renderingMetadata", b"renderingMetadata", "richResponseSourcesMetadata", b"richResponseSourcesMetadata", "sessionMetadata", b"sessionMetadata", "sessionTransparencyMetadata", b"sessionTransparencyMetadata", "suggestedPromptMetadata", b"suggestedPromptMetadata", "timezone", b"timezone", "unifiedResponseMutation", b"unifiedResponseMutation", "verificationMetadata", b"verificationMetadata"]) -> None: ...
 
 global___BotMetadata = BotMetadata
 
@@ -2421,3 +2691,45 @@ class AIRichResponseSubMessage(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["codeMetadata", b"codeMetadata", "contentItemsMetadata", b"contentItemsMetadata", "dynamicMetadata", b"dynamicMetadata", "gridImageMetadata", b"gridImageMetadata", "imageMetadata", b"imageMetadata", "latexMetadata", b"latexMetadata", "mapMetadata", b"mapMetadata", "messageText", b"messageText", "messageType", b"messageType", "tableMetadata", b"tableMetadata"]) -> None: ...
 
 global___AIRichResponseSubMessage = AIRichResponseSubMessage
+
+@typing.final
+class AIRegenerateMetadata(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    MESSAGEKEY_FIELD_NUMBER: builtins.int
+    RESPONSETIMESTAMPMS_FIELD_NUMBER: builtins.int
+    responseTimestampMS: builtins.int
+    @property
+    def messageKey(self) -> waCommon.WACommon_pb2.MessageKey: ...
+    def __init__(
+        self,
+        *,
+        messageKey: waCommon.WACommon_pb2.MessageKey | None = ...,
+        responseTimestampMS: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["messageKey", b"messageKey", "responseTimestampMS", b"responseTimestampMS"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["messageKey", b"messageKey", "responseTimestampMS", b"responseTimestampMS"]) -> None: ...
+
+global___AIRegenerateMetadata = AIRegenerateMetadata
+
+@typing.final
+class SessionTransparencyMetadata(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    DISCLAIMERTEXT_FIELD_NUMBER: builtins.int
+    HCAID_FIELD_NUMBER: builtins.int
+    SESSIONTRANSPARENCYTYPE_FIELD_NUMBER: builtins.int
+    disclaimerText: builtins.str
+    hcaID: builtins.str
+    sessionTransparencyType: global___SessionTransparencyType.ValueType
+    def __init__(
+        self,
+        *,
+        disclaimerText: builtins.str | None = ...,
+        hcaID: builtins.str | None = ...,
+        sessionTransparencyType: global___SessionTransparencyType.ValueType | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["disclaimerText", b"disclaimerText", "hcaID", b"hcaID", "sessionTransparencyType", b"sessionTransparencyType"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["disclaimerText", b"disclaimerText", "hcaID", b"hcaID", "sessionTransparencyType", b"sessionTransparencyType"]) -> None: ...
+
+global___SessionTransparencyMetadata = SessionTransparencyMetadata

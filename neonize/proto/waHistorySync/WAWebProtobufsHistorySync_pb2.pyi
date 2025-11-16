@@ -11,10 +11,10 @@ import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
 import sys
 import typing
-import waChatLockSettings.WAProtobufsChatLockSettings_pb2
+import waChatLockSettings.WAWebProtobufsChatLockSettings_pb2
 import waCommon.WACommon_pb2
 import waE2E.WAWebProtobufsE2E_pb2
-import waSyncAction.WASyncAction_pb2
+import waSyncAction.WAWebProtobufSyncAction_pb2
 import waWeb.WAWebProtobufsWeb_pb2
 
 if sys.version_info >= (3, 10):
@@ -136,7 +136,7 @@ class HistorySync(google.protobuf.message.Message):
     @property
     def pastParticipants(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___PastParticipants]: ...
     @property
-    def callLogRecords(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waSyncAction.WASyncAction_pb2.CallLogRecord]: ...
+    def callLogRecords(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waSyncAction.WAWebProtobufSyncAction_pb2.CallLogRecord]: ...
     @property
     def phoneNumberToLidMappings(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___PhoneNumberToLIDMapping]: ...
     @property
@@ -155,7 +155,7 @@ class HistorySync(google.protobuf.message.Message):
         threadDsTimeframeOffset: builtins.int | None = ...,
         recentStickers: collections.abc.Iterable[global___StickerMetadata] | None = ...,
         pastParticipants: collections.abc.Iterable[global___PastParticipants] | None = ...,
-        callLogRecords: collections.abc.Iterable[waSyncAction.WASyncAction_pb2.CallLogRecord] | None = ...,
+        callLogRecords: collections.abc.Iterable[waSyncAction.WAWebProtobufSyncAction_pb2.CallLogRecord] | None = ...,
         aiWaitListState: global___HistorySync.BotAIWaitListState.ValueType | None = ...,
         phoneNumberToLidMappings: collections.abc.Iterable[global___PhoneNumberToLIDMapping] | None = ...,
         companionMetaNonce: builtins.str | None = ...,
@@ -588,7 +588,7 @@ class GlobalSettings(google.protobuf.message.Message):
     @property
     def groupNotificationSettings(self) -> global___NotificationSettings: ...
     @property
-    def chatLockSettings(self) -> waChatLockSettings.WAProtobufsChatLockSettings_pb2.ChatLockSettings: ...
+    def chatLockSettings(self) -> waChatLockSettings.WAWebProtobufsChatLockSettings_pb2.ChatLockSettings: ...
     def __init__(
         self,
         *,
@@ -610,7 +610,7 @@ class GlobalSettings(google.protobuf.message.Message):
         photoQualityMode: builtins.int | None = ...,
         individualNotificationSettings: global___NotificationSettings | None = ...,
         groupNotificationSettings: global___NotificationSettings | None = ...,
-        chatLockSettings: waChatLockSettings.WAProtobufsChatLockSettings_pb2.ChatLockSettings | None = ...,
+        chatLockSettings: waChatLockSettings.WAWebProtobufsChatLockSettings_pb2.ChatLockSettings | None = ...,
         chatDbLidMigrationTimestamp: builtins.int | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["autoDownloadCellular", b"autoDownloadCellular", "autoDownloadRoaming", b"autoDownloadRoaming", "autoDownloadWiFi", b"autoDownloadWiFi", "autoUnarchiveChats", b"autoUnarchiveChats", "avatarUserSettings", b"avatarUserSettings", "chatDbLidMigrationTimestamp", b"chatDbLidMigrationTimestamp", "chatLockSettings", b"chatLockSettings", "darkThemeWallpaper", b"darkThemeWallpaper", "disappearingModeDuration", b"disappearingModeDuration", "disappearingModeTimestamp", b"disappearingModeTimestamp", "fontSize", b"fontSize", "groupNotificationSettings", b"groupNotificationSettings", "individualNotificationSettings", b"individualNotificationSettings", "lightThemeWallpaper", b"lightThemeWallpaper", "mediaVisibility", b"mediaVisibility", "photoQualityMode", b"photoQualityMode", "securityNotifications", b"securityNotifications", "showGroupNotificationsPreview", b"showGroupNotificationsPreview", "showIndividualNotificationsPreview", b"showIndividualNotificationsPreview", "videoQualityMode", b"videoQualityMode"]) -> builtins.bool: ...

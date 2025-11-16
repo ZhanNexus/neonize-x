@@ -9,7 +9,7 @@ import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.message
 import typing
-import waSyncAction.WASyncAction_pb2
+import waSyncAction.WAWebProtobufSyncAction_pb2
 
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
@@ -50,11 +50,11 @@ class SyncdPlainTextRecord(google.protobuf.message.Message):
     keyID: builtins.bytes
     mac: builtins.bytes
     @property
-    def value(self) -> waSyncAction.WASyncAction_pb2.SyncActionData: ...
+    def value(self) -> waSyncAction.WAWebProtobufSyncAction_pb2.SyncActionData: ...
     def __init__(
         self,
         *,
-        value: waSyncAction.WASyncAction_pb2.SyncActionData | None = ...,
+        value: waSyncAction.WAWebProtobufSyncAction_pb2.SyncActionData | None = ...,
         keyID: builtins.bytes | None = ...,
         mac: builtins.bytes | None = ...,
     ) -> None: ...

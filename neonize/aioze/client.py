@@ -1418,7 +1418,7 @@ class NewAClient:
             ),
             add_msg_secret=add_msg_secret,
         )
-
+     
     async def send_carousel(
         self,
         to,

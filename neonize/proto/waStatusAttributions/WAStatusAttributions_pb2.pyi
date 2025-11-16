@@ -126,6 +126,7 @@ class StatusAttribution(google.protobuf.message.Message):
             THREADS: StatusAttribution.ExternalShare._Source.ValueType  # 7
             APPLE_MUSIC: StatusAttribution.ExternalShare._Source.ValueType  # 8
             SHARECHAT: StatusAttribution.ExternalShare._Source.ValueType  # 9
+            GOOGLE_PHOTOS: StatusAttribution.ExternalShare._Source.ValueType  # 10
 
         class Source(_Source, metaclass=_SourceEnumTypeWrapper): ...
         UNKNOWN: StatusAttribution.ExternalShare.Source.ValueType  # 0
@@ -138,6 +139,7 @@ class StatusAttribution(google.protobuf.message.Message):
         THREADS: StatusAttribution.ExternalShare.Source.ValueType  # 7
         APPLE_MUSIC: StatusAttribution.ExternalShare.Source.ValueType  # 8
         SHARECHAT: StatusAttribution.ExternalShare.Source.ValueType  # 9
+        GOOGLE_PHOTOS: StatusAttribution.ExternalShare.Source.ValueType  # 10
 
         ACTIONURL_FIELD_NUMBER: builtins.int
         SOURCE_FIELD_NUMBER: builtins.int

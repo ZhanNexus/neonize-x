@@ -9,6 +9,7 @@ import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.message
 import typing
+import waCommon.WACommon_pb2
 import waWeb.WAWebProtobufsWeb_pb2
 
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
@@ -18,13 +19,45 @@ class GroupHistory(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     MESSAGES_FIELD_NUMBER: builtins.int
+    ASSOCIATEDMESSAGELISTS_FIELD_NUMBER: builtins.int
+    COMMENTMESSAGES_FIELD_NUMBER: builtins.int
     @property
     def messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waWeb.WAWebProtobufsWeb_pb2.WebMessageInfo]: ...
+    @property
+    def associatedMessageLists(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___AssociatedMessageList]: ...
+    @property
+    def commentMessages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waWeb.WAWebProtobufsWeb_pb2.WebMessageInfo]: ...
     def __init__(
         self,
         *,
         messages: collections.abc.Iterable[waWeb.WAWebProtobufsWeb_pb2.WebMessageInfo] | None = ...,
+        associatedMessageLists: collections.abc.Iterable[global___AssociatedMessageList] | None = ...,
+        commentMessages: collections.abc.Iterable[waWeb.WAWebProtobufsWeb_pb2.WebMessageInfo] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["messages", b"messages"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["associatedMessageLists", b"associatedMessageLists", "commentMessages", b"commentMessages", "messages", b"messages"]) -> None: ...
 
 global___GroupHistory = GroupHistory
+
+@typing.final
+class AssociatedMessageList(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    MESSAGES_FIELD_NUMBER: builtins.int
+    PARENTMESSAGE_FIELD_NUMBER: builtins.int
+    ASSOCIATIONTYPE_FIELD_NUMBER: builtins.int
+    associationType: builtins.int
+    @property
+    def messages(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waWeb.WAWebProtobufsWeb_pb2.WebMessageInfo]: ...
+    @property
+    def parentMessage(self) -> waCommon.WACommon_pb2.MessageKey: ...
+    def __init__(
+        self,
+        *,
+        messages: collections.abc.Iterable[waWeb.WAWebProtobufsWeb_pb2.WebMessageInfo] | None = ...,
+        parentMessage: waCommon.WACommon_pb2.MessageKey | None = ...,
+        associationType: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["associationType", b"associationType", "parentMessage", b"parentMessage"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["associationType", b"associationType", "messages", b"messages", "parentMessage", b"parentMessage"]) -> None: ...
+
+global___AssociatedMessageList = AssociatedMessageList

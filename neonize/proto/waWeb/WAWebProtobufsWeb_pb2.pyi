@@ -269,6 +269,8 @@ class WebMessageInfo(google.protobuf.message.Message):
         BIZ_AUTOMATICALLY_LABELED_CHAT_SYSTEM_MESSAGE: WebMessageInfo._StubType.ValueType  # 218
         PHONE_NUMBER_HIDING_CHAT_DEPRECATED_MESSAGE: WebMessageInfo._StubType.ValueType  # 219
         QUARANTINED_MESSAGE: WebMessageInfo._StubType.ValueType  # 220
+        GROUP_MEMBER_SHARE_GROUP_HISTORY_MODE: WebMessageInfo._StubType.ValueType  # 221
+        GROUP_OPEN_BOT_ADDED: WebMessageInfo._StubType.ValueType  # 222
 
     class StubType(_StubType, metaclass=_StubTypeEnumTypeWrapper): ...
     UNKNOWN: WebMessageInfo.StubType.ValueType  # 0
@@ -492,6 +494,8 @@ class WebMessageInfo(google.protobuf.message.Message):
     BIZ_AUTOMATICALLY_LABELED_CHAT_SYSTEM_MESSAGE: WebMessageInfo.StubType.ValueType  # 218
     PHONE_NUMBER_HIDING_CHAT_DEPRECATED_MESSAGE: WebMessageInfo.StubType.ValueType  # 219
     QUARANTINED_MESSAGE: WebMessageInfo.StubType.ValueType  # 220
+    GROUP_MEMBER_SHARE_GROUP_HISTORY_MODE: WebMessageInfo.StubType.ValueType  # 221
+    GROUP_OPEN_BOT_ADDED: WebMessageInfo.StubType.ValueType  # 222
 
     class _Status:
         ValueType = typing.NewType("ValueType", builtins.int)
@@ -1211,12 +1215,14 @@ class GroupHistoryBundleInfo(google.protobuf.message.Message):
         INJECTED: GroupHistoryBundleInfo._ProcessState.ValueType  # 1
         INJECTED_PARTIAL: GroupHistoryBundleInfo._ProcessState.ValueType  # 2
         INJECTION_FAILED: GroupHistoryBundleInfo._ProcessState.ValueType  # 3
+        INJECTION_FAILED_NO_RETRY: GroupHistoryBundleInfo._ProcessState.ValueType  # 4
 
     class ProcessState(_ProcessState, metaclass=_ProcessStateEnumTypeWrapper): ...
     NOT_INJECTED: GroupHistoryBundleInfo.ProcessState.ValueType  # 0
     INJECTED: GroupHistoryBundleInfo.ProcessState.ValueType  # 1
     INJECTED_PARTIAL: GroupHistoryBundleInfo.ProcessState.ValueType  # 2
     INJECTION_FAILED: GroupHistoryBundleInfo.ProcessState.ValueType  # 3
+    INJECTION_FAILED_NO_RETRY: GroupHistoryBundleInfo.ProcessState.ValueType  # 4
 
     DEPRECATEDMESSAGEHISTORYBUNDLE_FIELD_NUMBER: builtins.int
     PROCESSSTATE_FIELD_NUMBER: builtins.int
