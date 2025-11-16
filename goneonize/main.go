@@ -223,7 +223,7 @@ func GenerateMessageID(id *C.char) *C.char {
 
 //export AcceptTOSNotice
 func AcceptTOSNotice(id *C.char, noticeID *C.char, stage *C.char) *C.char {
-	err := clients[C.GoString(id)].AcceptTOSNotice(C.GoString(noticeID), C.GoString(stage))
+	err := clients[C.GoString(id)].AcceptTOSNotice(context.Background(),C.GoString(noticeID), C.GoString(stage))
 	if err != nil {
 		return C.CString(err.Error())
 	}
@@ -972,7 +972,7 @@ func DownloadMediaWithPath(id *C.char, directPath *C.char, encFileHash *C.uchar,
 func IsOnWhatsApp(id *C.char, numbers *C.char) *C.struct_BytesReturn {
 	onWhatsApp := []*defproto.IsOnWhatsAppResponse{}
 	return_ := defproto.IsOnWhatsAppReturnFunction{}
-	response, err := clients[C.GoString(id)].IsOnWhatsApp(strings.Split(C.GoString(numbers), " "))
+	response, err := clients[C.GoString(id)].IsOnWhatsApp(context.Background(),strings.Split(C.GoString(numbers), " "))
 	for _, participant := range response {
 		onWhatsApp = append(onWhatsApp, utils.EncodeIsOnWhatsApp(participant))
 	}
@@ -1014,7 +1014,7 @@ func GetUserInfo(id *C.char, JIDSByte *C.uchar, JIDSSize C.int) *C.struct_BytesR
 	for _, jid := range NeoJIDS.JIDS {
 		JIDS = append(JIDS, utils.DecodeJidProto(jid))
 	}
-	user_info, err := clients[C.GoString(id)].GetUserInfo(JIDS)
+	user_info, err := clients[C.GoString(id)].GetUserInfo(context.Background(),JIDS)
 	if err != nil {
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
@@ -1045,7 +1045,7 @@ func GetGroupInfo(id *C.char, JIDByte *C.uchar, JIDSize C.int) *C.struct_BytesRe
 		return ProtoReturnV3(&groupinfo)
 	}
 	decodeJid := utils.DecodeJidProto(&neoJIDProto)
-	info, err_info := clients[C.GoString(id)].GetGroupInfo(decodeJid)
+	info, err_info := clients[C.GoString(id)].GetGroupInfo(context.Background(),decodeJid)
 	if err_info != nil {
 		groupinfo.Error = proto.String(err_info.Error())
 		return ProtoReturnV3(&groupinfo)
@@ -1072,7 +1072,7 @@ func GetGroupInfoFromInvite(id *C.char, JIDByte *C.uchar, JIDSize C.int, inviter
 		return_proto.Error = proto.String(err_inviter.Error())
 		return ProtoReturnV3(&return_proto)
 	}
-	group_info, err := clients[C.GoString(id)].GetGroupInfoFromInvite(utils.DecodeJidProto(&JID), utils.DecodeJidProto(&JIDInviter), C.GoString(code), int64(expiration))
+	group_info, err := clients[C.GoString(id)].GetGroupInfoFromInvite(context.Background(),utils.DecodeJidProto(&JID), utils.DecodeJidProto(&JIDInviter), C.GoString(code), int64(expiration))
 	if err != nil {
 		return_proto.Error = proto.String(err.Error())
 	}
@@ -1085,7 +1085,7 @@ func GetGroupInfoFromInvite(id *C.char, JIDByte *C.uchar, JIDSize C.int, inviter
 //export GetGroupInfoFromLink
 func GetGroupInfoFromLink(id *C.char, code *C.char) *C.struct_BytesReturn {
 	return_proto := defproto.GetGroupInfoReturnFunction{}
-	info, err := clients[C.GoString(id)].GetGroupInfoFromLink(C.GoString(code))
+	info, err := clients[C.GoString(id)].GetGroupInfoFromLink(context.Background(),C.GoString(code))
 	if err != nil {
 		return_proto.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_proto)
@@ -1105,7 +1105,7 @@ func GetGroupRequestParticipants(id *C.char, JIDByte *C.uchar, JIDSize C.int) *C
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
 	}
-	request_participants, err_request := clients[C.GoString(id)].GetGroupRequestParticipants(utils.DecodeJidProto(&JID))
+	request_participants, err_request := clients[C.GoString(id)].GetGroupRequestParticipants(context.Background(),utils.DecodeJidProto(&JID))
 	participants := []*defproto.GroupParticipantRequest{}
 	for _, participant := range request_participants {
 		participants = append(participants, &defproto.GroupParticipantRequest{
@@ -1133,7 +1133,7 @@ func GetLinkedGroupsParticipants(id *C.char, JIDByte *C.uchar, JIDSize C.int) *C
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
 	}
-	JIDS, err_get := clients[C.GoString(id)].GetLinkedGroupsParticipants(utils.DecodeJidProto(&JID))
+	JIDS, err_get := clients[C.GoString(id)].GetLinkedGroupsParticipants(context.Background(),utils.DecodeJidProto(&JID))
 	if err_get != nil {
 		return_.Error = proto.String(err_get.Error())
 		return ProtoReturnV3(&return_)
@@ -1158,7 +1158,7 @@ func SetGroupName(id *C.char, JIDByte *C.uchar, JIDSize C.int, name *C.char) *C.
 	if err != nil {
 		return C.CString(err.Error())
 	}
-	status_err := clients[C.GoString(id)].SetGroupName(utils.DecodeJidProto(&neoJIDProto), C.GoString(name))
+	status_err := clients[C.GoString(id)].SetGroupName(context.Background(),utils.DecodeJidProto(&neoJIDProto), C.GoString(name))
 	if status_err != nil {
 		return C.CString(status_err.Error())
 	}
@@ -1176,7 +1176,7 @@ func SetGroupPhoto(id *C.char, JIDByte *C.uchar, JIDSize C.int, Photo *C.uchar, 
 		return ProtoReturnV3(&return_)
 	}
 	photo_buf := getByteByAddr(Photo, PhotoSize)
-	response, err_status := clients[C.GoString(id)].SetGroupPhoto(utils.DecodeJidProto(&neoJIDProto), photo_buf)
+	response, err_status := clients[C.GoString(id)].SetGroupPhoto(context.Background(),utils.DecodeJidProto(&neoJIDProto), photo_buf)
 	return_.PictureID = &response
 	if err_status != nil {
 		return_.Error = proto.String(err_status.Error())
