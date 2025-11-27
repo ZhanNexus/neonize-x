@@ -71,11 +71,11 @@ class DeviceCapabilities(google.protobuf.message.Message):
         FULL: DeviceCapabilities.AiThread.SupportLevel.ValueType  # 2
 
         SUPPORTLEVEL_FIELD_NUMBER: builtins.int
-        supportLevel: global___DeviceCapabilities.AiThread.SupportLevel.ValueType
+        supportLevel: Global___DeviceCapabilities.AiThread.SupportLevel.ValueType
         def __init__(
             self,
             *,
-            supportLevel: global___DeviceCapabilities.AiThread.SupportLevel.ValueType | None = ...,
+            supportLevel: Global___DeviceCapabilities.AiThread.SupportLevel.ValueType | None = ...,
         ) -> None: ...
         def HasField(self, field_name: typing.Literal["supportLevel", b"supportLevel"]) -> builtins.bool: ...
         def ClearField(self, field_name: typing.Literal["supportLevel", b"supportLevel"]) -> None: ...
@@ -128,27 +128,27 @@ class DeviceCapabilities(google.protobuf.message.Message):
     USERHASAVATAR_FIELD_NUMBER: builtins.int
     MEMBERNAMETAGPRIMARYSUPPORT_FIELD_NUMBER: builtins.int
     AITHREAD_FIELD_NUMBER: builtins.int
-    chatLockSupportLevel: global___DeviceCapabilities.ChatLockSupportLevel.ValueType
-    memberNameTagPrimarySupport: global___DeviceCapabilities.MemberNameTagPrimarySupport.ValueType
+    chatLockSupportLevel: Global___DeviceCapabilities.ChatLockSupportLevel.ValueType
+    memberNameTagPrimarySupport: Global___DeviceCapabilities.MemberNameTagPrimarySupport.ValueType
     @property
-    def lidMigration(self) -> global___DeviceCapabilities.LIDMigration: ...
+    def lidMigration(self) -> Global___DeviceCapabilities.LIDMigration: ...
     @property
-    def businessBroadcast(self) -> global___DeviceCapabilities.BusinessBroadcast: ...
+    def businessBroadcast(self) -> Global___DeviceCapabilities.BusinessBroadcast: ...
     @property
-    def userHasAvatar(self) -> global___DeviceCapabilities.UserHasAvatar: ...
+    def userHasAvatar(self) -> Global___DeviceCapabilities.UserHasAvatar: ...
     @property
-    def aiThread(self) -> global___DeviceCapabilities.AiThread: ...
+    def aiThread(self) -> Global___DeviceCapabilities.AiThread: ...
     def __init__(
         self,
         *,
-        chatLockSupportLevel: global___DeviceCapabilities.ChatLockSupportLevel.ValueType | None = ...,
-        lidMigration: global___DeviceCapabilities.LIDMigration | None = ...,
-        businessBroadcast: global___DeviceCapabilities.BusinessBroadcast | None = ...,
-        userHasAvatar: global___DeviceCapabilities.UserHasAvatar | None = ...,
-        memberNameTagPrimarySupport: global___DeviceCapabilities.MemberNameTagPrimarySupport.ValueType | None = ...,
-        aiThread: global___DeviceCapabilities.AiThread | None = ...,
+        chatLockSupportLevel: Global___DeviceCapabilities.ChatLockSupportLevel.ValueType | None = ...,
+        lidMigration: Global___DeviceCapabilities.LIDMigration | None = ...,
+        businessBroadcast: Global___DeviceCapabilities.BusinessBroadcast | None = ...,
+        userHasAvatar: Global___DeviceCapabilities.UserHasAvatar | None = ...,
+        memberNameTagPrimarySupport: Global___DeviceCapabilities.MemberNameTagPrimarySupport.ValueType | None = ...,
+        aiThread: Global___DeviceCapabilities.AiThread | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["aiThread", b"aiThread", "businessBroadcast", b"businessBroadcast", "chatLockSupportLevel", b"chatLockSupportLevel", "lidMigration", b"lidMigration", "memberNameTagPrimarySupport", b"memberNameTagPrimarySupport", "userHasAvatar", b"userHasAvatar"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["aiThread", b"aiThread", "businessBroadcast", b"businessBroadcast", "chatLockSupportLevel", b"chatLockSupportLevel", "lidMigration", b"lidMigration", "memberNameTagPrimarySupport", b"memberNameTagPrimarySupport", "userHasAvatar", b"userHasAvatar"]) -> None: ...
 
-global___DeviceCapabilities = DeviceCapabilities
+Global___DeviceCapabilities: typing_extensions.TypeAlias = DeviceCapabilities

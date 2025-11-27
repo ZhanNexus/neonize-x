@@ -77,12 +77,12 @@ class UserPassword(google.protobuf.message.Message):
         VALUE_FIELD_NUMBER: builtins.int
         key: builtins.str
         @property
-        def value(self) -> global___UserPassword.TransformerArg.Value: ...
+        def value(self) -> Global___UserPassword.TransformerArg.Value: ...
         def __init__(
             self,
             *,
             key: builtins.str | None = ...,
-            value: global___UserPassword.TransformerArg.Value | None = ...,
+            value: Global___UserPassword.TransformerArg.Value | None = ...,
         ) -> None: ...
         def HasField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> builtins.bool: ...
         def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
@@ -91,20 +91,20 @@ class UserPassword(google.protobuf.message.Message):
     TRANSFORMER_FIELD_NUMBER: builtins.int
     TRANSFORMERARG_FIELD_NUMBER: builtins.int
     TRANSFORMEDDATA_FIELD_NUMBER: builtins.int
-    encoding: global___UserPassword.Encoding.ValueType
-    transformer: global___UserPassword.Transformer.ValueType
+    encoding: Global___UserPassword.Encoding.ValueType
+    transformer: Global___UserPassword.Transformer.ValueType
     transformedData: builtins.bytes
     @property
-    def transformerArg(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___UserPassword.TransformerArg]: ...
+    def transformerArg(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[Global___UserPassword.TransformerArg]: ...
     def __init__(
         self,
         *,
-        encoding: global___UserPassword.Encoding.ValueType | None = ...,
-        transformer: global___UserPassword.Transformer.ValueType | None = ...,
-        transformerArg: collections.abc.Iterable[global___UserPassword.TransformerArg] | None = ...,
+        encoding: Global___UserPassword.Encoding.ValueType | None = ...,
+        transformer: Global___UserPassword.Transformer.ValueType | None = ...,
+        transformerArg: collections.abc.Iterable[Global___UserPassword.TransformerArg] | None = ...,
         transformedData: builtins.bytes | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["encoding", b"encoding", "transformedData", b"transformedData", "transformer", b"transformer"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["encoding", b"encoding", "transformedData", b"transformedData", "transformer", b"transformer", "transformerArg", b"transformerArg"]) -> None: ...
 
-global___UserPassword = UserPassword
+Global___UserPassword: typing_extensions.TypeAlias = UserPassword

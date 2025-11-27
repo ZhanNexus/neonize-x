@@ -2,7 +2,7 @@ syntax = "proto2";
 import "waVnameCert/WAWebProtobufsVnameCert.proto";
 import "waE2E/WAWebProtobufsE2E.proto";
 import "waWeb/WAWebProtobufsWeb.proto";
-import "waSyncAction/WASyncAction.proto";
+import "waSyncAction/WAWebProtobufSyncAction.proto";
 import "waHistorySync/WAWebProtobufsHistorySync.proto";
 option go_package = "./defproto";
 package neonize;
@@ -44,6 +44,10 @@ enum AddressingMode {
     PN = 1;
     LID = 2;
 }
+message BroadcastRecipient {
+    required JID LID = 1;
+    required JID PN = 2;
+}
 message MessageSource {
     required JID Chat = 1;
     required JID Sender = 2;
@@ -53,6 +57,7 @@ message MessageSource {
     required JID SenderAlt = 6;
     required JID RecipientAlt = 7;
     required JID BroadcastListOwner = 8;
+    repeated BroadcastRecipient BroadcastRecipients = 9;
 }
 message DeviceSentMeta {
     required string DestinationJID = 1;
@@ -328,10 +333,11 @@ message NewsletterText {
     required int64 UpdateTime = 3;
 }
 message ProfilePictureInfo {
-    required string URL = 1;
-    required string ID = 2;
-    required string Type = 3;
-    required string DirectPath = 4;
+    optional string URL = 1;
+    optional string ID = 2;
+    optional string Type = 3;
+    optional string DirectPath = 4;
+    optional bytes Hash = 5;
 }
 message NewsletterReactionSettings {
     enum NewsletterReactionsMode {
@@ -535,7 +541,7 @@ message ResolveBusinessMessageLinkReturnFunction {
 message MutationInfo {
     repeated string Index = 1;
     required int32 Version = 2;
-    required WASyncAction.SyncActionValue Value = 3;
+    required WAWebProtobufSyncAction.SyncActionValue Value = 3;
 }
 message PatchInfo {
     enum WAPatchName {
@@ -576,6 +582,7 @@ message ContactInfo {
     required string FullName = 3;
     required string PushName = 4;
     required string BusinessName = 5;
+    required string RedactedPhone = 6;
 }
 message Contact{
     required JID JID = 1;
@@ -816,7 +823,8 @@ message BasicCallMeta {
     required JID from = 1;
     required int64 timestamp = 2;
     required JID callCreator = 3;
-    required string callID = 4;
+    required JID callCreatorAlt = 4;
+    required string callID = 5;
 }
 message CallRemoteMeta {
     required string remotePlatform = 1;

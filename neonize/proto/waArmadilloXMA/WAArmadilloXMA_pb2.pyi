@@ -246,7 +246,7 @@ class ExtendedContentMessage(google.protobuf.message.Message):
         NATIVEURL_FIELD_NUMBER: builtins.int
         CTATYPE_FIELD_NUMBER: builtins.int
         ACTIONCONTENTBLOB_FIELD_NUMBER: builtins.int
-        buttonType: global___ExtendedContentMessage.CtaButtonType.ValueType
+        buttonType: Global___ExtendedContentMessage.CtaButtonType.ValueType
         title: builtins.str
         actionURL: builtins.str
         nativeURL: builtins.str
@@ -255,7 +255,7 @@ class ExtendedContentMessage(google.protobuf.message.Message):
         def __init__(
             self,
             *,
-            buttonType: global___ExtendedContentMessage.CtaButtonType.ValueType | None = ...,
+            buttonType: Global___ExtendedContentMessage.CtaButtonType.ValueType | None = ...,
             title: builtins.str | None = ...,
             actionURL: builtins.str | None = ...,
             nativeURL: builtins.str | None = ...,
@@ -291,17 +291,17 @@ class ExtendedContentMessage(google.protobuf.message.Message):
     MENTIONEDJID_FIELD_NUMBER: builtins.int
     COMMANDS_FIELD_NUMBER: builtins.int
     MENTIONS_FIELD_NUMBER: builtins.int
-    targetType: global___ExtendedContentMessage.ExtendedContentType.ValueType
+    targetType: Global___ExtendedContentMessage.ExtendedContentType.ValueType
     targetUsername: builtins.str
     targetID: builtins.str
     targetExpiringAtSec: builtins.int
-    xmaLayoutType: global___ExtendedContentMessage.XmaLayoutType.ValueType
+    xmaLayoutType: Global___ExtendedContentMessage.XmaLayoutType.ValueType
     titleText: builtins.str
     subtitleText: builtins.str
     maxTitleNumOfLines: builtins.int
     maxSubtitleNumOfLines: builtins.int
     headerTitle: builtins.str
-    overlayIconGlyph: global___ExtendedContentMessage.OverlayIconGlyph.ValueType
+    overlayIconGlyph: Global___ExtendedContentMessage.OverlayIconGlyph.ValueType
     overlayTitle: builtins.str
     overlayDescription: builtins.str
     sentWithMessageID: builtins.str
@@ -312,7 +312,7 @@ class ExtendedContentMessage(google.protobuf.message.Message):
     @property
     def associatedMessage(self) -> waCommon.WACommon_pb2.SubProtocol: ...
     @property
-    def ctas(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___ExtendedContentMessage.CTA]: ...
+    def ctas(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[Global___ExtendedContentMessage.CTA]: ...
     @property
     def previews(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[waCommon.WACommon_pb2.SubProtocol]: ...
     @property
@@ -329,12 +329,12 @@ class ExtendedContentMessage(google.protobuf.message.Message):
         self,
         *,
         associatedMessage: waCommon.WACommon_pb2.SubProtocol | None = ...,
-        targetType: global___ExtendedContentMessage.ExtendedContentType.ValueType | None = ...,
+        targetType: Global___ExtendedContentMessage.ExtendedContentType.ValueType | None = ...,
         targetUsername: builtins.str | None = ...,
         targetID: builtins.str | None = ...,
         targetExpiringAtSec: builtins.int | None = ...,
-        xmaLayoutType: global___ExtendedContentMessage.XmaLayoutType.ValueType | None = ...,
-        ctas: collections.abc.Iterable[global___ExtendedContentMessage.CTA] | None = ...,
+        xmaLayoutType: Global___ExtendedContentMessage.XmaLayoutType.ValueType | None = ...,
+        ctas: collections.abc.Iterable[Global___ExtendedContentMessage.CTA] | None = ...,
         previews: collections.abc.Iterable[waCommon.WACommon_pb2.SubProtocol] | None = ...,
         titleText: builtins.str | None = ...,
         subtitleText: builtins.str | None = ...,
@@ -343,7 +343,7 @@ class ExtendedContentMessage(google.protobuf.message.Message):
         favicon: waCommon.WACommon_pb2.SubProtocol | None = ...,
         headerImage: waCommon.WACommon_pb2.SubProtocol | None = ...,
         headerTitle: builtins.str | None = ...,
-        overlayIconGlyph: global___ExtendedContentMessage.OverlayIconGlyph.ValueType | None = ...,
+        overlayIconGlyph: Global___ExtendedContentMessage.OverlayIconGlyph.ValueType | None = ...,
         overlayTitle: builtins.str | None = ...,
         overlayDescription: builtins.str | None = ...,
         sentWithMessageID: builtins.str | None = ...,
@@ -358,4 +358,4 @@ class ExtendedContentMessage(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["associatedMessage", b"associatedMessage", "contentRef", b"contentRef", "favicon", b"favicon", "headerImage", b"headerImage", "headerSubtitle", b"headerSubtitle", "headerTitle", b"headerTitle", "maxSubtitleNumOfLines", b"maxSubtitleNumOfLines", "maxTitleNumOfLines", b"maxTitleNumOfLines", "messageText", b"messageText", "overlayDescription", b"overlayDescription", "overlayIconGlyph", b"overlayIconGlyph", "overlayTitle", b"overlayTitle", "sentWithMessageID", b"sentWithMessageID", "subtitleText", b"subtitleText", "targetExpiringAtSec", b"targetExpiringAtSec", "targetID", b"targetID", "targetType", b"targetType", "targetUsername", b"targetUsername", "titleText", b"titleText", "xmaDataclass", b"xmaDataclass", "xmaLayoutType", b"xmaLayoutType"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["associatedMessage", b"associatedMessage", "commands", b"commands", "contentRef", b"contentRef", "ctas", b"ctas", "favicon", b"favicon", "headerImage", b"headerImage", "headerSubtitle", b"headerSubtitle", "headerTitle", b"headerTitle", "maxSubtitleNumOfLines", b"maxSubtitleNumOfLines", "maxTitleNumOfLines", b"maxTitleNumOfLines", "mentionedJID", b"mentionedJID", "mentions", b"mentions", "messageText", b"messageText", "overlayDescription", b"overlayDescription", "overlayIconGlyph", b"overlayIconGlyph", "overlayTitle", b"overlayTitle", "previews", b"previews", "sentWithMessageID", b"sentWithMessageID", "subtitleText", b"subtitleText", "targetExpiringAtSec", b"targetExpiringAtSec", "targetID", b"targetID", "targetType", b"targetType", "targetUsername", b"targetUsername", "titleText", b"titleText", "xmaDataclass", b"xmaDataclass", "xmaLayoutType", b"xmaLayoutType"]) -> None: ...
 
-global___ExtendedContentMessage = ExtendedContentMessage
+Global___ExtendedContentMessage: typing_extensions.TypeAlias = ExtendedContentMessage

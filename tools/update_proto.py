@@ -54,7 +54,7 @@ def download_whatsmeow():
     print(
         f"{Fore.RED}[{Fore.GREEN}{name.name} {Fore.YELLOW}'HEAD'{Fore.RED}]{Fore.RESET}")
     resp = requests.get(
-        "https://github.com/ginkohub/whatsmeow/archive/refs/heads/bypass.zip", stream=True
+        "https://github.com/tulir/whatsmeow/archive/refs/heads/main.zip", stream=True
     )
     total = int(resp.headers.get("content-length", 0))
     with (
@@ -75,7 +75,7 @@ def download_whatsmeow():
     # unzip
     with zipfile.ZipFile("whatsmeow.zip") as zfile:
         for name in filter(lambda x: x.startswith(
-                "whatsmeow-bypass/proto"), zfile.namelist()):
+                "whatsmeow-main/proto"), zfile.namelist()):
             zfile.extract(name, ".dest")
     # remove != .proto
     value = FileValue()
@@ -87,7 +87,7 @@ def download_whatsmeow():
     shutil.rmtree(WORKDIR / "goneonize/defproto/")
     shutil.move(
         WORKDIR /
-        ".dest/whatsmeow-bypass/proto",
+        ".dest/whatsmeow-main/proto",
         WORKDIR /
         "goneonize/defproto")
     shutil.copy(
@@ -101,32 +101,25 @@ def download_whatsmeow():
     os.remove(WORKDIR / "whatsmeow.zip")
     shutil.rmtree(WORKDIR / ".dest")
     print(f"{Fore.BLUE}[INFO] Work directory cleaned up successfully.")
-    git_proto_sha = get_bypass_branch_sha()
+    git_proto_sha = ""
+    last_sha_commit = requests.get(
+        "https://api.github.com/repos/tulir/whatsmeow/contents/").json()
+    for result in filter(
+            lambda item: item["name"] == "proto", last_sha_commit):
+        git_proto_sha = result["sha"]
+        break
     with open(SHA_FILE, "w") as file:
         file.write(git_proto_sha)
 
 
-def get_bypass_branch_sha():
-    """Get the SHA of the bypass branch from ginkohub/whatsmeow"""
-    try:
-        # Get the branch information from ginkohub/whatsmeow bypass branch
-        resp = requests.get("https://api.github.com/repos/ginkohub/whatsmeow/branches/bypass")
-        branch_info = resp.json()
-        return branch_info["commit"]["sha"]
-    except Exception:
-        # Fallback to the original method if bypass branch API fails
-        git_proto_sha = ""
-        last_sha_commit = requests.get(
-            "https://api.github.com/repos/tulir/whatsmeow/contents/").json()
-        for result in filter(
-                lambda item: item["name"] == "proto", last_sha_commit):
-            git_proto_sha = result["sha"]
-            break
-        return git_proto_sha
-
-
 def upgradable() -> ProtoCommit:
-    git_proto_sha = get_bypass_branch_sha()
+    git_proto_sha = ""
+    last_sha_commit = requests.get(
+        "https://api.github.com/repos/tulir/whatsmeow/contents/").json()
+    for result in filter(
+            lambda item: item["name"] == "proto", last_sha_commit):
+        git_proto_sha = result["sha"]
+        break
     if SHA_FILE.exists():
         return ProtoCommit(
             upgradeable=SHA_FILE.read_text().strip() != git_proto_sha, sha=git_proto_sha
