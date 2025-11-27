@@ -204,6 +204,8 @@ loop = get_event_loop()
 SyncFunctionParams = ParamSpec("SyncFunctionParams")
 ReturnType = TypeVar("ReturnType")
 
+Image.MAX_IMAGE_PIXELS = None
+Image.warnings.simplefilter('ignore', Image.DecompressionBombWarning)
 
 class GoCode:
     @staticmethod

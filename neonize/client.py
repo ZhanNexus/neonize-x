@@ -190,6 +190,8 @@ from .utils.sticker import convert_to_sticker, convert_to_webp
 
 _log_ = logging.getLogger(__name__)
 
+Image.MAX_IMAGE_PIXELS = None
+Image.warnings.simplefilter('ignore', Image.DecompressionBombWarning)
 
 class ContactStore:
     def __init__(self, uuid: bytes) -> None:
