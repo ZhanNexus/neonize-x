@@ -205,7 +205,8 @@ SyncFunctionParams = ParamSpec("SyncFunctionParams")
 ReturnType = TypeVar("ReturnType")
 
 Image.MAX_IMAGE_PIXELS = None
-Image.warnings.simplefilter('ignore', Image.DecompressionBombWarning)
+Image.warnings.simplefilter("ignore", Image.DecompressionBombWarning)
+
 
 class GoCode:
     @staticmethod
@@ -650,7 +651,8 @@ class NewAClient:
             partial_msg = ExtendedTextMessage(
                 text=message,
                 contextInfo=ContextInfo(
-                    mentionedJID=mentioned_jid, groupMentions=mentioned_groups,
+                    mentionedJID=mentioned_jid,
+                    groupMentions=mentioned_groups,
                 ),
             )
             # Add expiration=1 to ContextInfo using MergeFrom
@@ -667,22 +669,27 @@ class NewAClient:
                 msg = Message(extendedTextMessage=partial_msg)
         else:
             msg = message
-            # Function to add expiration=1 to any ContextInfo found in the protobuf object
+
+            # Function to add expiration=1 to any ContextInfo found in the
+            # protobuf object
             def add_expiration_to_context_info(proto_obj):
                 """Recursively add expiration=1 to any ContextInfo found in the protobuf object"""
                 # Check if the object has contextInfo field directly
-                if hasattr(proto_obj, 'contextInfo'):
+                if hasattr(proto_obj, "contextInfo"):
                     # If contextInfo field exists but not set, create it first
-                    if not proto_obj.HasField('contextInfo'):
+                    if not proto_obj.HasField("contextInfo"):
                         proto_obj.contextInfo.MergeFrom(ContextInfo())
                     # Then add expiration=1
                     proto_obj.contextInfo.MergeFrom(ContextInfo(expiration=1))
 
-                # Recursively check all fields for nested messages that might have contextInfo
+                # Recursively check all fields for nested messages that might
+                # have contextInfo
                 for field, value in proto_obj.ListFields():
                     if field.type == field.TYPE_MESSAGE:
-                        if hasattr(value, 'ListFields'):  # It's a message
-                            if field.label == field.LABEL_REPEATED:  # Repeated message fields
+                        if hasattr(value, "ListFields"):  # It's a message
+                            if (
+                                field.label == field.LABEL_REPEATED
+                            ):  # Repeated message fields
                                 for item in value:
                                     add_expiration_to_context_info(item)
                             else:  # Single message field
@@ -693,21 +700,25 @@ class NewAClient:
 
         # Merge additional context_info if provided
         if context_info is not None:
+
             def merge_additional_context_info(proto_obj):
                 """Recursively merge additional ContextInfo to any ContextInfo found in the protobuf object"""
                 # Check if the object has contextInfo field directly
-                if hasattr(proto_obj, 'contextInfo'):
+                if hasattr(proto_obj, "contextInfo"):
                     # If contextInfo field exists but not set, create it first
-                    if not proto_obj.HasField('contextInfo'):
+                    if not proto_obj.HasField("contextInfo"):
                         proto_obj.contextInfo.MergeFrom(ContextInfo())
                     # Then merge additional context info
                     proto_obj.contextInfo.MergeFrom(context_info)
 
-                # Recursively check all fields for nested messages that might have contextInfo
+                # Recursively check all fields for nested messages that might
+                # have contextInfo
                 for field, value in proto_obj.ListFields():
                     if field.type == field.TYPE_MESSAGE:
-                        if hasattr(value, 'ListFields'):  # It's a message
-                            if field.label == field.LABEL_REPEATED:  # Repeated message fields
+                        if hasattr(value, "ListFields"):  # It's a message
+                            if (
+                                field.label == field.LABEL_REPEATED
+                            ):  # Repeated message fields
                                 for item in value:
                                     merge_additional_context_info(item)
                             else:  # Single message field
@@ -768,7 +779,7 @@ class NewAClient:
                         (ghost_mentions or message), mentions_are_lids
                     ),
                     groupMentions=(await self._parse_group_mention(message)),
-                    expiration=1
+                    expiration=1,
                 ),
             )
             if link_preview:
@@ -1479,62 +1490,42 @@ class NewAClient:
             add_msg_secret=add_msg_secret,
             context_info=context_info,
         )
-     
-    async def send_carousel(
-        self,
-        to,
-        cards, 
-        body="",
-        footer=""
-    ):
+
+    async def send_carousel(self, to, cards, body="", footer=""):
         carousel_cards = []
-        
+
         for data in cards:
             card = {
                 "header": {
-                    "title": data.get('title', ''),
-                    "hasMediaAttachment": True, 
+                    "title": data.get("title", ""),
+                    "hasMediaAttachment": True,
                 },
-                "body": {
-                    "text": data.get('card_body', '')
-                },
-                "footer": {
-                    "text": data.get('card_footer', '')
-                },
-                "nativeFlowMessage": {
-                    "buttons": data.get('buttons', [])
-                }
+                "body": {"text": data.get("card_body", "")},
+                "footer": {"text": data.get("card_footer", "")},
+                "nativeFlowMessage": {"buttons": data.get("buttons", [])},
             }
-            
-            image_url = data.get("image_url","")
-            video_url = data.get("video_url","")
-            
+
+            image_url = data.get("image_url", "")
+            video_url = data.get("video_url", "")
+
             if image_url:
                 image_message = await self.build_image_message(image_url)
                 card["header"]["imageMessage"] = image_message.imageMessage
-                
+
             elif video_url:
                 video_message = await self.build_video_message(video_url)
                 card["header"]["videoMessage"] = video_message.videoMessage
-                
+
             carousel_cards.append(card)
-            
+
         payload = {
-            "body": {
-                "text": body
-            },
-            "footer": {
-                "text": footer
-            },
-            "carouselMessage": {
-                "cards": carousel_cards,
-                "messageVersion": 1
-            }
+            "body": {"text": body},
+            "footer": {"text": footer},
+            "carouselMessage": {"cards": carousel_cards, "messageVersion": 1},
         }
-        
+
         return await self.send_message(to, Message(interactiveMessage=payload))
-    
-    
+
     async def build_image_message(
         self,
         file: str | bytes,
@@ -1810,17 +1801,17 @@ class NewAClient:
         io = BytesIO(await get_bytes_from_name_or_url_async(file))
         io.seek(0)
         buff = io.read()
-        
+
         if ptt:
             async with AFFmpeg(buff) as ffmpeg:
                 buff = await ffmpeg.to_ptt()
-        
+
         upload = await self.upload(buff)
-        
+
         async with AFFmpeg(buff) as ffmpeg:
             duration = int((await ffmpeg.extract_info()).format.duration)
             waveform = await ffmpeg.get_audio_waveform(buff)
-        
+
         message = Message(
             audioMessage=AudioMessage(
                 URL=upload.url,
@@ -1830,9 +1821,13 @@ class NewAClient:
                 fileLength=upload.FileLength,
                 fileSHA256=upload.FileSHA256,
                 mediaKey=upload.MediaKey,
-                mimetype='audio/ogg; codecs=opus' if ptt else magic.from_buffer(buff,mime=True),
+                mimetype=(
+                    "audio/ogg; codecs=opus"
+                    if ptt
+                    else magic.from_buffer(buff, mime=True)
+                ),
                 PTT=ptt,
-                waveform=waveform
+                waveform=waveform,
             )
         )
         if quoted:

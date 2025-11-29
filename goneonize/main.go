@@ -17,10 +17,11 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"go.mau.fi/util/random"
 	"strings"
 	"time"
 	"unsafe"
+
+	"go.mau.fi/util/random"
 
 	"github.com/krypton-byte/neonize/defproto"
 	"github.com/krypton-byte/neonize/utils"
