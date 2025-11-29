@@ -1,14 +1,14 @@
 import asyncio
 import io
-import wave
-import struct
 import json
 import logging
 import os
 import shlex
+import struct
 import subprocess
 import tempfile
 import uuid
+import wave
 from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional, Tuple
@@ -375,25 +375,31 @@ class AFFmpeg:
         Convert input audio/video to WhatsApp-compatible PTT (voice note) format.
         Uses libopus codec in OGG container, mono channel, 16kHz sample rate.
         """
-        import os, tempfile, uuid
-    
+        import os
+        import tempfile
+        import uuid
+
         temp = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.ogg")
-    
+
         await self.call(
             [
                 "ffmpeg",
-                "-y",                 
-                "-i", self.filepath,  
-                "-vn",               
-                "-c:a", "libopus",    
-                "-ar", "48000",       
-                "-ac", "1",           
-                "-b:a", "128k",
-                temp,                 
+                "-y",
+                "-i",
+                self.filepath,
+                "-vn",
+                "-c:a",
+                "libopus",
+                "-ar",
+                "48000",
+                "-ac",
+                "1",
+                "-b:a",
+                "128k",
+                temp,
             ]
         )
 
-    
         with open(temp, "rb") as file:
             buf = file.read()
         os.remove(temp)
@@ -417,11 +423,13 @@ class AFFmpeg:
                     num_channels = wav_file.getnchannels()
 
                     if sample_width == 1:
-                        samples = [s - 128 for s in struct.unpack(f"{len(frames)}B", frames)]
+                        samples = [
+                            s - 128 for s in struct.unpack(f"{len(frames)}B", frames)
+                        ]
                     elif sample_width == 2:
-                        samples = struct.unpack(f"{len(frames)//2}h", frames)
+                        samples = struct.unpack(f"{len(frames) // 2}h", frames)
                     elif sample_width == 4:
-                        samples = struct.unpack(f"{len(frames)//4}i", frames)
+                        samples = struct.unpack(f"{len(frames) // 4}i", frames)
                     else:
                         raise ValueError(f"Unsupported sample width: {sample_width}")
 
@@ -429,16 +437,23 @@ class AFFmpeg:
                         samples = samples[::2]
 
             except wave.Error:
-                # fallback: use ffmpeg via asyncio to decode to s16le mono 22050
+                # fallback: use ffmpeg via asyncio to decode to s16le mono
+                # 22050
                 ff = await asyncio.create_subprocess_exec(
                     "ffmpeg",
-                    "-i", "pipe:0",
-                    "-f", "s16le",
-                    "-acodec", "pcm_s16le",
-                    "-ac", "1",
-                    "-ar", "22050",
+                    "-i",
+                    "pipe:0",
+                    "-f",
+                    "s16le",
+                    "-acodec",
+                    "pcm_s16le",
+                    "-ac",
+                    "1",
+                    "-ar",
+                    "22050",
                     "-hide_banner",
-                    "-loglevel", "error",
+                    "-loglevel",
+                    "error",
                     "pipe:1",
                     stdin=asyncio.subprocess.PIPE,
                     stdout=asyncio.subprocess.PIPE,
@@ -446,8 +461,10 @@ class AFFmpeg:
                 )
                 stdout, stderr = await ff.communicate(input=audio_bytes)
                 if ff.returncode != 0:
-                    raise RuntimeError(f"ffmpeg failed: {stderr.decode(errors='ignore')}")
-                samples = struct.unpack(f"{len(stdout)//2}h", stdout)
+                    raise RuntimeError(
+                        f"ffmpeg failed: {stderr.decode(errors='ignore')}"
+                    )
+                samples = struct.unpack(f"{len(stdout) // 2}h", stdout)
 
             if not samples:
                 return bytes([0] * 64)
@@ -466,7 +483,9 @@ class AFFmpeg:
 
             max_val = max(waveform_data) if waveform_data else 1
             if max_val > 0:
-                normalized_data = [min(1.0, (val / max_val) ** 0.7) for val in waveform_data]
+                normalized_data = [
+                    min(1.0, (val / max_val) ** 0.7) for val in waveform_data
+                ]
             else:
                 normalized_data = [0] * len(waveform_data)
 
@@ -477,7 +496,6 @@ class AFFmpeg:
                 logger.debug(f"Waveform generation failed: {e}")
             return bytes([0] * 64)
 
-    
     async def extract_thumbnail(
         self,
         format: ImageFormat = ImageFormat.JPG,
@@ -761,14 +779,19 @@ class FFmpeg:
         self.call(
             [
                 "ffmpeg",
-                "-y",                 
-                "-i", self.filepath,  
-                "-vn",               
-                "-c:a", "libopus",    
-                "-ar", "48000",       
-                "-ac", "1",           
-                "-b:a", "128k",
-                temp,                 
+                "-y",
+                "-i",
+                self.filepath,
+                "-vn",
+                "-c:a",
+                "libopus",
+                "-ar",
+                "48000",
+                "-ac",
+                "1",
+                "-b:a",
+                "128k",
+                temp,
             ]
         )
         with open(temp, "rb") as file:
@@ -794,11 +817,13 @@ class FFmpeg:
                     num_channels = wav_file.getnchannels()
 
                     if sample_width == 1:
-                        samples = [s - 128 for s in struct.unpack(f"{len(frames)}B", frames)]
+                        samples = [
+                            s - 128 for s in struct.unpack(f"{len(frames)}B", frames)
+                        ]
                     elif sample_width == 2:
-                        samples = struct.unpack(f"{len(frames)//2}h", frames)
+                        samples = struct.unpack(f"{len(frames) // 2}h", frames)
                     elif sample_width == 4:
-                        samples = struct.unpack(f"{len(frames)//4}i", frames)
+                        samples = struct.unpack(f"{len(frames) // 4}i", frames)
                     else:
                         raise ValueError(f"Unsupported sample width: {sample_width}")
 
@@ -808,15 +833,27 @@ class FFmpeg:
             except wave.Error:
                 # fallback: run ffmpeg to convert to s16le mono 22050
                 cmd = [
-                    "ffmpeg", "-i", "pipe:0",
-                    "-f", "s16le", "-acodec", "pcm_s16le",
-                    "-ac", "1", "-ar", "22050",
-                    "-hide_banner", "-loglevel", "error",
-                    "pipe:1"
+                    "ffmpeg",
+                    "-i",
+                    "pipe:0",
+                    "-f",
+                    "s16le",
+                    "-acodec",
+                    "pcm_s16le",
+                    "-ac",
+                    "1",
+                    "-ar",
+                    "22050",
+                    "-hide_banner",
+                    "-loglevel",
+                    "error",
+                    "pipe:1",
                 ]
-                proc = subprocess.run(cmd, input=audio_bytes, capture_output=True, check=True)
+                proc = subprocess.run(
+                    cmd, input=audio_bytes, capture_output=True, check=True
+                )
                 stdout = proc.stdout
-                samples = struct.unpack(f"{len(stdout)//2}h", stdout)
+                samples = struct.unpack(f"{len(stdout) // 2}h", stdout)
 
             if not samples:
                 return bytes([0] * 64)
@@ -835,7 +872,9 @@ class FFmpeg:
 
             max_val = max(waveform_data) if waveform_data else 1
             if max_val > 0:
-                normalized_data = [min(1.0, (val / max_val) ** 0.7) for val in waveform_data]
+                normalized_data = [
+                    min(1.0, (val / max_val) ** 0.7) for val in waveform_data
+                ]
             else:
                 normalized_data = [0] * len(waveform_data)
 
@@ -845,7 +884,6 @@ class FFmpeg:
             if logger:
                 logger.debug(f"Waveform generation failed: {e}")
             return bytes([0] * 64)
-
 
     def extract_thumbnail(
         self,
@@ -935,4 +973,3 @@ class FFmpeg:
                 for data in streams
             ],
         )
-

@@ -191,7 +191,8 @@ from .utils.sticker import convert_to_sticker, convert_to_webp
 _log_ = logging.getLogger(__name__)
 
 Image.MAX_IMAGE_PIXELS = None
-Image.warnings.simplefilter('ignore', Image.DecompressionBombWarning)
+Image.warnings.simplefilter("ignore", Image.DecompressionBombWarning)
+
 
 class ContactStore:
     def __init__(self, uuid: bytes) -> None:
@@ -587,7 +588,8 @@ class NewClient:
             partial_msg = ExtendedTextMessage(
                 text=message,
                 contextInfo=ContextInfo(
-                    mentionedJID=mentioned_jid, groupMentions=mentioned_groups,
+                    mentionedJID=mentioned_jid,
+                    groupMentions=mentioned_groups,
                 ),
             )
             # Add expiration=1 to ContextInfo using MergeFrom
@@ -604,22 +606,27 @@ class NewClient:
                 msg = Message(extendedTextMessage=partial_msg)
         else:
             msg = message
-            # Function to add expiration=1 to any ContextInfo found in the protobuf object
+
+            # Function to add expiration=1 to any ContextInfo found in the
+            # protobuf object
             def add_expiration_to_context_info(proto_obj):
                 """Recursively add expiration=1 to any ContextInfo found in the protobuf object"""
                 # Check if the object has contextInfo field directly
-                if hasattr(proto_obj, 'contextInfo'):
+                if hasattr(proto_obj, "contextInfo"):
                     # If contextInfo field exists but not set, create it first
-                    if not proto_obj.HasField('contextInfo'):
+                    if not proto_obj.HasField("contextInfo"):
                         proto_obj.contextInfo.MergeFrom(ContextInfo())
                     # Then add expiration=1
                     proto_obj.contextInfo.MergeFrom(ContextInfo(expiration=1))
 
-                # Recursively check all fields for nested messages that might have contextInfo
+                # Recursively check all fields for nested messages that might
+                # have contextInfo
                 for field, value in proto_obj.ListFields():
                     if field.type == field.TYPE_MESSAGE:
-                        if hasattr(value, 'ListFields'):  # It's a message
-                            if field.label == field.LABEL_REPEATED:  # Repeated message fields
+                        if hasattr(value, "ListFields"):  # It's a message
+                            if (
+                                field.label == field.LABEL_REPEATED
+                            ):  # Repeated message fields
                                 for item in value:
                                     add_expiration_to_context_info(item)
                             else:  # Single message field
@@ -630,21 +637,25 @@ class NewClient:
 
         # Merge additional context_info if provided
         if context_info is not None:
+
             def merge_additional_context_info(proto_obj):
                 """Recursively merge additional ContextInfo to any ContextInfo found in the protobuf object"""
                 # Check if the object has contextInfo field directly
-                if hasattr(proto_obj, 'contextInfo'):
+                if hasattr(proto_obj, "contextInfo"):
                     # If contextInfo field exists but not set, create it first
-                    if not proto_obj.HasField('contextInfo'):
+                    if not proto_obj.HasField("contextInfo"):
                         proto_obj.contextInfo.MergeFrom(ContextInfo())
                     # Then merge additional context info
                     proto_obj.contextInfo.MergeFrom(context_info)
 
-                # Recursively check all fields for nested messages that might have contextInfo
+                # Recursively check all fields for nested messages that might
+                # have contextInfo
                 for field, value in proto_obj.ListFields():
                     if field.type == field.TYPE_MESSAGE:
-                        if hasattr(value, 'ListFields'):  # It's a message
-                            if field.label == field.LABEL_REPEATED:  # Repeated message fields
+                        if hasattr(value, "ListFields"):  # It's a message
+                            if (
+                                field.label == field.LABEL_REPEATED
+                            ):  # Repeated message fields
                                 for item in value:
                                     merge_additional_context_info(item)
                             else:  # Single message field
@@ -1361,60 +1372,42 @@ class NewClient:
                 self._make_quoted_message(quoted)
             )
         return message
-    def send_carousel_message(
-        self,
-        to,
-        cards, 
-        body="",
-        footer=""
-    ):
+
+    def send_carousel_message(self, to, cards, body="", footer=""):
         carousel_cards = []
-        
+
         for data in cards:
             card = {
                 "header": {
-                    "title": data.get('title', ''),
-                    "hasMediaAttachment": True, 
+                    "title": data.get("title", ""),
+                    "hasMediaAttachment": True,
                 },
-                "body": {
-                    "text": data.get('card_body', '')
-                },
-                "footer": {
-                    "text": data.get('card_footer', '')
-                },
-                "nativeFlowMessage": {
-                    "buttons": data.get('buttons', [])
-                }
+                "body": {"text": data.get("card_body", "")},
+                "footer": {"text": data.get("card_footer", "")},
+                "nativeFlowMessage": {"buttons": data.get("buttons", [])},
             }
-            
-            image_url = data.get("image_url","")
-            video_url = data.get("video_url","")
-            
+
+            image_url = data.get("image_url", "")
+            video_url = data.get("video_url", "")
+
             if image_url:
                 image_message = self.build_image_message(image_url)
                 card["header"]["imageMessage"] = image_message.imageMessage
-                
+
             elif video_url:
                 video_message = self.build_video_message(video_url)
                 card["header"]["videoMessage"] = video_message.videoMessage
-                
+
             carousel_cards.append(card)
-            
+
         payload = {
-            "body": {
-                "text": body
-            },
-            "footer": {
-                "text": footer
-            },
-            "carouselMessage": {
-                "cards": carousel_cards,
-                "messageVersion": 1
-            }
+            "body": {"text": body},
+            "footer": {"text": footer},
+            "carouselMessage": {"cards": carousel_cards, "messageVersion": 1},
         }
-        
+
         return self.send_message(to, Message(interactiveMessage=payload))
-        
+
     def send_video(
         self,
         to: JID,
@@ -1737,13 +1730,13 @@ class NewClient:
         if ptt:
             with FFmpeg(buff) as ffmpeg:
                 buff = ffmpeg.to_ptt()
-        
+
         upload = self.upload(buff)
-        
+
         with FFmpeg(buff) as ffmpeg:
             duration = int((ffmpeg.extract_info()).format.duration)
             waveform = ffmpeg.get_audio_waveform(buff)
-        
+
         message = Message(
             audioMessage=AudioMessage(
                 URL=upload.url,
@@ -1753,9 +1746,13 @@ class NewClient:
                 fileLength=upload.FileLength,
                 fileSHA256=upload.FileSHA256,
                 mediaKey=upload.MediaKey,
-                mimetype='audio/ogg; codecs=opus' if ptt else magic.from_buffer(buff,mime=True),
+                mimetype=(
+                    "audio/ogg; codecs=opus"
+                    if ptt
+                    else magic.from_buffer(buff, mime=True)
+                ),
                 PTT=ptt,
-                waveform=waveform
+                waveform=waveform,
             )
         )
         if quoted:
