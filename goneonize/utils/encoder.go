@@ -911,6 +911,7 @@ func EncodeContactInfo(info types.ContactInfo) *defproto.ContactInfo {
 		FullName:     proto.String(info.FullName),
 		PushName:     proto.String(info.PushName),
 		BusinessName: proto.String(info.BusinessName),
+		RedactedPhone: proto.String(info.RedactedPhone),
 	}
 }
 
