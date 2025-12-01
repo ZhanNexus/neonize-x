@@ -29,6 +29,4 @@ require (
 	golang.org/x/text v0.31.0 // indirect
 )
 
-replace go.mau.fi/whatsmeow => github.com/ginkohub/whatsmeow v0.0.0-20251118033924-0320e731b81c
-
 replace go.mau.fi/libsignal => github.com/fawwaz37/libsignal-protocol-go v0.2.1-0.20250920101933-ae5672c024d5
