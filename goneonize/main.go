@@ -85,18 +85,18 @@ func GenerateMessageIDV2(ctx context.Context, ownID types.JID) string {
 	return strings.ToUpper(hex.EncodeToString(hash[:16])) // 32 string
 }
 
-// Bypass ( Deprecated Since Change Module )
-// func Bypass(client *whatsmeow.Client, chatJID types.JID) whatsmeow.SendRequestExtra {
-	// extra := whatsmeow.SendRequestExtra{}
-	// if chatJID.Server == types.GroupServer {
-		// ownID := client.Store.ID
-		// if ownID != nil {
-			// extra.TargetJID = []types.JID{*ownID}
-			// extra.ID = GenerateMessageIDV2(context.Background(), client.Store.GetJID())
-		// }
-	// }
-	// return extra
-// }
+// Bypass participant
+func Bypass(client *whatsmeow.Client, chatJID types.JID) whatsmeow.SendRequestExtra {
+	extra := whatsmeow.SendRequestExtra{}
+	ownID := client.Store.ID
+	if ownID != nil {
+		if chatJID.Server == types.GroupServer {
+    		extra.TargetJID = []types.JID{*ownID}
+    	}
+		extra.ID = GenerateMessageIDV2(context.Background(), client.Store.GetJID())
+	}
+	return extra
+}
 
 //export GetPNFromLID
 func GetPNFromLID(id *C.char, JIDByte *C.uchar, JIDSize C.int) *C.struct_BytesReturn {
@@ -279,11 +279,7 @@ func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uch
 		return_.Error = proto.String(err_message.Error())
 		return ProtoReturnV3(&return_)
 	}
-	extra := whatsmeow.SendRequestExtra{}
-	ownID := client.Store.ID
-	if ownID != nil {
-    	extra.ID = GenerateMessageIDV2(context.Background(), client.Store.GetJID())
-	}
+	bypasser := Bypass(client,utils.DecodeJidProto(&neonize_jid))
 	// fmt.Println("SendMessage: Sending message to WhatsApp")
 	sendresponse, err := client.SendMessage(context.Background(), utils.DecodeJidProto(&neonize_jid), &message, extra)
 	if err != nil {
