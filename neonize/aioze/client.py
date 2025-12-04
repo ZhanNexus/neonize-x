@@ -643,6 +643,12 @@ class NewAClient:
         :rtype: SendResponse
         """
         to_bytes = to.SerializeToString()
+        disappearing_time=0
+        if to.Server == "g.us":
+            get_ephemeral = await self.get_group_info(to)
+            disappearing_time= get_ephemeral.GroupEphemeral.DisappearingTimer
+        elif to.Server == "s.whatsapp.net" or to.Server == "lid":
+            disappearing_time=86400
         if isinstance(message, str):
             mentioned_groups = await self._parse_group_mention(message)
             mentioned_jid = self._parse_mention(
@@ -655,7 +661,7 @@ class NewAClient:
                     groupMentions=mentioned_groups,
                 ),
             )
-            partial_msg.contextInfo.MergeFrom(ContextInfo(expiration=86400))
+            partial_msg.contextInfo.MergeFrom(ContextInfo(expiration=disappearing_time))
             if link_preview:
                 preview = await self._generate_link_preview(message)
                 if preview:
@@ -669,11 +675,11 @@ class NewAClient:
         else:
             msg = message
             def add_expiration_to_context_info(proto_obj):
-                """Recursively add expiration=86400 to any ContextInfo found in the protobuf object"""
+                """Recursively add expiration=disappearing_time to any ContextInfo found in the protobuf object"""
                 if hasattr(proto_obj, "contextInfo"):
                     if not proto_obj.HasField("contextInfo"):
                         proto_obj.contextInfo.MergeFrom(ContextInfo())
-                    proto_obj.contextInfo.MergeFrom(ContextInfo(expiration=86400))
+                    proto_obj.contextInfo.MergeFrom(ContextInfo(expiration=disappearing_time))
 
                 for field, value in proto_obj.ListFields():
                     if field.type == field.TYPE_MESSAGE:
@@ -762,7 +768,6 @@ class NewAClient:
                         (ghost_mentions or message), mentions_are_lids
                     ),
                     groupMentions=(await self._parse_group_mention(message)),
-                    expiration=86400,
                 ),
             )
             if link_preview:
