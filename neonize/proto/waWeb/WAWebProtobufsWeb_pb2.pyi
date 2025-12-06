@@ -271,6 +271,7 @@ class WebMessageInfo(google.protobuf.message.Message):
         QUARANTINED_MESSAGE: WebMessageInfo._StubType.ValueType  # 220
         GROUP_MEMBER_SHARE_GROUP_HISTORY_MODE: WebMessageInfo._StubType.ValueType  # 221
         GROUP_OPEN_BOT_ADDED: WebMessageInfo._StubType.ValueType  # 222
+        GROUP_TEE_BOT_ADDED: WebMessageInfo._StubType.ValueType  # 223
 
     class StubType(_StubType, metaclass=_StubTypeEnumTypeWrapper): ...
     UNKNOWN: WebMessageInfo.StubType.ValueType  # 0
@@ -496,6 +497,7 @@ class WebMessageInfo(google.protobuf.message.Message):
     QUARANTINED_MESSAGE: WebMessageInfo.StubType.ValueType  # 220
     GROUP_MEMBER_SHARE_GROUP_HISTORY_MODE: WebMessageInfo.StubType.ValueType  # 221
     GROUP_OPEN_BOT_ADDED: WebMessageInfo.StubType.ValueType  # 222
+    GROUP_TEE_BOT_ADDED: WebMessageInfo.StubType.ValueType  # 223
 
     class _Status:
         ValueType = typing.NewType("ValueType", builtins.int)

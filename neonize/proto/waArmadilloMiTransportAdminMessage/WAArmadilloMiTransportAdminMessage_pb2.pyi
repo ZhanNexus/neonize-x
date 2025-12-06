@@ -626,16 +626,19 @@ class MiTransportAdminMessage(google.protobuf.message.Message):
 
         OTHERUSERNAME_FIELD_NUMBER: builtins.int
         ISTURNONCOHORT_FIELD_NUMBER: builtins.int
+        USERWHOACCEPTEDFRIENDREQUEST_FIELD_NUMBER: builtins.int
         otherUserName: builtins.str
         isTurnOnCohort: builtins.str
+        userWhoAcceptedFriendRequest: builtins.str
         def __init__(
             self,
             *,
             otherUserName: builtins.str | None = ...,
             isTurnOnCohort: builtins.str | None = ...,
+            userWhoAcceptedFriendRequest: builtins.str | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["isTurnOnCohort", b"isTurnOnCohort", "otherUserName", b"otherUserName"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["isTurnOnCohort", b"isTurnOnCohort", "otherUserName", b"otherUserName"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["isTurnOnCohort", b"isTurnOnCohort", "otherUserName", b"otherUserName", "userWhoAcceptedFriendRequest", b"userWhoAcceptedFriendRequest"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["isTurnOnCohort", b"isTurnOnCohort", "otherUserName", b"otherUserName", "userWhoAcceptedFriendRequest", b"userWhoAcceptedFriendRequest"]) -> None: ...
 
     @typing.final
     class XmatDisappearingSetting(google.protobuf.message.Message):

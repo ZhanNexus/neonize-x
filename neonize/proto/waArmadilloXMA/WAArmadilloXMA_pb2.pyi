@@ -24,6 +24,21 @@ DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 class ExtendedContentMessage(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
+    class _XmaDataclassType:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _XmaDataclassTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[ExtendedContentMessage._XmaDataclassType.ValueType], builtins.type):
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        SENDER_COPY: ExtendedContentMessage._XmaDataclassType.ValueType  # 0
+        SERVER: ExtendedContentMessage._XmaDataclassType.ValueType  # 1
+        SIGNED_CLIENT: ExtendedContentMessage._XmaDataclassType.ValueType  # 2
+
+    class XmaDataclassType(_XmaDataclassType, metaclass=_XmaDataclassTypeEnumTypeWrapper): ...
+    SENDER_COPY: ExtendedContentMessage.XmaDataclassType.ValueType  # 0
+    SERVER: ExtendedContentMessage.XmaDataclassType.ValueType  # 1
+    SIGNED_CLIENT: ExtendedContentMessage.XmaDataclassType.ValueType  # 2
+
     class _OverlayIconGlyph:
         ValueType = typing.NewType("ValueType", builtins.int)
         V: typing_extensions.TypeAlias = ValueType
@@ -125,6 +140,7 @@ class ExtendedContentMessage(google.protobuf.message.Message):
         FB_POST_MENTION: ExtendedContentMessage._ExtendedContentType.ValueType  # 1011
         FB_PROFILE_DIRECTORY_ITEM: ExtendedContentMessage._ExtendedContentType.ValueType  # 1013
         FB_FEED_POST_REACTION_REPLY: ExtendedContentMessage._ExtendedContentType.ValueType  # 1014
+        FB_QUICKSNAP_REPLY: ExtendedContentMessage._ExtendedContentType.ValueType  # 1015
         MSG_EXTERNAL_LINK_SHARE: ExtendedContentMessage._ExtendedContentType.ValueType  # 2000
         MSG_P2P_PAYMENT: ExtendedContentMessage._ExtendedContentType.ValueType  # 2001
         MSG_LOCATION_SHARING: ExtendedContentMessage._ExtendedContentType.ValueType  # 2002
@@ -150,6 +166,12 @@ class ExtendedContentMessage(google.protobuf.message.Message):
         MSG_NOTE_REPLY: ExtendedContentMessage._ExtendedContentType.ValueType  # 2024
         MSG_NOTE_MENTION: ExtendedContentMessage._ExtendedContentType.ValueType  # 2025
         GEN_AI_ENTITY: ExtendedContentMessage._ExtendedContentType.ValueType  # 2026
+        MSG_OPG_P2P_PAYMENT: ExtendedContentMessage._ExtendedContentType.ValueType  # 2027
+        GEN_AI_RICH_RESPONSE: ExtendedContentMessage._ExtendedContentType.ValueType  # 2028
+        MSG_MUSIC_STICKER: ExtendedContentMessage._ExtendedContentType.ValueType  # 2029
+        MSG_PHONE_NUMBER: ExtendedContentMessage._ExtendedContentType.ValueType  # 2030
+        AI_ACTIVITY_SHARE: ExtendedContentMessage._ExtendedContentType.ValueType  # 2031
+        MSG_PRIVATE_XMA: ExtendedContentMessage._ExtendedContentType.ValueType  # 2032
         RTC_AUDIO_CALL: ExtendedContentMessage._ExtendedContentType.ValueType  # 3000
         RTC_VIDEO_CALL: ExtendedContentMessage._ExtendedContentType.ValueType  # 3001
         RTC_MISSED_AUDIO_CALL: ExtendedContentMessage._ExtendedContentType.ValueType  # 3002
@@ -198,6 +220,7 @@ class ExtendedContentMessage(google.protobuf.message.Message):
     FB_POST_MENTION: ExtendedContentMessage.ExtendedContentType.ValueType  # 1011
     FB_PROFILE_DIRECTORY_ITEM: ExtendedContentMessage.ExtendedContentType.ValueType  # 1013
     FB_FEED_POST_REACTION_REPLY: ExtendedContentMessage.ExtendedContentType.ValueType  # 1014
+    FB_QUICKSNAP_REPLY: ExtendedContentMessage.ExtendedContentType.ValueType  # 1015
     MSG_EXTERNAL_LINK_SHARE: ExtendedContentMessage.ExtendedContentType.ValueType  # 2000
     MSG_P2P_PAYMENT: ExtendedContentMessage.ExtendedContentType.ValueType  # 2001
     MSG_LOCATION_SHARING: ExtendedContentMessage.ExtendedContentType.ValueType  # 2002
@@ -223,6 +246,12 @@ class ExtendedContentMessage(google.protobuf.message.Message):
     MSG_NOTE_REPLY: ExtendedContentMessage.ExtendedContentType.ValueType  # 2024
     MSG_NOTE_MENTION: ExtendedContentMessage.ExtendedContentType.ValueType  # 2025
     GEN_AI_ENTITY: ExtendedContentMessage.ExtendedContentType.ValueType  # 2026
+    MSG_OPG_P2P_PAYMENT: ExtendedContentMessage.ExtendedContentType.ValueType  # 2027
+    GEN_AI_RICH_RESPONSE: ExtendedContentMessage.ExtendedContentType.ValueType  # 2028
+    MSG_MUSIC_STICKER: ExtendedContentMessage.ExtendedContentType.ValueType  # 2029
+    MSG_PHONE_NUMBER: ExtendedContentMessage.ExtendedContentType.ValueType  # 2030
+    AI_ACTIVITY_SHARE: ExtendedContentMessage.ExtendedContentType.ValueType  # 2031
+    MSG_PRIVATE_XMA: ExtendedContentMessage.ExtendedContentType.ValueType  # 2032
     RTC_AUDIO_CALL: ExtendedContentMessage.ExtendedContentType.ValueType  # 3000
     RTC_VIDEO_CALL: ExtendedContentMessage.ExtendedContentType.ValueType  # 3001
     RTC_MISSED_AUDIO_CALL: ExtendedContentMessage.ExtendedContentType.ValueType  # 3002
@@ -291,6 +320,8 @@ class ExtendedContentMessage(google.protobuf.message.Message):
     MENTIONEDJID_FIELD_NUMBER: builtins.int
     COMMANDS_FIELD_NUMBER: builtins.int
     MENTIONS_FIELD_NUMBER: builtins.int
+    XMADATACLASSTYPE_FIELD_NUMBER: builtins.int
+    SIGNEDXMADATACLASSVALIDATION_FIELD_NUMBER: builtins.int
     targetType: Global___ExtendedContentMessage.ExtendedContentType.ValueType
     targetUsername: builtins.str
     targetID: builtins.str
@@ -309,6 +340,8 @@ class ExtendedContentMessage(google.protobuf.message.Message):
     headerSubtitle: builtins.str
     xmaDataclass: builtins.str
     contentRef: builtins.str
+    xmaDataclassType: Global___ExtendedContentMessage.XmaDataclassType.ValueType
+    signedXmaDataclassValidation: builtins.str
     @property
     def associatedMessage(self) -> waCommon.WACommon_pb2.SubProtocol: ...
     @property
@@ -354,8 +387,10 @@ class ExtendedContentMessage(google.protobuf.message.Message):
         mentionedJID: collections.abc.Iterable[builtins.str] | None = ...,
         commands: collections.abc.Iterable[waCommon.WACommon_pb2.Command] | None = ...,
         mentions: collections.abc.Iterable[waCommon.WACommon_pb2.Mention] | None = ...,
+        xmaDataclassType: Global___ExtendedContentMessage.XmaDataclassType.ValueType | None = ...,
+        signedXmaDataclassValidation: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["associatedMessage", b"associatedMessage", "contentRef", b"contentRef", "favicon", b"favicon", "headerImage", b"headerImage", "headerSubtitle", b"headerSubtitle", "headerTitle", b"headerTitle", "maxSubtitleNumOfLines", b"maxSubtitleNumOfLines", "maxTitleNumOfLines", b"maxTitleNumOfLines", "messageText", b"messageText", "overlayDescription", b"overlayDescription", "overlayIconGlyph", b"overlayIconGlyph", "overlayTitle", b"overlayTitle", "sentWithMessageID", b"sentWithMessageID", "subtitleText", b"subtitleText", "targetExpiringAtSec", b"targetExpiringAtSec", "targetID", b"targetID", "targetType", b"targetType", "targetUsername", b"targetUsername", "titleText", b"titleText", "xmaDataclass", b"xmaDataclass", "xmaLayoutType", b"xmaLayoutType"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["associatedMessage", b"associatedMessage", "commands", b"commands", "contentRef", b"contentRef", "ctas", b"ctas", "favicon", b"favicon", "headerImage", b"headerImage", "headerSubtitle", b"headerSubtitle", "headerTitle", b"headerTitle", "maxSubtitleNumOfLines", b"maxSubtitleNumOfLines", "maxTitleNumOfLines", b"maxTitleNumOfLines", "mentionedJID", b"mentionedJID", "mentions", b"mentions", "messageText", b"messageText", "overlayDescription", b"overlayDescription", "overlayIconGlyph", b"overlayIconGlyph", "overlayTitle", b"overlayTitle", "previews", b"previews", "sentWithMessageID", b"sentWithMessageID", "subtitleText", b"subtitleText", "targetExpiringAtSec", b"targetExpiringAtSec", "targetID", b"targetID", "targetType", b"targetType", "targetUsername", b"targetUsername", "titleText", b"titleText", "xmaDataclass", b"xmaDataclass", "xmaLayoutType", b"xmaLayoutType"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["associatedMessage", b"associatedMessage", "contentRef", b"contentRef", "favicon", b"favicon", "headerImage", b"headerImage", "headerSubtitle", b"headerSubtitle", "headerTitle", b"headerTitle", "maxSubtitleNumOfLines", b"maxSubtitleNumOfLines", "maxTitleNumOfLines", b"maxTitleNumOfLines", "messageText", b"messageText", "overlayDescription", b"overlayDescription", "overlayIconGlyph", b"overlayIconGlyph", "overlayTitle", b"overlayTitle", "sentWithMessageID", b"sentWithMessageID", "signedXmaDataclassValidation", b"signedXmaDataclassValidation", "subtitleText", b"subtitleText", "targetExpiringAtSec", b"targetExpiringAtSec", "targetID", b"targetID", "targetType", b"targetType", "targetUsername", b"targetUsername", "titleText", b"titleText", "xmaDataclass", b"xmaDataclass", "xmaDataclassType", b"xmaDataclassType", "xmaLayoutType", b"xmaLayoutType"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["associatedMessage", b"associatedMessage", "commands", b"commands", "contentRef", b"contentRef", "ctas", b"ctas", "favicon", b"favicon", "headerImage", b"headerImage", "headerSubtitle", b"headerSubtitle", "headerTitle", b"headerTitle", "maxSubtitleNumOfLines", b"maxSubtitleNumOfLines", "maxTitleNumOfLines", b"maxTitleNumOfLines", "mentionedJID", b"mentionedJID", "mentions", b"mentions", "messageText", b"messageText", "overlayDescription", b"overlayDescription", "overlayIconGlyph", b"overlayIconGlyph", "overlayTitle", b"overlayTitle", "previews", b"previews", "sentWithMessageID", b"sentWithMessageID", "signedXmaDataclassValidation", b"signedXmaDataclassValidation", "subtitleText", b"subtitleText", "targetExpiringAtSec", b"targetExpiringAtSec", "targetID", b"targetID", "targetType", b"targetType", "targetUsername", b"targetUsername", "titleText", b"titleText", "xmaDataclass", b"xmaDataclass", "xmaDataclassType", b"xmaDataclassType", "xmaLayoutType", b"xmaLayoutType"]) -> None: ...
 
 Global___ExtendedContentMessage: typing_extensions.TypeAlias = ExtendedContentMessage

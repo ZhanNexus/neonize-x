@@ -122,8 +122,10 @@ class _MutationPropsEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._
     NEWSLETTER_SAVED_INTERESTS_ACTION: _MutationProps.ValueType  # 75
     AI_THREAD_RENAME_ACTION: _MutationProps.ValueType  # 76
     INTERACTIVE_MESSAGE_ACTION: _MutationProps.ValueType  # 77
+    SETTINGS_SYNC_ACTION: _MutationProps.ValueType  # 78
     SHARE_OWN_PN: _MutationProps.ValueType  # 10001
     BUSINESS_BROADCAST_ACTION: _MutationProps.ValueType  # 10002
+    AI_THREAD_DELETE_ACTION: _MutationProps.ValueType  # 10003
 
 class MutationProps(_MutationProps, metaclass=_MutationPropsEnumTypeWrapper): ...
 
@@ -198,8 +200,10 @@ PRIVATE_PROCESSING_SETTING_ACTION: MutationProps.ValueType  # 74
 NEWSLETTER_SAVED_INTERESTS_ACTION: MutationProps.ValueType  # 75
 AI_THREAD_RENAME_ACTION: MutationProps.ValueType  # 76
 INTERACTIVE_MESSAGE_ACTION: MutationProps.ValueType  # 77
+SETTINGS_SYNC_ACTION: MutationProps.ValueType  # 78
 SHARE_OWN_PN: MutationProps.ValueType  # 10001
 BUSINESS_BROADCAST_ACTION: MutationProps.ValueType  # 10002
+AI_THREAD_DELETE_ACTION: MutationProps.ValueType  # 10003
 Global___MutationProps: typing_extensions.TypeAlias = MutationProps
 
 @typing.final
@@ -340,6 +344,181 @@ class CallLogRecord(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["callCreatorJID", b"callCreatorJID", "callID", b"callID", "callLinkToken", b"callLinkToken", "callResult", b"callResult", "callType", b"callType", "duration", b"duration", "groupJID", b"groupJID", "isCallLink", b"isCallLink", "isDndMode", b"isDndMode", "isIncoming", b"isIncoming", "isVideo", b"isVideo", "participants", b"participants", "scheduledCallID", b"scheduledCallID", "silenceReason", b"silenceReason", "startTime", b"startTime"]) -> None: ...
 
 Global___CallLogRecord: typing_extensions.TypeAlias = CallLogRecord
+
+@typing.final
+class SettingsSyncAction(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    class _DisplayMode:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _DisplayModeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[SettingsSyncAction._DisplayMode.ValueType], builtins.type):
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        DISPLAY_MODE_UNKNOWN: SettingsSyncAction._DisplayMode.ValueType  # 0
+        ALWAYS: SettingsSyncAction._DisplayMode.ValueType  # 1
+        NEVER: SettingsSyncAction._DisplayMode.ValueType  # 2
+        ONLY_WHEN_APP_IS_OPEN: SettingsSyncAction._DisplayMode.ValueType  # 3
+
+    class DisplayMode(_DisplayMode, metaclass=_DisplayModeEnumTypeWrapper): ...
+    DISPLAY_MODE_UNKNOWN: SettingsSyncAction.DisplayMode.ValueType  # 0
+    ALWAYS: SettingsSyncAction.DisplayMode.ValueType  # 1
+    NEVER: SettingsSyncAction.DisplayMode.ValueType  # 2
+    ONLY_WHEN_APP_IS_OPEN: SettingsSyncAction.DisplayMode.ValueType  # 3
+
+    class _SettingKey:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _SettingKeyEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[SettingsSyncAction._SettingKey.ValueType], builtins.type):
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        SETTING_KEY_UNKNOWN: SettingsSyncAction._SettingKey.ValueType  # 0
+        START_AT_LOGIN: SettingsSyncAction._SettingKey.ValueType  # 1
+        MINIMIZE_TO_TRAY: SettingsSyncAction._SettingKey.ValueType  # 2
+        LANGUAGE: SettingsSyncAction._SettingKey.ValueType  # 3
+        REPLACE_TEXT_WITH_EMOJI: SettingsSyncAction._SettingKey.ValueType  # 4
+        BANNER_NOTIFICATION_DISPLAY_MODE: SettingsSyncAction._SettingKey.ValueType  # 5
+        UNREAD_COUNTER_BADGE_DISPLAY_MODE: SettingsSyncAction._SettingKey.ValueType  # 6
+        IS_MESSAGES_NOTIFICATION_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 7
+        IS_CALLS_NOTIFICATION_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 8
+        IS_REACTIONS_NOTIFICATION_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 9
+        IS_STATUS_REACTIONS_NOTIFICATION_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 10
+        IS_TEXT_PREVIEW_FOR_NOTIFICATION_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 11
+        DEFAULT_NOTIFICATION_TONE_ID: SettingsSyncAction._SettingKey.ValueType  # 12
+        GROUP_DEFAULT_NOTIFICATION_TONE_ID: SettingsSyncAction._SettingKey.ValueType  # 13
+        APP_THEME: SettingsSyncAction._SettingKey.ValueType  # 14
+        WALLPAPER_ID: SettingsSyncAction._SettingKey.ValueType  # 15
+        IS_DOODLE_WALLPAPER_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 16
+        FONT_SIZE: SettingsSyncAction._SettingKey.ValueType  # 17
+        IS_PHOTOS_AUTODOWNLOAD_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 18
+        IS_AUDIOS_AUTODOWNLOAD_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 19
+        IS_VIDEOS_AUTODOWNLOAD_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 20
+        IS_DOCUMENTS_AUTODOWNLOAD_ENABLED: SettingsSyncAction._SettingKey.ValueType  # 21
+        DISABLE_LINK_PREVIEWS: SettingsSyncAction._SettingKey.ValueType  # 22
+        NOTIFICATION_TONE_ID: SettingsSyncAction._SettingKey.ValueType  # 23
+
+    class SettingKey(_SettingKey, metaclass=_SettingKeyEnumTypeWrapper): ...
+    SETTING_KEY_UNKNOWN: SettingsSyncAction.SettingKey.ValueType  # 0
+    START_AT_LOGIN: SettingsSyncAction.SettingKey.ValueType  # 1
+    MINIMIZE_TO_TRAY: SettingsSyncAction.SettingKey.ValueType  # 2
+    LANGUAGE: SettingsSyncAction.SettingKey.ValueType  # 3
+    REPLACE_TEXT_WITH_EMOJI: SettingsSyncAction.SettingKey.ValueType  # 4
+    BANNER_NOTIFICATION_DISPLAY_MODE: SettingsSyncAction.SettingKey.ValueType  # 5
+    UNREAD_COUNTER_BADGE_DISPLAY_MODE: SettingsSyncAction.SettingKey.ValueType  # 6
+    IS_MESSAGES_NOTIFICATION_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 7
+    IS_CALLS_NOTIFICATION_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 8
+    IS_REACTIONS_NOTIFICATION_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 9
+    IS_STATUS_REACTIONS_NOTIFICATION_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 10
+    IS_TEXT_PREVIEW_FOR_NOTIFICATION_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 11
+    DEFAULT_NOTIFICATION_TONE_ID: SettingsSyncAction.SettingKey.ValueType  # 12
+    GROUP_DEFAULT_NOTIFICATION_TONE_ID: SettingsSyncAction.SettingKey.ValueType  # 13
+    APP_THEME: SettingsSyncAction.SettingKey.ValueType  # 14
+    WALLPAPER_ID: SettingsSyncAction.SettingKey.ValueType  # 15
+    IS_DOODLE_WALLPAPER_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 16
+    FONT_SIZE: SettingsSyncAction.SettingKey.ValueType  # 17
+    IS_PHOTOS_AUTODOWNLOAD_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 18
+    IS_AUDIOS_AUTODOWNLOAD_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 19
+    IS_VIDEOS_AUTODOWNLOAD_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 20
+    IS_DOCUMENTS_AUTODOWNLOAD_ENABLED: SettingsSyncAction.SettingKey.ValueType  # 21
+    DISABLE_LINK_PREVIEWS: SettingsSyncAction.SettingKey.ValueType  # 22
+    NOTIFICATION_TONE_ID: SettingsSyncAction.SettingKey.ValueType  # 23
+
+    class _SettingPlatform:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _SettingPlatformEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[SettingsSyncAction._SettingPlatform.ValueType], builtins.type):
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        PLATFORM_UNKNOWN: SettingsSyncAction._SettingPlatform.ValueType  # 0
+        WEB: SettingsSyncAction._SettingPlatform.ValueType  # 1
+        HYBRID: SettingsSyncAction._SettingPlatform.ValueType  # 2
+        WINDOWS: SettingsSyncAction._SettingPlatform.ValueType  # 3
+        MAC: SettingsSyncAction._SettingPlatform.ValueType  # 4
+
+    class SettingPlatform(_SettingPlatform, metaclass=_SettingPlatformEnumTypeWrapper): ...
+    PLATFORM_UNKNOWN: SettingsSyncAction.SettingPlatform.ValueType  # 0
+    WEB: SettingsSyncAction.SettingPlatform.ValueType  # 1
+    HYBRID: SettingsSyncAction.SettingPlatform.ValueType  # 2
+    WINDOWS: SettingsSyncAction.SettingPlatform.ValueType  # 3
+    MAC: SettingsSyncAction.SettingPlatform.ValueType  # 4
+
+    STARTATLOGIN_FIELD_NUMBER: builtins.int
+    MINIMIZETOTRAY_FIELD_NUMBER: builtins.int
+    LANGUAGE_FIELD_NUMBER: builtins.int
+    REPLACETEXTWITHEMOJI_FIELD_NUMBER: builtins.int
+    BANNERNOTIFICATIONDISPLAYMODE_FIELD_NUMBER: builtins.int
+    UNREADCOUNTERBADGEDISPLAYMODE_FIELD_NUMBER: builtins.int
+    ISMESSAGESNOTIFICATIONENABLED_FIELD_NUMBER: builtins.int
+    ISCALLSNOTIFICATIONENABLED_FIELD_NUMBER: builtins.int
+    ISREACTIONSNOTIFICATIONENABLED_FIELD_NUMBER: builtins.int
+    ISSTATUSREACTIONSNOTIFICATIONENABLED_FIELD_NUMBER: builtins.int
+    ISTEXTPREVIEWFORNOTIFICATIONENABLED_FIELD_NUMBER: builtins.int
+    DEFAULTNOTIFICATIONTONEID_FIELD_NUMBER: builtins.int
+    GROUPDEFAULTNOTIFICATIONTONEID_FIELD_NUMBER: builtins.int
+    APPTHEME_FIELD_NUMBER: builtins.int
+    WALLPAPERID_FIELD_NUMBER: builtins.int
+    ISDOODLEWALLPAPERENABLED_FIELD_NUMBER: builtins.int
+    FONTSIZE_FIELD_NUMBER: builtins.int
+    ISPHOTOSAUTODOWNLOADENABLED_FIELD_NUMBER: builtins.int
+    ISAUDIOSAUTODOWNLOADENABLED_FIELD_NUMBER: builtins.int
+    ISVIDEOSAUTODOWNLOADENABLED_FIELD_NUMBER: builtins.int
+    ISDOCUMENTSAUTODOWNLOADENABLED_FIELD_NUMBER: builtins.int
+    DISABLELINKPREVIEWS_FIELD_NUMBER: builtins.int
+    NOTIFICATIONTONEID_FIELD_NUMBER: builtins.int
+    startAtLogin: builtins.bool
+    minimizeToTray: builtins.bool
+    language: builtins.str
+    replaceTextWithEmoji: builtins.bool
+    bannerNotificationDisplayMode: Global___SettingsSyncAction.DisplayMode.ValueType
+    unreadCounterBadgeDisplayMode: Global___SettingsSyncAction.DisplayMode.ValueType
+    isMessagesNotificationEnabled: builtins.bool
+    isCallsNotificationEnabled: builtins.bool
+    isReactionsNotificationEnabled: builtins.bool
+    isStatusReactionsNotificationEnabled: builtins.bool
+    isTextPreviewForNotificationEnabled: builtins.bool
+    defaultNotificationToneID: builtins.int
+    groupDefaultNotificationToneID: builtins.int
+    appTheme: builtins.int
+    wallpaperID: builtins.int
+    isDoodleWallpaperEnabled: builtins.bool
+    fontSize: builtins.int
+    isPhotosAutodownloadEnabled: builtins.bool
+    isAudiosAutodownloadEnabled: builtins.bool
+    isVideosAutodownloadEnabled: builtins.bool
+    isDocumentsAutodownloadEnabled: builtins.bool
+    disableLinkPreviews: builtins.bool
+    notificationToneID: builtins.int
+    def __init__(
+        self,
+        *,
+        startAtLogin: builtins.bool | None = ...,
+        minimizeToTray: builtins.bool | None = ...,
+        language: builtins.str | None = ...,
+        replaceTextWithEmoji: builtins.bool | None = ...,
+        bannerNotificationDisplayMode: Global___SettingsSyncAction.DisplayMode.ValueType | None = ...,
+        unreadCounterBadgeDisplayMode: Global___SettingsSyncAction.DisplayMode.ValueType | None = ...,
+        isMessagesNotificationEnabled: builtins.bool | None = ...,
+        isCallsNotificationEnabled: builtins.bool | None = ...,
+        isReactionsNotificationEnabled: builtins.bool | None = ...,
+        isStatusReactionsNotificationEnabled: builtins.bool | None = ...,
+        isTextPreviewForNotificationEnabled: builtins.bool | None = ...,
+        defaultNotificationToneID: builtins.int | None = ...,
+        groupDefaultNotificationToneID: builtins.int | None = ...,
+        appTheme: builtins.int | None = ...,
+        wallpaperID: builtins.int | None = ...,
+        isDoodleWallpaperEnabled: builtins.bool | None = ...,
+        fontSize: builtins.int | None = ...,
+        isPhotosAutodownloadEnabled: builtins.bool | None = ...,
+        isAudiosAutodownloadEnabled: builtins.bool | None = ...,
+        isVideosAutodownloadEnabled: builtins.bool | None = ...,
+        isDocumentsAutodownloadEnabled: builtins.bool | None = ...,
+        disableLinkPreviews: builtins.bool | None = ...,
+        notificationToneID: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["appTheme", b"appTheme", "bannerNotificationDisplayMode", b"bannerNotificationDisplayMode", "defaultNotificationToneID", b"defaultNotificationToneID", "disableLinkPreviews", b"disableLinkPreviews", "fontSize", b"fontSize", "groupDefaultNotificationToneID", b"groupDefaultNotificationToneID", "isAudiosAutodownloadEnabled", b"isAudiosAutodownloadEnabled", "isCallsNotificationEnabled", b"isCallsNotificationEnabled", "isDocumentsAutodownloadEnabled", b"isDocumentsAutodownloadEnabled", "isDoodleWallpaperEnabled", b"isDoodleWallpaperEnabled", "isMessagesNotificationEnabled", b"isMessagesNotificationEnabled", "isPhotosAutodownloadEnabled", b"isPhotosAutodownloadEnabled", "isReactionsNotificationEnabled", b"isReactionsNotificationEnabled", "isStatusReactionsNotificationEnabled", b"isStatusReactionsNotificationEnabled", "isTextPreviewForNotificationEnabled", b"isTextPreviewForNotificationEnabled", "isVideosAutodownloadEnabled", b"isVideosAutodownloadEnabled", "language", b"language", "minimizeToTray", b"minimizeToTray", "notificationToneID", b"notificationToneID", "replaceTextWithEmoji", b"replaceTextWithEmoji", "startAtLogin", b"startAtLogin", "unreadCounterBadgeDisplayMode", b"unreadCounterBadgeDisplayMode", "wallpaperID", b"wallpaperID"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["appTheme", b"appTheme", "bannerNotificationDisplayMode", b"bannerNotificationDisplayMode", "defaultNotificationToneID", b"defaultNotificationToneID", "disableLinkPreviews", b"disableLinkPreviews", "fontSize", b"fontSize", "groupDefaultNotificationToneID", b"groupDefaultNotificationToneID", "isAudiosAutodownloadEnabled", b"isAudiosAutodownloadEnabled", "isCallsNotificationEnabled", b"isCallsNotificationEnabled", "isDocumentsAutodownloadEnabled", b"isDocumentsAutodownloadEnabled", "isDoodleWallpaperEnabled", b"isDoodleWallpaperEnabled", "isMessagesNotificationEnabled", b"isMessagesNotificationEnabled", "isPhotosAutodownloadEnabled", b"isPhotosAutodownloadEnabled", "isReactionsNotificationEnabled", b"isReactionsNotificationEnabled", "isStatusReactionsNotificationEnabled", b"isStatusReactionsNotificationEnabled", "isTextPreviewForNotificationEnabled", b"isTextPreviewForNotificationEnabled", "isVideosAutodownloadEnabled", b"isVideosAutodownloadEnabled", "language", b"language", "minimizeToTray", b"minimizeToTray", "notificationToneID", b"notificationToneID", "replaceTextWithEmoji", b"replaceTextWithEmoji", "startAtLogin", b"startAtLogin", "unreadCounterBadgeDisplayMode", b"unreadCounterBadgeDisplayMode", "wallpaperID", b"wallpaperID"]) -> None: ...
+
+Global___SettingsSyncAction: typing_extensions.TypeAlias = SettingsSyncAction
 
 @typing.final
 class InteractiveMessageAction(google.protobuf.message.Message):
@@ -988,7 +1167,6 @@ class SyncActionValue(google.protobuf.message.Message):
     CTWAPERCUSTOMERDATASHARINGACTION_FIELD_NUMBER: builtins.int
     PAYMENTTOSACTION_FIELD_NUMBER: builtins.int
     PRIVACYSETTINGCHANNELSPERSONALISEDRECOMMENDATIONACTION_FIELD_NUMBER: builtins.int
-    BUSINESSBROADCASTASSOCIATIONACTION_FIELD_NUMBER: builtins.int
     DETECTEDOUTCOMESSTATUSACTION_FIELD_NUMBER: builtins.int
     MAIBAAIFEATURESCONTROLACTION_FIELD_NUMBER: builtins.int
     BUSINESSBROADCASTLISTACTION_FIELD_NUMBER: builtins.int
@@ -999,6 +1177,7 @@ class SyncActionValue(google.protobuf.message.Message):
     NEWSLETTERSAVEDINTERESTSACTION_FIELD_NUMBER: builtins.int
     AITHREADRENAMEACTION_FIELD_NUMBER: builtins.int
     INTERACTIVEMESSAGEACTION_FIELD_NUMBER: builtins.int
+    SETTINGSSYNCACTION_FIELD_NUMBER: builtins.int
     timestamp: builtins.int
     @property
     def starAction(self) -> Global___StarAction: ...
@@ -1115,8 +1294,6 @@ class SyncActionValue(google.protobuf.message.Message):
     @property
     def privacySettingChannelsPersonalisedRecommendationAction(self) -> Global___PrivacySettingChannelsPersonalisedRecommendationAction: ...
     @property
-    def businessBroadcastAssociationAction(self) -> Global___BusinessBroadcastAssociationAction: ...
-    @property
     def detectedOutcomesStatusAction(self) -> Global___DetectedOutcomesStatusAction: ...
     @property
     def maibaAiFeaturesControlAction(self) -> Global___MaibaAIFeaturesControlAction: ...
@@ -1136,6 +1313,8 @@ class SyncActionValue(google.protobuf.message.Message):
     def aiThreadRenameAction(self) -> Global___AiThreadRenameAction: ...
     @property
     def interactiveMessageAction(self) -> Global___InteractiveMessageAction: ...
+    @property
+    def settingsSyncAction(self) -> Global___SettingsSyncAction: ...
     def __init__(
         self,
         *,
@@ -1197,7 +1376,6 @@ class SyncActionValue(google.protobuf.message.Message):
         ctwaPerCustomerDataSharingAction: Global___CtwaPerCustomerDataSharingAction | None = ...,
         paymentTosAction: Global___PaymentTosAction | None = ...,
         privacySettingChannelsPersonalisedRecommendationAction: Global___PrivacySettingChannelsPersonalisedRecommendationAction | None = ...,
-        businessBroadcastAssociationAction: Global___BusinessBroadcastAssociationAction | None = ...,
         detectedOutcomesStatusAction: Global___DetectedOutcomesStatusAction | None = ...,
         maibaAiFeaturesControlAction: Global___MaibaAIFeaturesControlAction | None = ...,
         businessBroadcastListAction: Global___BusinessBroadcastListAction | None = ...,
@@ -1208,9 +1386,10 @@ class SyncActionValue(google.protobuf.message.Message):
         newsletterSavedInterestsAction: Global___NewsletterSavedInterestsAction | None = ...,
         aiThreadRenameAction: Global___AiThreadRenameAction | None = ...,
         interactiveMessageAction: Global___InteractiveMessageAction | None = ...,
+        settingsSyncAction: Global___SettingsSyncAction | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["agentAction", b"agentAction", "aiThreadRenameAction", b"aiThreadRenameAction", "androidUnsupportedActions", b"androidUnsupportedActions", "archiveChatAction", b"archiveChatAction", "avatarUpdatedAction", b"avatarUpdatedAction", "botWelcomeRequestAction", b"botWelcomeRequestAction", "businessBroadcastAssociationAction", b"businessBroadcastAssociationAction", "businessBroadcastListAction", b"businessBroadcastListAction", "callLogAction", b"callLogAction", "chatAssignment", b"chatAssignment", "chatAssignmentOpenedStatus", b"chatAssignmentOpenedStatus", "chatLockSettings", b"chatLockSettings", "clearChatAction", b"clearChatAction", "contactAction", b"contactAction", "ctwaPerCustomerDataSharingAction", b"ctwaPerCustomerDataSharingAction", "customPaymentMethodsAction", b"customPaymentMethodsAction", "deleteChatAction", b"deleteChatAction", "deleteIndividualCallLog", b"deleteIndividualCallLog", "deleteMessageForMeAction", b"deleteMessageForMeAction", "detectedOutcomesStatusAction", b"detectedOutcomesStatusAction", "deviceCapabilities", b"deviceCapabilities", "externalWebBetaAction", b"externalWebBetaAction", "favoritesAction", b"favoritesAction", "interactiveMessageAction", b"interactiveMessageAction", "keyExpiration", b"keyExpiration", "labelAssociationAction", b"labelAssociationAction", "labelEditAction", b"labelEditAction", "labelReorderingAction", b"labelReorderingAction", "lidContactAction", b"lidContactAction", "localeSetting", b"localeSetting", "lockChatAction", b"lockChatAction", "maibaAiFeaturesControlAction", b"maibaAiFeaturesControlAction", "markChatAsReadAction", b"markChatAsReadAction", "marketingMessageAction", b"marketingMessageAction", "marketingMessageBroadcastAction", b"marketingMessageBroadcastAction", "merchantPaymentPartnerAction", b"merchantPaymentPartnerAction", "musicUserIDAction", b"musicUserIDAction", "muteAction", b"muteAction", "newsletterSavedInterestsAction", b"newsletterSavedInterestsAction", "noteEditAction", b"noteEditAction", "notificationActivitySettingAction", b"notificationActivitySettingAction", "nuxAction", b"nuxAction", "paymentInfoAction", b"paymentInfoAction", "paymentTosAction", b"paymentTosAction", "pinAction", b"pinAction", "pnForLidChatAction", b"pnForLidChatAction", "primaryFeature", b"primaryFeature", "primaryVersionAction", b"primaryVersionAction", "privacySettingChannelsPersonalisedRecommendationAction", b"privacySettingChannelsPersonalisedRecommendationAction", "privacySettingDisableLinkPreviewsAction", b"privacySettingDisableLinkPreviewsAction", "privacySettingRelayAllCalls", b"privacySettingRelayAllCalls", "privateProcessingSettingAction", b"privateProcessingSettingAction", "pushNameSetting", b"pushNameSetting", "quickReplyAction", b"quickReplyAction", "recentEmojiWeightsAction", b"recentEmojiWeightsAction", "removeRecentStickerAction", b"removeRecentStickerAction", "starAction", b"starAction", "statusPostOptInNotificationPreferencesAction", b"statusPostOptInNotificationPreferencesAction", "statusPrivacy", b"statusPrivacy", "stickerAction", b"stickerAction", "subscriptionAction", b"subscriptionAction", "timeFormatAction", b"timeFormatAction", "timestamp", b"timestamp", "ugcBot", b"ugcBot", "unarchiveChatsSetting", b"unarchiveChatsSetting", "userStatusMuteAction", b"userStatusMuteAction", "usernameChatStartMode", b"usernameChatStartMode", "waffleAccountLinkStateAction", b"waffleAccountLinkStateAction", "wamoUserIdentifierAction", b"wamoUserIdentifierAction"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["agentAction", b"agentAction", "aiThreadRenameAction", b"aiThreadRenameAction", "androidUnsupportedActions", b"androidUnsupportedActions", "archiveChatAction", b"archiveChatAction", "avatarUpdatedAction", b"avatarUpdatedAction", "botWelcomeRequestAction", b"botWelcomeRequestAction", "businessBroadcastAssociationAction", b"businessBroadcastAssociationAction", "businessBroadcastListAction", b"businessBroadcastListAction", "callLogAction", b"callLogAction", "chatAssignment", b"chatAssignment", "chatAssignmentOpenedStatus", b"chatAssignmentOpenedStatus", "chatLockSettings", b"chatLockSettings", "clearChatAction", b"clearChatAction", "contactAction", b"contactAction", "ctwaPerCustomerDataSharingAction", b"ctwaPerCustomerDataSharingAction", "customPaymentMethodsAction", b"customPaymentMethodsAction", "deleteChatAction", b"deleteChatAction", "deleteIndividualCallLog", b"deleteIndividualCallLog", "deleteMessageForMeAction", b"deleteMessageForMeAction", "detectedOutcomesStatusAction", b"detectedOutcomesStatusAction", "deviceCapabilities", b"deviceCapabilities", "externalWebBetaAction", b"externalWebBetaAction", "favoritesAction", b"favoritesAction", "interactiveMessageAction", b"interactiveMessageAction", "keyExpiration", b"keyExpiration", "labelAssociationAction", b"labelAssociationAction", "labelEditAction", b"labelEditAction", "labelReorderingAction", b"labelReorderingAction", "lidContactAction", b"lidContactAction", "localeSetting", b"localeSetting", "lockChatAction", b"lockChatAction", "maibaAiFeaturesControlAction", b"maibaAiFeaturesControlAction", "markChatAsReadAction", b"markChatAsReadAction", "marketingMessageAction", b"marketingMessageAction", "marketingMessageBroadcastAction", b"marketingMessageBroadcastAction", "merchantPaymentPartnerAction", b"merchantPaymentPartnerAction", "musicUserIDAction", b"musicUserIDAction", "muteAction", b"muteAction", "newsletterSavedInterestsAction", b"newsletterSavedInterestsAction", "noteEditAction", b"noteEditAction", "notificationActivitySettingAction", b"notificationActivitySettingAction", "nuxAction", b"nuxAction", "paymentInfoAction", b"paymentInfoAction", "paymentTosAction", b"paymentTosAction", "pinAction", b"pinAction", "pnForLidChatAction", b"pnForLidChatAction", "primaryFeature", b"primaryFeature", "primaryVersionAction", b"primaryVersionAction", "privacySettingChannelsPersonalisedRecommendationAction", b"privacySettingChannelsPersonalisedRecommendationAction", "privacySettingDisableLinkPreviewsAction", b"privacySettingDisableLinkPreviewsAction", "privacySettingRelayAllCalls", b"privacySettingRelayAllCalls", "privateProcessingSettingAction", b"privateProcessingSettingAction", "pushNameSetting", b"pushNameSetting", "quickReplyAction", b"quickReplyAction", "recentEmojiWeightsAction", b"recentEmojiWeightsAction", "removeRecentStickerAction", b"removeRecentStickerAction", "starAction", b"starAction", "statusPostOptInNotificationPreferencesAction", b"statusPostOptInNotificationPreferencesAction", "statusPrivacy", b"statusPrivacy", "stickerAction", b"stickerAction", "subscriptionAction", b"subscriptionAction", "timeFormatAction", b"timeFormatAction", "timestamp", b"timestamp", "ugcBot", b"ugcBot", "unarchiveChatsSetting", b"unarchiveChatsSetting", "userStatusMuteAction", b"userStatusMuteAction", "usernameChatStartMode", b"usernameChatStartMode", "waffleAccountLinkStateAction", b"waffleAccountLinkStateAction", "wamoUserIdentifierAction", b"wamoUserIdentifierAction"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["agentAction", b"agentAction", "aiThreadRenameAction", b"aiThreadRenameAction", "androidUnsupportedActions", b"androidUnsupportedActions", "archiveChatAction", b"archiveChatAction", "avatarUpdatedAction", b"avatarUpdatedAction", "botWelcomeRequestAction", b"botWelcomeRequestAction", "businessBroadcastListAction", b"businessBroadcastListAction", "callLogAction", b"callLogAction", "chatAssignment", b"chatAssignment", "chatAssignmentOpenedStatus", b"chatAssignmentOpenedStatus", "chatLockSettings", b"chatLockSettings", "clearChatAction", b"clearChatAction", "contactAction", b"contactAction", "ctwaPerCustomerDataSharingAction", b"ctwaPerCustomerDataSharingAction", "customPaymentMethodsAction", b"customPaymentMethodsAction", "deleteChatAction", b"deleteChatAction", "deleteIndividualCallLog", b"deleteIndividualCallLog", "deleteMessageForMeAction", b"deleteMessageForMeAction", "detectedOutcomesStatusAction", b"detectedOutcomesStatusAction", "deviceCapabilities", b"deviceCapabilities", "externalWebBetaAction", b"externalWebBetaAction", "favoritesAction", b"favoritesAction", "interactiveMessageAction", b"interactiveMessageAction", "keyExpiration", b"keyExpiration", "labelAssociationAction", b"labelAssociationAction", "labelEditAction", b"labelEditAction", "labelReorderingAction", b"labelReorderingAction", "lidContactAction", b"lidContactAction", "localeSetting", b"localeSetting", "lockChatAction", b"lockChatAction", "maibaAiFeaturesControlAction", b"maibaAiFeaturesControlAction", "markChatAsReadAction", b"markChatAsReadAction", "marketingMessageAction", b"marketingMessageAction", "marketingMessageBroadcastAction", b"marketingMessageBroadcastAction", "merchantPaymentPartnerAction", b"merchantPaymentPartnerAction", "musicUserIDAction", b"musicUserIDAction", "muteAction", b"muteAction", "newsletterSavedInterestsAction", b"newsletterSavedInterestsAction", "noteEditAction", b"noteEditAction", "notificationActivitySettingAction", b"notificationActivitySettingAction", "nuxAction", b"nuxAction", "paymentInfoAction", b"paymentInfoAction", "paymentTosAction", b"paymentTosAction", "pinAction", b"pinAction", "pnForLidChatAction", b"pnForLidChatAction", "primaryFeature", b"primaryFeature", "primaryVersionAction", b"primaryVersionAction", "privacySettingChannelsPersonalisedRecommendationAction", b"privacySettingChannelsPersonalisedRecommendationAction", "privacySettingDisableLinkPreviewsAction", b"privacySettingDisableLinkPreviewsAction", "privacySettingRelayAllCalls", b"privacySettingRelayAllCalls", "privateProcessingSettingAction", b"privateProcessingSettingAction", "pushNameSetting", b"pushNameSetting", "quickReplyAction", b"quickReplyAction", "recentEmojiWeightsAction", b"recentEmojiWeightsAction", "removeRecentStickerAction", b"removeRecentStickerAction", "settingsSyncAction", b"settingsSyncAction", "starAction", b"starAction", "statusPostOptInNotificationPreferencesAction", b"statusPostOptInNotificationPreferencesAction", "statusPrivacy", b"statusPrivacy", "stickerAction", b"stickerAction", "subscriptionAction", b"subscriptionAction", "timeFormatAction", b"timeFormatAction", "timestamp", b"timestamp", "ugcBot", b"ugcBot", "unarchiveChatsSetting", b"unarchiveChatsSetting", "userStatusMuteAction", b"userStatusMuteAction", "usernameChatStartMode", b"usernameChatStartMode", "waffleAccountLinkStateAction", b"waffleAccountLinkStateAction", "wamoUserIdentifierAction", b"wamoUserIdentifierAction"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["agentAction", b"agentAction", "aiThreadRenameAction", b"aiThreadRenameAction", "androidUnsupportedActions", b"androidUnsupportedActions", "archiveChatAction", b"archiveChatAction", "avatarUpdatedAction", b"avatarUpdatedAction", "botWelcomeRequestAction", b"botWelcomeRequestAction", "businessBroadcastListAction", b"businessBroadcastListAction", "callLogAction", b"callLogAction", "chatAssignment", b"chatAssignment", "chatAssignmentOpenedStatus", b"chatAssignmentOpenedStatus", "chatLockSettings", b"chatLockSettings", "clearChatAction", b"clearChatAction", "contactAction", b"contactAction", "ctwaPerCustomerDataSharingAction", b"ctwaPerCustomerDataSharingAction", "customPaymentMethodsAction", b"customPaymentMethodsAction", "deleteChatAction", b"deleteChatAction", "deleteIndividualCallLog", b"deleteIndividualCallLog", "deleteMessageForMeAction", b"deleteMessageForMeAction", "detectedOutcomesStatusAction", b"detectedOutcomesStatusAction", "deviceCapabilities", b"deviceCapabilities", "externalWebBetaAction", b"externalWebBetaAction", "favoritesAction", b"favoritesAction", "interactiveMessageAction", b"interactiveMessageAction", "keyExpiration", b"keyExpiration", "labelAssociationAction", b"labelAssociationAction", "labelEditAction", b"labelEditAction", "labelReorderingAction", b"labelReorderingAction", "lidContactAction", b"lidContactAction", "localeSetting", b"localeSetting", "lockChatAction", b"lockChatAction", "maibaAiFeaturesControlAction", b"maibaAiFeaturesControlAction", "markChatAsReadAction", b"markChatAsReadAction", "marketingMessageAction", b"marketingMessageAction", "marketingMessageBroadcastAction", b"marketingMessageBroadcastAction", "merchantPaymentPartnerAction", b"merchantPaymentPartnerAction", "musicUserIDAction", b"musicUserIDAction", "muteAction", b"muteAction", "newsletterSavedInterestsAction", b"newsletterSavedInterestsAction", "noteEditAction", b"noteEditAction", "notificationActivitySettingAction", b"notificationActivitySettingAction", "nuxAction", b"nuxAction", "paymentInfoAction", b"paymentInfoAction", "paymentTosAction", b"paymentTosAction", "pinAction", b"pinAction", "pnForLidChatAction", b"pnForLidChatAction", "primaryFeature", b"primaryFeature", "primaryVersionAction", b"primaryVersionAction", "privacySettingChannelsPersonalisedRecommendationAction", b"privacySettingChannelsPersonalisedRecommendationAction", "privacySettingDisableLinkPreviewsAction", b"privacySettingDisableLinkPreviewsAction", "privacySettingRelayAllCalls", b"privacySettingRelayAllCalls", "privateProcessingSettingAction", b"privateProcessingSettingAction", "pushNameSetting", b"pushNameSetting", "quickReplyAction", b"quickReplyAction", "recentEmojiWeightsAction", b"recentEmojiWeightsAction", "removeRecentStickerAction", b"removeRecentStickerAction", "settingsSyncAction", b"settingsSyncAction", "starAction", b"starAction", "statusPostOptInNotificationPreferencesAction", b"statusPostOptInNotificationPreferencesAction", "statusPrivacy", b"statusPrivacy", "stickerAction", b"stickerAction", "subscriptionAction", b"subscriptionAction", "timeFormatAction", b"timeFormatAction", "timestamp", b"timestamp", "ugcBot", b"ugcBot", "unarchiveChatsSetting", b"unarchiveChatsSetting", "userStatusMuteAction", b"userStatusMuteAction", "usernameChatStartMode", b"usernameChatStartMode", "waffleAccountLinkStateAction", b"waffleAccountLinkStateAction", "wamoUserIdentifierAction", b"wamoUserIdentifierAction"]) -> None: ...
 
 Global___SyncActionValue: typing_extensions.TypeAlias = SyncActionValue
 

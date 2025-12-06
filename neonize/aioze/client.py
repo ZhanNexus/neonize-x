@@ -463,7 +463,9 @@ class NewAClient:
         self.connected = False
         self.loop = event_global_loop
         self.me = None
-        self._group_disappearing_cache = {}  # Cache for group disappearing timers {group_jid: (expiration, timestamp)}
+        # Cache for group disappearing timers {group_jid: (expiration,
+        # timestamp)}
+        self._group_disappearing_cache = {}
         self._group_cache_ttl = 900  # TTL for cache entries
         _log_.debug("🔨 Creating a NewClient instance")
 
@@ -699,19 +701,20 @@ class NewAClient:
                 msg = Message(extendedTextMessage=partial_msg)
         else:
             msg = message
+
             def add_expiration_to_context_info(proto_obj):
                 """Recursively add expiration=disappearing_time to any ContextInfo found in the protobuf object"""
                 if hasattr(proto_obj, "contextInfo"):
                     if not proto_obj.HasField("contextInfo"):
                         proto_obj.contextInfo.MergeFrom(ContextInfo())
-                    proto_obj.contextInfo.MergeFrom(ContextInfo(expiration=disappearing_time))
+                    proto_obj.contextInfo.MergeFrom(
+                        ContextInfo(expiration=disappearing_time)
+                    )
 
                 for field, value in proto_obj.ListFields():
                     if field.type == field.TYPE_MESSAGE:
                         if hasattr(value, "ListFields"):
-                            if (
-                                field.label == field.LABEL_REPEATED
-                            ):
+                            if field.label == field.LABEL_REPEATED:
                                 for item in value:
                                     add_expiration_to_context_info(item)
                             else:
@@ -731,9 +734,7 @@ class NewAClient:
                 for field, value in proto_obj.ListFields():
                     if field.type == field.TYPE_MESSAGE:
                         if hasattr(value, "ListFields"):
-                            if (
-                                field.label == field.LABEL_REPEATED
-                            ):
+                            if field.label == field.LABEL_REPEATED:
                                 for item in value:
                                     merge_additional_context_info(item)
                             else:

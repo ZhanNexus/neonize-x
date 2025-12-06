@@ -44,19 +44,19 @@ MessageWithContextInfo = TypeVar(
     ContactsArrayMessage,
 )
 
-# Deprecated 
+# Deprecated
 
 # MediaMessageType = TypeVar(
-    # "MediaMessageType",
-    # ImageMessage,
-    # AudioMessage,
-    # VideoMessage,
-    # StickerMessage,
-    # DocumentMessage,
+# "MediaMessageType",
+# ImageMessage,
+# AudioMessage,
+# VideoMessage,
+# StickerMessage,
+# DocumentMessage,
 # )
 
 # TextMessageType = TypeVar(
-    # "TextMessageType",
-    # ExtendedTextMessage,
-    # str,
+# "TextMessageType",
+# ExtendedTextMessage,
+# str,
 # )

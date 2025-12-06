@@ -409,7 +409,11 @@ class AudioTransport(google.protobuf.message.Message):
 
         SECONDS_FIELD_NUMBER: builtins.int
         AVATARAUDIO_FIELD_NUMBER: builtins.int
+        WAVEFORMDATA_FIELD_NUMBER: builtins.int
+        WAVEFORM_FIELD_NUMBER: builtins.int
         seconds: builtins.int
+        waveformData: builtins.str
+        waveform: builtins.bytes
         @property
         def avatarAudio(self) -> Global___AudioTransport.Ancillary.AvatarAudio: ...
         def __init__(
@@ -417,9 +421,11 @@ class AudioTransport(google.protobuf.message.Message):
             *,
             seconds: builtins.int | None = ...,
             avatarAudio: Global___AudioTransport.Ancillary.AvatarAudio | None = ...,
+            waveformData: builtins.str | None = ...,
+            waveform: builtins.bytes | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing.Literal["avatarAudio", b"avatarAudio", "seconds", b"seconds"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing.Literal["avatarAudio", b"avatarAudio", "seconds", b"seconds"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["avatarAudio", b"avatarAudio", "seconds", b"seconds", "waveform", b"waveform", "waveformData", b"waveformData"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["avatarAudio", b"avatarAudio", "seconds", b"seconds", "waveform", b"waveform", "waveformData", b"waveformData"]) -> None: ...
 
     @typing.final
     class Integral(google.protobuf.message.Message):

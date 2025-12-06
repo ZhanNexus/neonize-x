@@ -1,9 +1,7 @@
 from ..proto import Neonize_pb2 as neonize_proto
-from ..proto.waE2E.WAWebProtobufsE2E_pb2 import (
-    Message,
-    PollUpdateMessage
-)
+from ..proto.waE2E.WAWebProtobufsE2E_pb2 import Message, PollUpdateMessage
 from ..types import MessageWithContextInfo
+
 
 def get_message_type(message: Message) -> str:
     """
@@ -17,7 +15,7 @@ def get_message_type(message: Message) -> str:
     """
     msg_fields = message.ListFields()
     field_name = msg_fields[0][0].name
-    return field_name 
+    return field_name
 
 
 def extract_text(message: Message) -> str:
@@ -30,7 +28,7 @@ def extract_text(message: Message) -> str:
     :rtype: str
     """
     msg_fields = message.ListFields()
-    
+
     _, field_value = msg_fields[0]
     if isinstance(field_value, str):
         return field_value

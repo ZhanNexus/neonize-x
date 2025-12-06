@@ -91,8 +91,8 @@ func Bypass(client *whatsmeow.Client, chatJID types.JID) whatsmeow.SendRequestEx
 	ownID := client.Store.ID
 	if ownID != nil {
 		if chatJID.Server == types.GroupServer {
-    		extra.TargetJID = []types.JID{*ownID}
-    	}
+			extra.TargetJID = []types.JID{*ownID}
+		}
 		extra.ID = GenerateMessageIDV2(context.Background(), client.Store.GetJID())
 	}
 	return extra
@@ -279,7 +279,7 @@ func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uch
 		return_.Error = proto.String(err_message.Error())
 		return ProtoReturnV3(&return_)
 	}
-	bypasser := Bypass(client,utils.DecodeJidProto(&neonize_jid))
+	bypasser := Bypass(client, utils.DecodeJidProto(&neonize_jid))
 	// fmt.Println("SendMessage: Sending message to WhatsApp")
 	sendresponse, err := client.SendMessage(context.Background(), utils.DecodeJidProto(&neonize_jid), &message, bypasser)
 	if err != nil {

@@ -201,6 +201,76 @@ class Armadillo(google.protobuf.message.Message):
             DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
             @typing.final
+            class SyncAttachmentInterventionAction(google.protobuf.message.Message):
+                DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+                class _InterventionType:
+                    ValueType = typing.NewType("ValueType", builtins.int)
+                    V: typing_extensions.TypeAlias = ValueType
+
+                class _InterventionTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction._InterventionType.ValueType], builtins.type):
+                    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+                    UNKNOWN: Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction._InterventionType.ValueType  # 0
+                    NUDE: Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction._InterventionType.ValueType  # 1
+                    NOT_NUDE: Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction._InterventionType.ValueType  # 2
+
+                class InterventionType(_InterventionType, metaclass=_InterventionTypeEnumTypeWrapper): ...
+                UNKNOWN: Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction.InterventionType.ValueType  # 0
+                NUDE: Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction.InterventionType.ValueType  # 1
+                NOT_NUDE: Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction.InterventionType.ValueType  # 2
+
+                MESSAGEKEY_FIELD_NUMBER: builtins.int
+                INTERVENTIONTYPE_FIELD_NUMBER: builtins.int
+                interventionType: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction.InterventionType.ValueType
+                @property
+                def messageKey(self) -> waCommon.WACommon_pb2.MessageKey: ...
+                def __init__(
+                    self,
+                    *,
+                    messageKey: waCommon.WACommon_pb2.MessageKey | None = ...,
+                    interventionType: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction.InterventionType.ValueType | None = ...,
+                ) -> None: ...
+                def HasField(self, field_name: typing.Literal["interventionType", b"interventionType", "messageKey", b"messageKey"]) -> builtins.bool: ...
+                def ClearField(self, field_name: typing.Literal["interventionType", b"interventionType", "messageKey", b"messageKey"]) -> None: ...
+
+            @typing.final
+            class SyncSpectraAction(google.protobuf.message.Message):
+                DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+                class _SpectraActionType:
+                    ValueType = typing.NewType("ValueType", builtins.int)
+                    V: typing_extensions.TypeAlias = ValueType
+
+                class _SpectraActionTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction._SpectraActionType.ValueType], builtins.type):
+                    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+                    TAKEDOWN: Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction._SpectraActionType.ValueType  # 0
+                    RESTORE: Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction._SpectraActionType.ValueType  # 1
+
+                class SpectraActionType(_SpectraActionType, metaclass=_SpectraActionTypeEnumTypeWrapper): ...
+                TAKEDOWN: Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction.SpectraActionType.ValueType  # 0
+                RESTORE: Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction.SpectraActionType.ValueType  # 1
+
+                KEY_FIELD_NUMBER: builtins.int
+                ACTIONTYPE_FIELD_NUMBER: builtins.int
+                TAKEDOWNACTIONID_FIELD_NUMBER: builtins.int
+                CONFIG_FIELD_NUMBER: builtins.int
+                actionType: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction.SpectraActionType.ValueType
+                takedownActionID: builtins.int
+                config: builtins.str
+                @property
+                def key(self) -> waCommon.WACommon_pb2.MessageKey: ...
+                def __init__(
+                    self,
+                    *,
+                    key: waCommon.WACommon_pb2.MessageKey | None = ...,
+                    actionType: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction.SpectraActionType.ValueType | None = ...,
+                    takedownActionID: builtins.int | None = ...,
+                    config: builtins.str | None = ...,
+                ) -> None: ...
+                def HasField(self, field_name: typing.Literal["actionType", b"actionType", "config", b"config", "key", b"key", "takedownActionID", b"takedownActionID"]) -> builtins.bool: ...
+                def ClearField(self, field_name: typing.Literal["actionType", b"actionType", "config", b"config", "key", b"key", "takedownActionID", b"takedownActionID"]) -> None: ...
+
+            @typing.final
             class SyncMessageAction(google.protobuf.message.Message):
                 DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -347,22 +417,30 @@ class Armadillo(google.protobuf.message.Message):
 
             CHATACTION_FIELD_NUMBER: builtins.int
             MESSAGEACTION_FIELD_NUMBER: builtins.int
+            SPECTRAACTION_FIELD_NUMBER: builtins.int
+            ATTACHMENTINTERVENTIONACTION_FIELD_NUMBER: builtins.int
             ACTIONTIMESTAMP_FIELD_NUMBER: builtins.int
             actionTimestamp: builtins.int
             @property
             def chatAction(self) -> Global___Armadillo.ApplicationData.MetadataSyncAction.SyncChatAction: ...
             @property
             def messageAction(self) -> Global___Armadillo.ApplicationData.MetadataSyncAction.SyncMessageAction: ...
+            @property
+            def spectraAction(self) -> Global___Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction: ...
+            @property
+            def attachmentInterventionAction(self) -> Global___Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction: ...
             def __init__(
                 self,
                 *,
                 chatAction: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncChatAction | None = ...,
                 messageAction: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncMessageAction | None = ...,
+                spectraAction: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncSpectraAction | None = ...,
+                attachmentInterventionAction: Global___Armadillo.ApplicationData.MetadataSyncAction.SyncAttachmentInterventionAction | None = ...,
                 actionTimestamp: builtins.int | None = ...,
             ) -> None: ...
-            def HasField(self, field_name: typing.Literal["actionTimestamp", b"actionTimestamp", "actionType", b"actionType", "chatAction", b"chatAction", "messageAction", b"messageAction"]) -> builtins.bool: ...
-            def ClearField(self, field_name: typing.Literal["actionTimestamp", b"actionTimestamp", "actionType", b"actionType", "chatAction", b"chatAction", "messageAction", b"messageAction"]) -> None: ...
-            def WhichOneof(self, oneof_group: typing.Literal["actionType", b"actionType"]) -> typing.Literal["chatAction", "messageAction"] | None: ...
+            def HasField(self, field_name: typing.Literal["actionTimestamp", b"actionTimestamp", "actionType", b"actionType", "attachmentInterventionAction", b"attachmentInterventionAction", "chatAction", b"chatAction", "messageAction", b"messageAction", "spectraAction", b"spectraAction"]) -> builtins.bool: ...
+            def ClearField(self, field_name: typing.Literal["actionTimestamp", b"actionTimestamp", "actionType", b"actionType", "attachmentInterventionAction", b"attachmentInterventionAction", "chatAction", b"chatAction", "messageAction", b"messageAction", "spectraAction", b"spectraAction"]) -> None: ...
+            def WhichOneof(self, oneof_group: typing.Literal["actionType", b"actionType"]) -> typing.Literal["chatAction", "messageAction", "spectraAction", "attachmentInterventionAction"] | None: ...
 
         @typing.final
         class MetadataSyncNotification(google.protobuf.message.Message):
