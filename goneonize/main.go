@@ -15,20 +15,22 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/binary"
-	"math/rand"
 	"encoding/hex"
 	"fmt"
+	"math/rand"
+	"reflect"
 	"strings"
 	"time"
-	"reflect"
 	"unsafe"
 
 	"go.mau.fi/util/random"
 
 	"github.com/krypton-byte/neonize/defproto"
 	"github.com/krypton-byte/neonize/utils"
+	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
+	waBinary "go.mau.fi/whatsmeow/binary"
 	"go.mau.fi/whatsmeow/proto/waCompanionReg"
 	"go.mau.fi/whatsmeow/proto/waConsumerApplication"
 	waE2E "go.mau.fi/whatsmeow/proto/waE2E"
@@ -37,8 +39,6 @@ import (
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	"go.mau.fi/whatsmeow/types"
 	"go.mau.fi/whatsmeow/types/events"
-	waBinary "go.mau.fi/whatsmeow/binary"
-	_ "github.com/lib/pq"
 
 	"google.golang.org/protobuf/proto"
 )
@@ -76,20 +76,20 @@ func getByteByAddr(addr *C.uchar, size C.int) []byte {
 }
 
 func GetMessageType(msg *waE2E.Message) string {
-    v := reflect.ValueOf(msg).Elem()
-    t := v.Type()
+	v := reflect.ValueOf(msg).Elem()
+	t := v.Type()
 
-    for i := 0; i < v.NumField(); i++ {
-        f := v.Field(i)
+	for i := 0; i < v.NumField(); i++ {
+		f := v.Field(i)
 
-        if f.Kind() == reflect.Ptr && !f.IsNil() {
-            raw := t.Field(i).Name
-            base := strings.TrimSuffix(raw, "Message")
-            return strings.ToLower(base)
-        }
-    }
+		if f.Kind() == reflect.Ptr && !f.IsNil() {
+			raw := t.Field(i).Name
+			base := strings.TrimSuffix(raw, "Message")
+			return strings.ToLower(base)
+		}
+	}
 
-    return "unknown"
+	return "unknown"
 }
 
 // GenerateWABinary generates AdditionalNodes (WABinary payload) based on
@@ -396,7 +396,7 @@ func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uch
 		return_.Error = proto.String(err_message.Error())
 		return ProtoReturnV3(&return_)
 	}
-	bypasser := Bypass(client, utils.DecodeJidProto(&neonize_jid),&message)
+	bypasser := Bypass(client, utils.DecodeJidProto(&neonize_jid), &message)
 	// fmt.Println("SendMessage: Sending message to WhatsApp")
 	sendresponse, err := client.SendMessage(context.Background(), utils.DecodeJidProto(&neonize_jid), &message, bypasser)
 	if err != nil {
