@@ -18,7 +18,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/rand"
-	"reflect"
 	"strings"
 	"time"
 	"unsafe"
@@ -75,21 +74,24 @@ func getByteByAddr(addr *C.uchar, size C.int) []byte {
 	// return result
 }
 
-func GetMessageType(msg *waE2E.Message) string {
-	v := reflect.ValueOf(msg).Elem()
-	t := v.Type()
-
-	for i := 0; i < v.NumField(); i++ {
-		f := v.Field(i)
-
-		if f.Kind() == reflect.Ptr && !f.IsNil() {
-			raw := t.Field(i).Name
-			base := strings.TrimSuffix(raw, "Message")
-			return strings.ToLower(base)
-		}
+// Get button type 
+func getButtonTypeFromMessage(msg *waE2E.Message) string {
+	switch {
+	case msg.ViewOnceMessage != nil:
+		return getButtonTypeFromMessage(msg.ViewOnceMessage.Message)
+	case msg.ViewOnceMessageV2 != nil:
+		return getButtonTypeFromMessage(msg.ViewOnceMessageV2.Message)
+	case msg.EphemeralMessage != nil:
+		return getButtonTypeFromMessage(msg.EphemeralMessage.Message)
+	case msg.ButtonsMessage != nil:
+		return "buttons"
+	case msg.ListMessage != nil:
+		return "list"	
+	case msg.InteractiveMessage != nil:
+		return "interactive"
+	default:
+		return ""
 	}
-
-	return "unknown"
 }
 
 // GenerateWABinary for create button
@@ -97,7 +99,7 @@ func GenerateWABinary(ctx context.Context, to types.JID, msg *waE2E.Message) *[]
 	isPrivate := to.Server == types.DefaultUserServer
 	nodes := make([]waBinary.Node, 0)
 
-	switch GetMessageType(msg) {
+	switch getButtonTypeFromMessage(msg) {
 	case "interactive":
 		im := msg.InteractiveMessage
 		if im != nil {
@@ -184,45 +186,46 @@ func GenerateWABinary(ctx context.Context, to types.JID, msg *waE2E.Message) *[]
 			nodes = append(nodes, botNode)
 		}
 
-	case "list":
-		bizNode := waBinary.Node{
-			Tag:   "biz",
-			Attrs: waBinary.Attrs{},
-			Content: []waBinary.Node{
-				{
-					Tag:   "list",
-					Attrs: waBinary.Attrs{"v": "2", "type": "product_list"},
-				},
-			},
-		}
-		nodes = append(nodes, bizNode)
+    // Not supported for go.mau.fi/whatsmeow. Must replace module 
+	// case "list":
+		// bizNode := waBinary.Node{
+			// Tag:   "biz",
+			// Attrs: waBinary.Attrs{},
+			// Content: []waBinary.Node{
+				// {
+					// Tag:   "list",
+					// Attrs: waBinary.Attrs{"v": "2", "type": "product_list"},
+				// },
+			// },
+		// }
+		// nodes = append(nodes, bizNode)
 
-	case "buttons":
-		bizNode := waBinary.Node{
-			Tag:   "biz",
-			Attrs: nil,
-			Content: []waBinary.Node{
-				{
-					Tag:   "interactive",
-					Attrs: waBinary.Attrs{"type": "native_flow", "v": "1"},
-					Content: []waBinary.Node{
-						{
-							Tag:   "native_flow",
-							Attrs: waBinary.Attrs{"v": "9", "name": "mixed"},
-						},
-					},
-				},
-			},
-		}
-		nodes = append(nodes, bizNode)
+	// case "buttons":
+		// bizNode := waBinary.Node{
+			// Tag:   "biz",
+			// Attrs: nil,
+			// Content: []waBinary.Node{
+				// {
+					// Tag:   "interactive",
+					// Attrs: waBinary.Attrs{"type": "native_flow", "v": "1"},
+					// Content: []waBinary.Node{
+						// {
+							// Tag:   "native_flow",
+							// Attrs: waBinary.Attrs{"v": "9", "name": "mixed"},
+						// },
+					// },
+				// },
+			// },
+		// }
+		// nodes = append(nodes, bizNode)
 
-		if isPrivate {
-			botNode := waBinary.Node{
-				Tag:   "bot",
-				Attrs: waBinary.Attrs{"biz_bot": "1"},
-			}
-			nodes = append(nodes, botNode)
-		}
+		// if isPrivate {
+			// botNode := waBinary.Node{
+				// Tag:   "bot",
+				// Attrs: waBinary.Attrs{"biz_bot": "1"},
+			// }
+			// nodes = append(nodes, botNode)
+		// }
 
 	default:
 		if isPrivate {
