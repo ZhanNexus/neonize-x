@@ -418,10 +418,6 @@ class NewClient:
         self.chat_settings = ChatSettingsStore(self.uuid)
         self.connected = False
         self.me = None
-        # Cache for group disappearing timers {group_jid: (expiration,
-        # timestamp)}
-        self._group_disappearing_cache = {}
-        self._group_cache_ttl = 900  # TTL for cache entries
         _log_.debug("🔨 Creating a NewClient instance")
 
     def __onLoginStatus(self, uuid: int, status: int):
@@ -541,34 +537,6 @@ class NewClient:
             return msg
         return None
 
-    def _get_group_disappearing_time(self, jid: JID) -> int:
-        """
-        Get group disappearing time with caching to avoid multiple API calls.
-
-        :param jid: The group JID
-        :return: Disappearing timer value in seconds
-        """
-        jid_str = Jid2String(jid)
-        current_time = time.time()
-
-        # Check if we have cached value and it's still valid
-        if jid_str in self._group_disappearing_cache:
-            cached_time, timestamp = self._group_disappearing_cache[jid_str]
-            if current_time - timestamp < self._group_cache_ttl:
-                return cached_time
-
-        # Fetch from API if not cached or cache expired
-        try:
-            get_ephemeral = self.get_group_info(jid)
-            disappearing_time = get_ephemeral.GroupEphemeral.DisappearingTimer
-            # Cache the result with current timestamp
-            self._group_disappearing_cache[jid_str] = (disappearing_time, current_time)
-            return disappearing_time
-        except Exception as e:
-            _log_.warning(f"Could not get group info for {jid_str}: {e}")
-            # Return 0 if we can't get the group info
-            return 0
-
     def _make_quoted_message(
         self, message: neonize_proto.Message, reply_privately: bool = False
     ) -> ContextInfo:
@@ -626,11 +594,6 @@ class NewClient:
         :rtype: SendResponse
         """
         to_bytes = to.SerializeToString()
-        disappearing_time = 0
-        if to.Server == "g.us":
-            disappearing_time = self._get_group_disappearing_time(to)
-        elif to.Server == "s.whatsapp.net" or to.Server == "lid":
-            disappearing_time = 86400
         if isinstance(message, str):
             mentioned_groups = self._parse_group_mention(message)
             mentioned_jid = self._parse_mention(
@@ -643,7 +606,6 @@ class NewClient:
                     groupMentions=mentioned_groups,
                 ),
             )
-            partial_msg.contextInfo.MergeFrom(ContextInfo(expiration=disappearing_time))
             if link_preview:
                 preview = self._generate_link_preview(message)
                 if preview:
@@ -656,28 +618,7 @@ class NewClient:
                 msg = Message(extendedTextMessage=partial_msg)
         else:
             msg = message
-
-            def add_expiration_to_context_info(proto_obj):
-                """Recursively add expiration=disappearing_time to any ContextInfo found in the protobuf object"""
-
-                if hasattr(proto_obj, "contextInfo"):
-                    if not proto_obj.HasField("contextInfo"):
-                        proto_obj.contextInfo.MergeFrom(ContextInfo())
-                    proto_obj.contextInfo.MergeFrom(
-                        ContextInfo(expiration=disappearing_time)
-                    )
-
-                for field, value in proto_obj.ListFields():
-                    if field.type == field.TYPE_MESSAGE:
-                        if hasattr(value, "ListFields"):  # It's a message
-                            if field.label == field.LABEL_REPEATED:
-                                for item in value:
-                                    add_expiration_to_context_info(item)
-                            else:
-                                add_expiration_to_context_info(value)
-
-            add_expiration_to_context_info(msg)
-
+            
         if context_info is not None:
 
             def merge_additional_context_info(proto_obj):
@@ -711,14 +652,6 @@ class NewClient:
             raise SendMessageError(model.Error)
         model.SendResponse.MergeFrom(model.SendResponse.__class__(Message=msg))
         return model.SendResponse
-
-    def clear_group_cache(self):
-        """Clear the group disappearing time cache."""
-        self._group_disappearing_cache.clear()
-
-    def set_group_cache_ttl(self, ttl: int):
-        """Set the TTL for group cache entries in seconds."""
-        self._group_cache_ttl = ttl
 
     def build_reply_message(
         self,
