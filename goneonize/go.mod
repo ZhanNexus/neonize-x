@@ -5,9 +5,9 @@ go 1.25.3
 require (
 	github.com/lib/pq v1.10.9
 	github.com/mattn/go-sqlite3 v1.14.32
-	go.mau.fi/util v0.9.3
-	go.mau.fi/whatsmeow v0.0.0-20251205211405-fd6170ac96e5
-	google.golang.org/protobuf v1.36.10
+	go.mau.fi/util v0.9.4
+	go.mau.fi/whatsmeow v0.0.0-20251217143725-11cf47c62d32
+	google.golang.org/protobuf v1.36.11
 )
 
 require (
@@ -23,7 +23,7 @@ require (
 	github.com/vektah/gqlparser/v2 v2.5.31 // indirect
 	go.mau.fi/libsignal v0.2.1 // indirect
 	golang.org/x/crypto v0.46.0 // indirect
-	golang.org/x/exp v0.0.0-20251209150349-8475f28825e9 // indirect
+	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
 	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect

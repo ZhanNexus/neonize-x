@@ -618,7 +618,7 @@ class NewClient:
                 msg = Message(extendedTextMessage=partial_msg)
         else:
             msg = message
-            
+
         if context_info is not None:
 
             def merge_additional_context_info(proto_obj):

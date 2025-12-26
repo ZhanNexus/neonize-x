@@ -74,7 +74,7 @@ func getByteByAddr(addr *C.uchar, size C.int) []byte {
 	// return result
 }
 
-// Get button type 
+// Get button type
 func getButtonTypeFromMessage(msg *waE2E.Message) string {
 	switch {
 	case msg.ViewOnceMessage != nil:
@@ -86,7 +86,7 @@ func getButtonTypeFromMessage(msg *waE2E.Message) string {
 	case msg.ButtonsMessage != nil:
 		return "buttons"
 	case msg.ListMessage != nil:
-		return "list"	
+		return "list"
 	case msg.InteractiveMessage != nil:
 		return "interactive"
 	default:
@@ -119,7 +119,7 @@ func GenerateWABinary(ctx context.Context, to types.JID, msg *waE2E.Message) *[]
 							if name == "payment_info" {
 								nativeFlowName = "payment_info"
 							} else if name == "payment_key_info" {
-							    nativeFlowName = "payment_key_info"
+								nativeFlowName = "payment_key_info"
 							}
 
 							bizNode := waBinary.Node{
@@ -188,46 +188,46 @@ func GenerateWABinary(ctx context.Context, to types.JID, msg *waE2E.Message) *[]
 			nodes = append(nodes, botNode)
 		}
 
-    // Not supported for go.mau.fi/whatsmeow. Must replace module 
+		// Not supported for go.mau.fi/whatsmeow. Must replace module
 	// case "list":
-		// bizNode := waBinary.Node{
-			// Tag:   "biz",
-			// Attrs: waBinary.Attrs{},
-			// Content: []waBinary.Node{
-				// {
-					// Tag:   "list",
-					// Attrs: waBinary.Attrs{"v": "2", "type": "product_list"},
-				// },
-			// },
-		// }
-		// nodes = append(nodes, bizNode)
+	// bizNode := waBinary.Node{
+	// Tag:   "biz",
+	// Attrs: waBinary.Attrs{},
+	// Content: []waBinary.Node{
+	// {
+	// Tag:   "list",
+	// Attrs: waBinary.Attrs{"v": "2", "type": "product_list"},
+	// },
+	// },
+	// }
+	// nodes = append(nodes, bizNode)
 
 	// case "buttons":
-		// bizNode := waBinary.Node{
-			// Tag:   "biz",
-			// Attrs: nil,
-			// Content: []waBinary.Node{
-				// {
-					// Tag:   "interactive",
-					// Attrs: waBinary.Attrs{"type": "native_flow", "v": "1"},
-					// Content: []waBinary.Node{
-						// {
-							// Tag:   "native_flow",
-							// Attrs: waBinary.Attrs{"v": "9", "name": "mixed"},
-						// },
-					// },
-				// },
-			// },
-		// }
-		// nodes = append(nodes, bizNode)
+	// bizNode := waBinary.Node{
+	// Tag:   "biz",
+	// Attrs: nil,
+	// Content: []waBinary.Node{
+	// {
+	// Tag:   "interactive",
+	// Attrs: waBinary.Attrs{"type": "native_flow", "v": "1"},
+	// Content: []waBinary.Node{
+	// {
+	// Tag:   "native_flow",
+	// Attrs: waBinary.Attrs{"v": "9", "name": "mixed"},
+	// },
+	// },
+	// },
+	// },
+	// }
+	// nodes = append(nodes, bizNode)
 
-		// if isPrivate {
-			// botNode := waBinary.Node{
-				// Tag:   "bot",
-				// Attrs: waBinary.Attrs{"biz_bot": "1"},
-			// }
-			// nodes = append(nodes, botNode)
-		// }
+	// if isPrivate {
+	// botNode := waBinary.Node{
+	// Tag:   "bot",
+	// Attrs: waBinary.Attrs{"biz_bot": "1"},
+	// }
+	// nodes = append(nodes, botNode)
+	// }
 
 	default:
 		if isPrivate {
