@@ -9666,11 +9666,11 @@ func (*ReturnFunctionWithError_GetLinkedGroupsParticipants) isReturnFunctionWith
 
 type SendRequestExtra struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	ID              *string                `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	InlineBotJID    *JID                   `protobuf:"bytes,2,req,name=InlineBotJID" json:"InlineBotJID,omitempty"`
-	Peer            *bool                  `protobuf:"varint,3,req,name=Peer" json:"Peer,omitempty"`
-	Timeout         *int64                 `protobuf:"varint,4,req,name=Timeout" json:"Timeout,omitempty"`
-	MediaHandle     *string                `protobuf:"bytes,5,req,name=MediaHandle" json:"MediaHandle,omitempty"`
+	ID              *string                `protobuf:"bytes,1,opt,name=ID" json:"ID,omitempty"`
+	InlineBotJID    *JID                   `protobuf:"bytes,2,opt,name=InlineBotJID" json:"InlineBotJID,omitempty"`
+	Peer            *bool                  `protobuf:"varint,3,opt,name=Peer" json:"Peer,omitempty"`
+	Timeout         *int64                 `protobuf:"varint,4,opt,name=Timeout" json:"Timeout,omitempty"`
+	MediaHandle     *string                `protobuf:"bytes,5,opt,name=MediaHandle" json:"MediaHandle,omitempty"`
 	AdditionalNodes []*Node                `protobuf:"bytes,6,rep,name=AdditionalNodes" json:"AdditionalNodes,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -10617,11 +10617,11 @@ const file_Neonize_proto_rawDesc = "" +
 	"\x1bGetLinkedGroupsParticipants\x18\x04 \x01(\v2\x11.neonize.JIDArrayH\x00R\x1bGetLinkedGroupsParticipantsB\b\n" +
 	"\x06Return\"\xdd\x01\n" +
 	"\x10SendRequestExtra\x12\x0e\n" +
-	"\x02ID\x18\x01 \x02(\tR\x02ID\x120\n" +
-	"\fInlineBotJID\x18\x02 \x02(\v2\f.neonize.JIDR\fInlineBotJID\x12\x12\n" +
-	"\x04Peer\x18\x03 \x02(\bR\x04Peer\x12\x18\n" +
-	"\aTimeout\x18\x04 \x02(\x03R\aTimeout\x12 \n" +
-	"\vMediaHandle\x18\x05 \x02(\tR\vMediaHandle\x127\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\x120\n" +
+	"\fInlineBotJID\x18\x02 \x01(\v2\f.neonize.JIDR\fInlineBotJID\x12\x12\n" +
+	"\x04Peer\x18\x03 \x01(\bR\x04Peer\x12\x18\n" +
+	"\aTimeout\x18\x04 \x01(\x03R\aTimeout\x12 \n" +
+	"\vMediaHandle\x18\x05 \x01(\tR\vMediaHandle\x127\n" +
 	"\x0fAdditionalNodes\x18\x06 \x03(\v2\r.neonize.NodeR\x0fAdditionalNodes\"h\n" +
 	"\x1aBuildMessageReturnFunction\x12\x14\n" +
 	"\x05Error\x18\x01 \x01(\tR\x05Error\x124\n" +
