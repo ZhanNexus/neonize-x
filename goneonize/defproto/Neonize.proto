@@ -920,6 +920,7 @@ message SendRequestExtra {
     required bool Peer = 3;
     required int64 Timeout = 4;
     required string MediaHandle = 5;
+    repeated Node AdditionalNodes = 6;
 }
 
 message BuildMessageReturnFunction{

@@ -430,53 +430,91 @@ func TestStruct() *C.struct_BytesReturn {
 }
 
 //export SendMessage
-func SendMessage(id *C.char, JIDByte *C.uchar, JIDSize C.int, messageByte *C.uchar, messageSize C.int) *C.struct_BytesReturn {
-	// fmt.Println("SendMessage: Getting client from ID")
+func SendMessage(
+	id *C.char,
+	JIDByte *C.uchar, JIDSize C.int,
+	messageByte *C.uchar, messageSize C.int,
+	extraByte *C.uchar, extraSize C.int,
+) *C.struct_BytesReturn {
+
 	client := clients[C.GoString(id)]
-	// fmt.Println("SendMessage: Getting JID byte array")
-	jid := getByteByAddr(JIDByte, JIDSize)
-	// fmt.Println("SendMessage: Creating neonize_jid variable")
-	var neonize_jid defproto.JID
-	// fmt.Println("SendMessage: Creating return object")
 	return_ := defproto.SendMessageReturnFunction{}
-	// fmt.Println("SendMessage: Unmarshaling JID")
-	err := proto.Unmarshal(jid, &neonize_jid)
-	if err != nil {
-		fmt.Println("SendMessage: Error unmarshaling JID:", err.Error())
+
+	jidBytes := getByteByAddr(JIDByte, JIDSize)
+	var neonizeJID defproto.JID
+	if err := proto.Unmarshal(jidBytes, &neonizeJID); err != nil {
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
 	}
-	// fmt.Println("SendMessage: Getting message byte array")
-	message_bytes := getByteByAddr(messageByte, messageSize)
-	// fmt.Println("SendMessage: Creating message variable")
+	jid := DecodeJidProto(&neonizeJID)
+
+	msgBytes := getByteByAddr(messageByte, messageSize)
 	var message waE2E.Message
-	// fmt.Println("SendMessage: Unmarshaling message")
-	err_message := proto.Unmarshal(message_bytes, &message)
-	if err_message != nil {
-		fmt.Println("SendMessage: Error unmarshaling message:", err_message.Error())
-		return_.Error = proto.String(err_message.Error())
-		return ProtoReturnV3(&return_)
-	}
-	bypasser := Bypass(client, utils.DecodeJidProto(&neonize_jid), &message)
-	// fmt.Println("SendMessage: Sending message to WhatsApp")
-	sendresponse, err := client.SendMessage(context.Background(), utils.DecodeJidProto(&neonize_jid), &message, bypasser)
-	if err != nil {
-		fmt.Println("SendMessage: Error sending message:", err.Error())
+	if err := proto.Unmarshal(msgBytes, &message); err != nil {
 		return_.Error = proto.String(err.Error())
 		return ProtoReturnV3(&return_)
 	}
-	// fmt.Println("SendMessage: Encoding send response")
-	return_.SendResponse = utils.EncodeSendResponse(sendresponse)
-	// buff, err := proto.Marshal(&return_)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// hashx := sha256.Sum256(buff)
-	// hashl := hex.EncodeToString(hashx[:]) // This is just to ensure the data is not empty
-	// fmt.Printf("Marshaled data (%d bytes): %x\thash: %s\n", len(buff), buff, hashl)
-	// fmt.Println("SendMessage: Returning proto response")
-	// result := ProtoReturnV3(&return_)
-	// fmt.Println("size of result:", int(result.size))
+	
+	var protoExtra *whatsmeow.SendRequestExtra
+	if extraByte != nil && extraSize > 0 {
+		extraBytes := getByteByAddr(extraByte, extraSize)
+		var extraProto defproto.SendRequestExtra
+		if err := proto.Unmarshal(extraBytes, &extraProto); err == nil {
+			protoExtra = utils.DecodeSendRequestExtra(&extraProto)
+		}
+	}
+	bypassExtra := Bypass(client, jid, &message)
+	finalExtra := whatsmeow.SendRequestExtra{}
+
+	if bypassExtra != nil {
+		finalExtra = *bypassExtra
+	}
+	
+	if protoExtra != nil {
+		if protoExtra.ID != "" {
+			finalExtra.ID = protoExtra.ID
+		}
+		if protoExtra.InlineBotJID.User != "" {
+			finalExtra.InlineBotJID = protoExtra.InlineBotJID
+		}
+		if protoExtra.Peer {
+			finalExtra.Peer = true
+		}
+		if protoExtra.Timeout != 0 {
+			finalExtra.Timeout = protoExtra.Timeout
+		}
+		if protoExtra.MediaHandle != "" {
+			finalExtra.MediaHandle = protoExtra.MediaHandle
+		}
+		if protoExtra.Meta != nil {
+			finalExtra.Meta = protoExtra.Meta
+		}
+
+		if protoExtra.AdditionalNodes != nil {
+			if finalExtra.AdditionalNodes == nil {
+				nodes := append([]waBinary.Node{}, (*protoExtra.AdditionalNodes)...)
+				finalExtra.AdditionalNodes = &nodes
+			} else {
+				nodes := append(
+					append([]waBinary.Node{}, (*finalExtra.AdditionalNodes)...),
+					(*protoExtra.AdditionalNodes)...,
+				)
+				finalExtra.AdditionalNodes = &nodes
+			}
+		}
+	}
+	sendResponse, err := client.SendMessage(
+		context.Background(),
+		jid,
+		&message,
+		&finalExtra, 
+	)
+	if err != nil {
+		return_.Error = proto.String(err.Error())
+		return ProtoReturnV3(&return_)
+	}
+
+	return_.SendResponse = utils.EncodeSendResponse(sendResponse)
 	return ProtoReturnV3(&return_)
 }
 

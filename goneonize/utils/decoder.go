@@ -7,6 +7,7 @@ import (
 	defproto "github.com/krypton-byte/neonize/defproto"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/appstate"
+	waBinary "go.mau.fi/whatsmeow/binary"
 	waVname "go.mau.fi/whatsmeow/proto/waVnameCert"
 	"go.mau.fi/whatsmeow/store"
 	"go.mau.fi/whatsmeow/types"
@@ -194,15 +195,80 @@ func DecodeContactEntry(entry *defproto.ContactEntry) *store.ContactEntry {
 }
 
 func DecodeSendRequestExtra(extra *defproto.SendRequestExtra) whatsmeow.SendRequestExtra {
+	var additionalNodes *[]waBinary.Node
+
+	if len(extra.AdditionalNodes) > 0 {
+		nodes := make([]waBinary.Node, 0, len(extra.AdditionalNodes))
+
+		for _, pn := range extra.AdditionalNodes {
+			n := DecodeNodeProto(pn)
+			if n != nil {
+				nodes = append(nodes, *n)
+			}
+		}
+
+		if len(nodes) > 0 {
+			additionalNodes = &nodes
+		}
+	}
+
 	return whatsmeow.SendRequestExtra{
-		ID:           *extra.ID,
-		InlineBotJID: DecodeJidProto(extra.InlineBotJID),
-		Peer:         *extra.Peer,
-		Timeout:      time.Duration(*extra.Timeout),
+		ID:              types.MessageID(extra.GetID()),
+		InlineBotJID:    DecodeJidProto(extra.InlineBotJID),
+		Peer:            extra.GetPeer(),
+		Timeout:         time.Duration(extra.GetTimeout()),
+		MediaHandle:     extra.GetMediaHandle(),
+		AdditionalNodes: additionalNodes,
 	}
 }
 
 func DecodeNewsLetterMessageMeta(defproto.NewsLetterMessageMeta) {
+}
+
+func DecodeNodeProto(n *defproto.Node) *waBinary.Node {
+	if n == nil {
+		return nil
+	}
+
+	// explicit nil node
+	if n.Nil != nil && *n.Nil {
+		return nil
+	}
+
+	node := &waBinary.Node{
+		Tag: n.Tag,
+	}
+
+	// attrs
+	if len(n.Attrs) > 0 {
+		node.Attrs = make(map[string]interface{}, len(n.Attrs))
+		for _, a := range n.Attrs {
+			switch v := a.Value.(type) {
+			case *defproto.NodeAttrs_Boolean:
+				node.Attrs[a.Name] = v.Boolean
+			case *defproto.NodeAttrs_Integer:
+				node.Attrs[a.Name] = v.Integer
+			case *defproto.NodeAttrs_Text:
+				node.Attrs[a.Name] = v.Text
+			case *defproto.NodeAttrs_Jid:
+				node.Attrs[a.Name] = DecodeJidProto(v.Jid)
+			}
+		}
+	}
+
+	// children
+	for _, c := range n.Nodes {
+		if child := DecodeNodeProto(c); child != nil {
+			node.Children = append(node.Children, *child)
+		}
+	}
+
+	// raw bytes node
+	if len(n.Bytes) > 0 {
+		node.Data = n.Bytes
+	}
+
+	return node
 }
 
 func DecodeEventTypesMessage(message *defproto.Message) *events.Message {

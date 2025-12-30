@@ -572,6 +572,7 @@ class NewClient:
         mentions_are_lids: bool = False,
         add_msg_secret: bool = False,
         context_info: Optional[ContextInfo] = None,
+        extra: Optional[neonize_proto.SendRequestExtra] = None,
     ) -> SendResponse:
         """Send a message to the specified JID.
 
@@ -642,8 +643,9 @@ class NewClient:
         if add_msg_secret:
             msg.messageContextInfo.messageSecret = urandom(32)
         message_bytes = msg.SerializeToString()
-        bytes_ptr = self.__client.SendMessage(
-            self.uuid, to_bytes, len(to_bytes), message_bytes, len(message_bytes)
+        extra_params = extra.SerializeToString()
+        bytes_ptr = await self.__client.SendMessage(
+            self.uuid, to_bytes, len(to_bytes), message_bytes, len(message_bytes),extra_params,len(extra_params),
         )
         protobytes = bytes_ptr.contents.get_bytes()
         free_bytes(bytes_ptr)

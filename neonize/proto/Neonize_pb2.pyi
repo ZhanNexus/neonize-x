@@ -3646,12 +3646,15 @@ class SendRequestExtra(google.protobuf.message.Message):
     PEER_FIELD_NUMBER: builtins.int
     TIMEOUT_FIELD_NUMBER: builtins.int
     MEDIAHANDLE_FIELD_NUMBER: builtins.int
+    ADDITIONALNODES_FIELD_NUMBER: builtins.int
     ID: builtins.str
     Peer: builtins.bool
     Timeout: builtins.int
     MediaHandle: builtins.str
     @property
     def InlineBotJID(self) -> Global___JID: ...
+    @property
+    def AdditionalNodes(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[Global___Node]: ...
     def __init__(
         self,
         *,
@@ -3660,9 +3663,10 @@ class SendRequestExtra(google.protobuf.message.Message):
         Peer: builtins.bool | None = ...,
         Timeout: builtins.int | None = ...,
         MediaHandle: builtins.str | None = ...,
+        AdditionalNodes: collections.abc.Iterable[Global___Node] | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["ID", b"ID", "InlineBotJID", b"InlineBotJID", "MediaHandle", b"MediaHandle", "Peer", b"Peer", "Timeout", b"Timeout"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["ID", b"ID", "InlineBotJID", b"InlineBotJID", "MediaHandle", b"MediaHandle", "Peer", b"Peer", "Timeout", b"Timeout"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["AdditionalNodes", b"AdditionalNodes", "ID", b"ID", "InlineBotJID", b"InlineBotJID", "MediaHandle", b"MediaHandle", "Peer", b"Peer", "Timeout", b"Timeout"]) -> None: ...
 
 Global___SendRequestExtra: typing_extensions.TypeAlias = SendRequestExtra
 
