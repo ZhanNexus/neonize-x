@@ -5,9 +5,9 @@ go 1.25.3
 require (
 	github.com/lib/pq v1.10.9
 	github.com/mattn/go-sqlite3 v1.14.32
-	go.mau.fi/util v0.9.3
+	go.mau.fi/util v0.9.4
 	go.mau.fi/whatsmeow v0.0.0-20251205211405-fd6170ac96e5
-	google.golang.org/protobuf v1.36.10
+	google.golang.org/protobuf v1.36.11
 )
 
 require (
@@ -31,4 +31,4 @@ require (
 
 replace go.mau.fi/libsignal => github.com/fawwaz37/libsignal-protocol-go v0.2.1-0.20250920101933-ae5672c024d5
 
-replace go.mau.fi/whatsmeow => github.com/ginkohub/whatsmeow v0.0.0-20251202021103-f3779ce15345
+replace go.mau.fi/whatsmeow => github.com/ZhanNexus/whatsmeow v0.0.0-20260102020949-f26186f153e6 // github.com/ginkohub/whatsmeow v0.0.0-20251202021103-f3779ce15345
