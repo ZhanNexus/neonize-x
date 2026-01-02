@@ -188,46 +188,45 @@ func GenerateWABinary(ctx context.Context, to types.JID, msg *waE2E.Message) *[]
 			nodes = append(nodes, botNode)
 		}
 
-    // Not supported for go.mau.fi/whatsmeow. Must replace module 
-	// case "list":
-		// bizNode := waBinary.Node{
-			// Tag:   "biz",
-			// Attrs: waBinary.Attrs{},
-			// Content: []waBinary.Node{
-				// {
-					// Tag:   "list",
-					// Attrs: waBinary.Attrs{"v": "2", "type": "product_list"},
-				// },
-			// },
-		// }
-		// nodes = append(nodes, bizNode)
+	case "list":
+		bizNode := waBinary.Node{
+			Tag:   "biz",
+			Attrs: waBinary.Attrs{},
+			Content: []waBinary.Node{
+				{
+					Tag:   "list",
+					Attrs: waBinary.Attrs{"v": "2", "type": "product_list"},
+				},
+			},
+		}
+		nodes = append(nodes, bizNode)
 
-	// case "buttons":
-		// bizNode := waBinary.Node{
-			// Tag:   "biz",
-			// Attrs: nil,
-			// Content: []waBinary.Node{
-				// {
-					// Tag:   "interactive",
-					// Attrs: waBinary.Attrs{"type": "native_flow", "v": "1"},
-					// Content: []waBinary.Node{
-						// {
-							// Tag:   "native_flow",
-							// Attrs: waBinary.Attrs{"v": "9", "name": "mixed"},
-						// },
-					// },
-				// },
-			// },
-		// }
-		// nodes = append(nodes, bizNode)
+	case "buttons":
+		bizNode := waBinary.Node{
+			Tag:   "biz",
+			Attrs: nil,
+			Content: []waBinary.Node{
+				{
+					Tag:   "interactive",
+					Attrs: waBinary.Attrs{"type": "native_flow", "v": "1"},
+					Content: []waBinary.Node{
+						{
+							Tag:   "native_flow",
+							Attrs: waBinary.Attrs{"v": "9", "name": "mixed"},
+						},
+					},
+				},
+			},
+		}
+		nodes = append(nodes, bizNode)
 
-		// if isPrivate {
-			// botNode := waBinary.Node{
-				// Tag:   "bot",
-				// Attrs: waBinary.Attrs{"biz_bot": "1"},
-			// }
-			// nodes = append(nodes, botNode)
-		// }
+		if isPrivate {
+			botNode := waBinary.Node{
+				Tag:   "bot",
+				Attrs: waBinary.Attrs{"biz_bot": "1"},
+			}
+			nodes = append(nodes, botNode)
+		}
 
 	default:
 		if isPrivate {
