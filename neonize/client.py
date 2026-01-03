@@ -619,7 +619,7 @@ class NewClient:
                 msg = Message(extendedTextMessage=partial_msg)
         else:
             msg = message
-            
+
         if context_info is not None:
 
             def merge_additional_context_info(proto_obj):
@@ -650,7 +650,13 @@ class NewClient:
         extra_len = len(extra_params) if extra_params is not None else 0
 
         bytes_ptr = self.__client.SendMessage(
-            self.uuid, to_bytes, len(to_bytes), message_bytes, len(message_bytes),extra_params,extra_len,
+            self.uuid,
+            to_bytes,
+            len(to_bytes),
+            message_bytes,
+            len(message_bytes),
+            extra_params,
+            extra_len,
         )
         protobytes = bytes_ptr.contents.get_bytes()
         free_bytes(bytes_ptr)
