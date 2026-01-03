@@ -702,7 +702,13 @@ class NewAClient:
         extra_len = len(extra_params) if extra_params is not None else 0
 
         bytes_ptr = await self.__client.SendMessage(
-            self.uuid, to_bytes, len(to_bytes), message_bytes, len(message_bytes),extra_params,extra_len,
+            self.uuid,
+            to_bytes,
+            len(to_bytes),
+            message_bytes,
+            len(message_bytes),
+            extra_params,
+            extra_len,
         )
         protobytes = bytes_ptr.contents.get_bytes()
         free_bytes(bytes_ptr)
