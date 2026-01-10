@@ -22,7 +22,7 @@ def normalize_jid(jid: JID | str) -> JID:
     :param to: StrJID or ObjJID
     """
     if isinstance(jid, str):
-        return StrToJID(jif)
+        return StrToJID(jid)
     if isinstance(jid, JID):
         return jid
     raise TypeError("Invalid JID")
