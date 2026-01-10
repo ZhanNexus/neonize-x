@@ -21,9 +21,9 @@ def normalize_jid(jid: JID | str) -> JID:
     """Normalize jid
     :param to: StrJID or ObjJID
     """
-    if isinstance(to, str):
+    if isinstance(jid, str):
         return StrToJID(to)
-    if isinstance(to, JID):
+    if isinstance(jid, JID):
         return to
     raise TypeError("Invalid JID")
 
