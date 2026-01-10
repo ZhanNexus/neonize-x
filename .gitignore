@@ -168,3 +168,5 @@ cython_debug/
 
 *.dll
 *.exe
+
+.ruff_cache

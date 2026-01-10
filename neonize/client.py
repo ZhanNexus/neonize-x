@@ -187,7 +187,7 @@ from .utils.enum import (
 )
 from .utils.ffmpeg import FFmpeg
 from .utils.iofile import get_bytes_from_name_or_url, prepare_zip_file_content
-from .utils.jid import Jid2String, JIDToNonAD, build_jid, jid_is_lid
+from .utils.jid import Jid2String, JIDToNonAD, build_jid, jid_is_lid, normalized_jid
 from .utils.sticker import convert_to_sticker, convert_to_webp
 
 _log_ = logging.getLogger(__name__)
@@ -226,7 +226,7 @@ class ContactStore:
             raise ContactStoreError(model.Error)
         return model
 
-    def put_contact_name(self, user: JID, fullname: str, firstname: str):
+    def put_contact_name(self, user: JID | str, fullname: str, firstname: str):
         """
         This method is used to update the contact name in the contact store. It takes the user's JID,
         full name and first name as input parameters,
@@ -234,7 +234,7 @@ class ContactStore:
         If there is an error, it returns a ContactStoreError with the error message.
 
         :param user: The JID of the user whose contact name is to be updated
-        :type user: JID
+        :type user: JID | str
         :param fullname: The full name of the user
         :type fullname: str
         :param firstname: The first name of the user
@@ -242,6 +242,7 @@ class ContactStore:
         :return: If there is an error, return a ContactStoreError with the error message, else None
         :rtype: ContactStoreError or None
         """
+        user = normalize_jid(user)
         user_bytes = user.SerializeToString()
         err = self.__client.PutContactName(
             self.uuid,
@@ -268,16 +269,17 @@ class ContactStore:
         if err:
             raise ContactStoreError(err)
 
-    def get_contact(self, user: JID) -> ContactInfo:
+    def get_contact(self, user: JID | str) -> ContactInfo:
         """
         This method retrieves a user's contact information based on their JID (Jabber Identifier).
 
         :param user: The Jabber Identifier of the user whose contact information is to be retrieved.
-        :type user: JID
+        :type user: JID | str
         :raises ContactStoreError: If there is an error while retrieving the contact information.
         :return: The contact information of the user.
         :rtype: ContactInfo
         """
+        user = normalize_jid(user)
         jid = user.SerializeToString()
         bytes_ptr = self.__client.GetContact(self.uuid, jid, len(jid))
         protobytes = bytes_ptr.contents.get_bytes()
@@ -318,16 +320,17 @@ class ChatSettingsStore:
         self.uuid = uuid
         self.__client = gocode
 
-    def put_muted_until(self, user: JID, until: timedelta):
+    def put_muted_until(self, user: JID | str, until: timedelta):
         """
         Mute a user until a specified time.
 
         :param user: The user to be muted.
-        :type user: JID
+        :type user: JID | str
         :param until: The duration until when the user will be muted.
         :type until: timedelta
         :raises PutMutedUntilError: If there is an error while muting the user.
         """
+        user = normalize_jid(user)
         user_buf = user.SerializeToString()
         return_ = self.__client.PutMutedUntil(
             self.uuid, user_buf, len(user_buf), until.total_seconds()
@@ -335,31 +338,33 @@ class ChatSettingsStore:
         if return_:
             raise PutMutedUntilError(return_.decode())
 
-    def put_pinned(self, user: JID, pinned: bool):
+    def put_pinned(self, user: JID | str, pinned: bool):
         """
         Pin or unpin a user.
 
         :param user: The user to be pinned or unpinned.
-        :type user: JID
+        :type user: JID | str
         :param pinned: True if the user should be pinned, False otherwise.
         :type pinned: bool
         :raises PutPinnedError: If there is an error while pinning the user.
         """
+        user = normalize_jid(user)
         user_buf = user.SerializeToString()
         return_ = self.__client.PutPinned(self.uuid, user_buf, len(user_buf), pinned)
         if return_:
             raise PutPinnedError(return_.decode())
 
-    def put_archived(self, user: JID, archived: bool):
+    def put_archived(self, user: JID | str, archived: bool):
         """
         Archive or unarchive a user.
 
         :param user: The user to be archived or unarchived.
-        :type user: JID
+        :type user: JID | str
         :param archived: True if the user should be archived, False otherwise.
         :type archived: bool
         :raises PutArchivedError: If there is an error while archiving the user.
         """
+        user = normalize_jid(user)
         user_buf = user.SerializeToString()
         return_ = self.__client.PutArchived(
             self.uuid, user_buf, len(user_buf), archived
@@ -367,16 +372,17 @@ class ChatSettingsStore:
         if return_:
             raise PutArchivedError(return_.decode())
 
-    def get_chat_settings(self, user: JID) -> LocalChatSettings:
+    def get_chat_settings(self, user: JID | str) -> LocalChatSettings:
         """
         Retrieve the chat settings for a user.
 
         :param user: The user whose chat settings are to be retrieved.
-        :type user: JID
+        :type user: JID | str
         :raises GetChatSettingsError: If there is an error while retrieving the chat settings.
         :return: The chat settings for the specified user.
         :rtype: LocalChatSettings
         """
+        user = normalize_jid(user)
         user_buf = user.SerializeToString()
         bytes_ptr = self.__client.GetChatSettings(self.uuid, user_buf, len(user_buf))
         protobytes = bytes_ptr.contents.get_bytes()
@@ -565,7 +571,7 @@ class NewClient:
 
     def send_message(
         self,
-        to: JID,
+        to: JID | str,
         message: typing.Union[Message, str],
         link_preview: bool = False,
         ghost_mentions: Optional[str] = None,
@@ -594,6 +600,7 @@ class NewClient:
         :return: The response from the server.
         :rtype: SendResponse
         """
+        to = normalize_jid(to)
         to_bytes = to.SerializeToString()
         if isinstance(message, str):
             mentioned_groups = self._parse_group_mention(message)
@@ -715,36 +722,17 @@ class NewClient:
 
     def reply_message(
         self,
-        message: typing.Union[str, MessageWithContextInfo],
+        message: str | MessageWithContextInfo,
         quoted: neonize_proto.Message,
-        to: Optional[JID] = None,
+        to: JID | str | None = None,
         link_preview: bool = False,
         reply_privately: bool = False,
         ghost_mentions: Optional[str] = None,
         mentions_are_lids: bool = False,
         add_msg_secret: bool = False,
     ) -> SendResponse:
-        """Send a reply message to a specified JID.
-
-        :param message: The message to be sent. Can be a string or a MessageWithContextInfo object.
-        :type message: typing.Union[str, MessageWithContextInfo]
-        :param quoted: The message to be quoted in the message being sent.
-        :type quoted: neonize_proto.Message
-        :param to: The recipient of the message. If not specified, the message is sent to the default recipient.
-        :type to: Optional[JID], optional
-        :param link_preview: If set to True, enables link previews in the message being sent. Defaults to False.
-        :type link_preview: bool, optional
-        :param reply_privately: If set to True, the message is sent as a private reply. Defaults to False.
-        :type reply_privately: bool, optional
-        :param ghost_mentions: List of users to tag silently (Takes precedence over auto detected mentions)
-        :type ghost_mentions: str, optional
-        :param mentions_are_lids: whether mentions contained in message or ghost_mentions are lids, defaults to False.
-        :type mentions_are_lids: bool, optional
-        :param add_msg_secret: If set to True generate 32 random bytes for messageSecret inside MessageContextInfo before sending, defaults to False
-        :type add_msg_secret: bool, optional
-        :return: Response of the send operation.
-        :rtype: SendResponse
-        """
+        """Send a reply message to a specified JID."""
+        
         if to is None:
             if reply_privately:
                 sender = quoted.Info.MessageSource.Sender
@@ -753,6 +741,7 @@ class NewClient:
                 to = JIDToNonAD(sender)
             else:
                 to = quoted.Info.MessageSource.Chat
+    
         return self.send_message(
             to,
             self.build_reply_message(
@@ -768,12 +757,12 @@ class NewClient:
         )
 
     def edit_message(
-        self, chat: JID, message_id: str, new_message: Message
+        self, chat: JID | str, message_id: str, new_message: Message
     ) -> SendResponse:
         """Edit a message.
 
         :param chat: Chat ID
-        :type chat: JID
+        :type chat: JID | str
         :param message_id: Message ID
         :type message_id: str
         :param new_message: New message
@@ -783,18 +772,20 @@ class NewClient:
         """
         return self.send_message(chat, build_edit(chat, message_id, new_message))
 
-    def revoke_message(self, chat: JID, sender: JID, message_id: str) -> SendResponse:
+    def revoke_message(self, chat: JID | str, sender: JID | str, message_id: str) -> SendResponse:
         """Revoke a message.
 
         :param chat: Chat ID
-        :type chat: JID
+        :type chat: JID | str
         :param sender: Sender ID
-        :type sender: JID
+        :type sender: JID | str
         :param message_id: Message ID
         :type message_id: str
         :return: Response from server
         :rtype: SendResponse
         """
+        sender = normalize_jid(sender)
+        chat = normalize_jid(chat)
         return self.send_message(chat, self.build_revoke(chat, sender, message_id))
 
     def build_poll_vote_creation(
@@ -870,7 +861,7 @@ class NewClient:
         return model.PollVote
 
     def build_reaction(
-        self, chat: JID, sender: JID, message_id: str, reaction: str
+        self, chat: JID | str, sender: JID | str, message_id: str, reaction: str
     ) -> Message:
         """
         This function builds a reaction message in a chat. It takes the chat and sender IDs,
@@ -880,9 +871,9 @@ class NewClient:
         It finally returns the reaction message.
 
         :param chat: The ID of the chat in which the reaction is being made
-        :type chat: JID
+        :type chat: JID | str
         :param sender: The ID of the sender making the reaction
-        :type sender: JID
+        :type sender: JID | str
         :param message_id: The ID of the message to which the reaction is being made
         :type message_id: str
         :param reaction: The reaction being made
@@ -890,8 +881,10 @@ class NewClient:
         :return: The reaction message
         :rtype: Message
         """
-        sender_proto = sender.SerializeToString()
-        chat_proto = chat.SerializeToString()
+        sender_jid = normalize_jid(sender)
+        chat_jid = normalize_jid(chat)
+        sender_proto = sender_jid.SerializeToString()
+        chat_proto = chat_jid.SerializeToString()
         bytes_ptr = self.__client.BuildReaction(
             self.uuid,
             chat_proto,
@@ -922,9 +915,11 @@ class NewClient:
         :return: The constructed Message object for revoking the specified message.
         :rtype: Message
         """
+        chat_jid = normalize_jid(chat)
+        sender_jid = normalize_jid(sender)
         if with_go:
-            chat_buf = chat.SerializeToString()
-            sender_buf = sender.SerializeToString()
+            chat_buf = chat_jid.SerializeToString()
+            sender_buf = sender_jid.SerializeToString()
             bytes_ptr = self.__client.BuildRevoke(
                 self.uuid,
                 chat_buf,
@@ -938,7 +933,7 @@ class NewClient:
             result = Message.FromString(protobytes)
             return result
         else:
-            return build_revoke(chat, sender, message_id, self.get_me().JID)
+            return build_revoke(chat_jid, sender_jid, message_id, self.get_me().JID)
 
     def build_sticker_message(
         self,
@@ -1038,7 +1033,7 @@ class NewClient:
 
     def send_sticker(
         self,
-        to: JID,
+        to: JID | str,
         file: typing.Union[str, bytes],
         quoted: Optional[neonize_proto.Message] = None,
         name: str = "",
@@ -1239,7 +1234,7 @@ class NewClient:
 
     def send_stickerpack(
         self,
-        to: JID,
+        to: JID | str,
         files: list,
         quoted: Optional[neonize_proto.Message] = None,
         packname: str = "Sticker pack",
@@ -1396,7 +1391,7 @@ class NewClient:
 
     def send_video(
         self,
-        to: JID,
+        to: JID | str,
         file: str | bytes,
         caption: Optional[str] = None,
         quoted: Optional[neonize_proto.Message] = None,
@@ -1520,7 +1515,7 @@ class NewClient:
 
     def send_image(
         self,
-        to: JID,
+        to: JID | str,
         file: str | bytes,
         caption: Optional[str] = None,
         quoted: Optional[neonize_proto.Message] = None,
@@ -1587,7 +1582,7 @@ class NewClient:
 
     def send_album(
         self,
-        to: JID,
+        to: JID | str,
         files: list,
         caption: Optional[str] = None,
         quoted: Optional[neonize_proto.Message] = None,
@@ -1713,16 +1708,17 @@ class NewClient:
         io = BytesIO(get_bytes_from_name_or_url(file))
         io.seek(0)
         buff = io.read()
+        waveform = None
         if ptt:
             with FFmpeg(buff) as ffmpeg:
                 buff = ffmpeg.to_ptt()
+                waveform = ffmpeg.get_audio_waveform(buff) 
 
         upload = self.upload(buff)
 
         with FFmpeg(buff) as ffmpeg:
             duration = int((ffmpeg.extract_info()).format.duration)
-            waveform = ffmpeg.get_audio_waveform(buff)
-
+            
         message = Message(
             audioMessage=AudioMessage(
                 URL=upload.url,
@@ -1749,7 +1745,7 @@ class NewClient:
 
     def send_audio(
         self,
-        to: JID,
+        to: JID | str,
         file: str | bytes,
         ptt: bool = False,
         quoted: Optional[neonize_proto.Message] = None,
@@ -1879,7 +1875,7 @@ class NewClient:
 
     def send_contact(
         self,
-        to: JID,
+        to: JID | str,
         contact_name: str,
         contact_number: str,
         quoted: Optional[neonize_proto.Message] = None,
@@ -2029,7 +2025,7 @@ class NewClient:
         return self.__client.GenerateMessageID(self.uuid).decode()
 
     def send_chat_presence(
-        self, jid: JID, state: ChatPresence, media: ChatPresenceMedia
+        self, jid: JID | str, state: ChatPresence, media: ChatPresenceMedia
     ) -> str:
         """Sends chat presence information.
 
@@ -2042,6 +2038,7 @@ class NewClient:
         :return: A string indicating the result or status of the presence information sending.
         :rtype: str
         """
+        jid = normalized_jid(jid)
         jidbyte = jid.SerializeToString()
         return self.__client.SendChatPresence(
             self.uuid, jidbyte, len(jidbyte), state.value, media.value
@@ -2111,15 +2108,16 @@ class NewClient:
             raise GetUserInfoError(model.Error)
         return model.UsersInfo
 
-    def get_group_info(self, jid: JID) -> GroupInfo:
+    def get_group_info(self, jid: JID | str) -> GroupInfo:
         """Retrieves information about a group.
 
         :param jid: The JID (Jabber Identifier) of the group.
-        :type jid: JID
+        :type jid: JID | str
         :raises GetGroupInfoError: Raised if there is an issue retrieving group information.
         :return: Information about the specified group.
         :rtype: GroupInfo
         """
+        jid = normalize_jid(jid)
         jidbuf = jid.SerializeToString()
         bytes_ptr = self.__client.GetGroupInfo(
             self.uuid,
@@ -2187,26 +2185,27 @@ class NewClient:
             raise GetGroupInfoError(model.Error)
         return model.GroupInfo
 
-    def set_group_name(self, jid: JID, name: str) -> str:
+    def set_group_name(self, jid: JID | str, name: str) -> str:
         """Sets the name of a group.
 
         :param jid: The JID (Jabber Identifier) of the group.
-        :type jid: JID
+        :type jid: JID | str
         :param name: The new name to be set for the group.
         :type name: str
         :return: A string indicating the result or an error status. Empty string if successful.
         :rtype: str
         """
+        jid = normalize_jid(jid)
         jidbuf = jid.SerializeToString()
         return self.__client.SetGroupName(
             self.uuid, jidbuf, len(jidbuf), ctypes.create_string_buffer(name.encode())
         ).decode()
 
-    def set_group_photo(self, jid: JID, file_or_bytes: typing.Union[str, bytes]) -> str:
+    def set_group_photo(self, jid: JID | str, file_or_bytes: typing.Union[str, bytes]) -> str:
         """Sets the photo of a group.
 
         :param jid: The JID (Jabber Identifier) of the group.
-        :type jid: JID
+        :type jid: JID | str
         :param file_or_bytes: Either a file path (str) or binary data (bytes) representing the group photo.
         :type file_or_bytes: typing.Union[str, bytes]
         :raises SetGroupPhotoError: Raised if there is an issue setting the group photo.
@@ -2214,6 +2213,7 @@ class NewClient:
         :rtype: str
         """
         data = get_bytes_from_name_or_url(file_or_bytes)
+        jid = normalize_jid(jid)
         jid_buf = jid.SerializeToString()
         bytes_ptr = self.__client.SetGroupPhoto(
             self.uuid, jid_buf, len(jid_buf), data, len(data)
@@ -2243,15 +2243,16 @@ class NewClient:
             raise SetGroupPhotoError(model.Error)
         return model.PictureID
 
-    def get_lid_from_pn(self, jid: JID) -> JID:
+    def get_lid_from_pn(self, jid: JID | str) -> JID:
         """Retrieves the matching lid from the supplied jid.
 
         :param jid: The JID (Jabber Identifier) (pn) of the target user.
-        :type jid: JID
+        :type jid: JID | str
         :raises GetJIDFromStoreError: Raised if there is an issue getting the lid from the given jid.
         :return: The lid (hidden user) matching the supplied jid.
         :rtype: JID
         """
+        jid = normalize_jid(jid)
         jid_buf = jid.SerializeToString()
         bytes_ptr = self.__client.GetLIDFromPN(self.uuid, jid_buf, len(jid_buf))
         protobytes = bytes_ptr.contents.get_bytes()
@@ -2261,15 +2262,16 @@ class NewClient:
             raise GetJIDFromStoreError(model.Error)
         return model.Jid
 
-    def get_pn_from_lid(self, jid: JID) -> JID:
+    def get_pn_from_lid(self, jid: JID | str) -> JID:
         """Retrieves the matching jid from the supplied lid.
 
         :param jid: The JID (Jabber Identifier) (lid) of the target user.
-        :type jid: JID
+        :type jid: JID | str
         :raises GetJIDFromStoreError: Raised if there is an issue getting the jid from the given lid.
         :return: The jid (phone number) matching the supplied lid.
         :rtype: JID
         """
+        jid = normalize_jid(jid)
         jid_buf = jid.SerializeToString()
         bytes_ptr = self.__client.GetPNFromLID(self.uuid, jid_buf, len(jid_buf))
         protobytes = bytes_ptr.contents.get_bytes()
@@ -2303,28 +2305,30 @@ class NewClient:
             raise SendMessageError(model.Error)
         return model.SendResponse
 
-    def leave_group(self, jid: JID) -> str:
+    def leave_group(self, jid: JID | str) -> str:
         """Leaves a group.
 
         :param jid: The JID (Jabber Identifier) of the target group.
-        :type jid: JID
+        :type jid: JID | str
         :return: A string indicating the result or an error status. Empty string if successful.
         :rtype: str
         """
+        jid = normalize_jid(jid)
         jid_buf = jid.SerializeToString()
         return self.__client.LeaveGroup(self.uuid, jid_buf, len(jid_buf)).decode()
 
-    def get_group_invite_link(self, jid: JID, revoke: bool = False) -> str:
+    def get_group_invite_link(self, jid: JID | str, revoke: bool = False) -> str:
         """Gets or revokes the invite link for a group.
 
         :param jid: The JID (Jabber Identifier) of the group.
-        :type jid: JID
+        :type jid: JID | str
         :param revoke: Optional. If True, revokes the existing invite link; if False, gets the invite link. Defaults to False.
         :type revoke: bool, optional
         :raises GetGroupInviteLinkError: Raised if there is an issue getting or revoking the invite link.
         :return: The group invite link or an error status.
         :rtype: str
         """
+        jid = normalize_jid(jid)
         jid_buf = jid.SerializeToString()
         bytes_ptr = self.__client.GetGroupInviteLink(
             self.uuid, jid_buf, len(jid_buf), revoke
@@ -2384,16 +2388,18 @@ class NewClient:
         if err:
             raise JoinGroupWithInviteError(err)
 
-    def link_group(self, parent: JID, child: JID):
+    def link_group(self, parent: JID | str, child: JID | str):
         """
         Links a child group to a parent group.
 
         :param parent: The JID of the parent group
-        :type parent: JID
+        :type parent: JID | str
         :param child: The JID of the child group
-        :type child: JID
+        :type child: JID | str
         :raises LinkGroupError: If there is an error while linking the groups
         """
+        parent = normalize_jid(parent)
+        child = normalize_jid(child)
         parent_bytes = parent.SerializeToString()
         child_bytes = child.SerializeToString()
         err = self.__client.LinkGroup(
@@ -2498,15 +2504,16 @@ class NewClient:
             raise NewsletterSendReactionError(err)
         return
 
-    def newsletter_subscribe_live_updates(self, jid: JID) -> int:
+    def newsletter_subscribe_live_updates(self, jid: JID | str) -> int:
         """Subscribes a user to live updates of a newsletter.
 
         :param jid: The unique identifier of the user subscribing to the newsletter.
-        :type jid: JID
+        :type jid: JID | str
         :raises NewsletterSubscribeLiveUpdatesError: If there is an error during the subscription process.
         :return: The duration for which the subscription is valid.
         :rtype: int
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         bytes_ptr = self.__client.NewsletterSubscribeLiveUpdates(
             self.uuid, jid_proto, len(jid_proto)
@@ -2520,15 +2527,16 @@ class NewClient:
             raise NewsletterSubscribeLiveUpdatesError(model.Error)
         return model.Duration
 
-    def newsletter_toggle_mute(self, jid: JID, mute: bool):
+    def newsletter_toggle_mute(self, jid: JID | str, mute: bool):
         """Toggle the mute status of a given JID.
 
         :param jid: The JID (Jabber Identifier) of the user.
-        :type jid: JID
+        :type jid: JID | str
         :param mute: The desired mute status. If True, the user will be muted. If False, the user will be unmuted.
         :type mute: bool
         :raises NewsletterToggleMuteError: If there is an error while toggling the mute status.
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         err = self.__client.NewsletterToggleMute(
             self.uuid, jid_proto, len(jid_proto), mute
@@ -2606,18 +2614,19 @@ class NewClient:
         if err:
             raise SetDefaultDisappearingTimerError(err)
 
-    def set_disappearing_timer(self, jid: JID, timer: typing.Union[timedelta, int]):
+    def set_disappearing_timer(self, jid: JID | str, timer: typing.Union[timedelta, int]):
         """
         Set a disappearing timer for a specific JID. The timer can be set as either a timedelta object or an integer.
         If a timedelta object is provided, it's converted into nanoseconds. If an integer is provided, it's interpreted as nanoseconds.
 
         :param jid: The JID for which the disappearing timer is to be set
-        :type jid: JID
+        :type jid: JID | str
         :param timer: The duration for the disappearing timer. Can be a timedelta object or an integer representing nanoseconds.
         :type timer: typing.Union[timedelta, int]
         :raises SetDisappearingTimerError: If there is an error in setting the disappearing timer
         """
         timestamp = 0
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         if isinstance(timer, timedelta):
             timestamp = int(timer.total_seconds() * 1000**3)
@@ -2638,16 +2647,17 @@ class NewClient:
         """
         self.__client.SetForceActiveDeliveryReceipts(self.uuid, active)
 
-    def set_group_announce(self, jid: JID, announce: bool):
+    def set_group_announce(self, jid: JID | str, announce: bool):
         """
         Sets the announcement status of a group.
 
         :param jid: The unique identifier of the group
-        :type jid: JID
+        :type jid: JID | str
         :param announce: The announcement status to be set. If True, announcements are enabled. If False, they are disabled.
         :type announce: bool
         :raises SetGroupAnnounceError: If there is an error while setting the announcement status
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         err = self.__client.SetGroupAnnounce(
             self.uuid, jid_proto, len(jid_proto), announce
@@ -2655,16 +2665,17 @@ class NewClient:
         if err:
             raise SetGroupAnnounceError(err)
 
-    def set_group_locked(self, jid: JID, locked: bool):
+    def set_group_locked(self, jid: JID | str, locked: bool):
         """
         Sets the locked status of a group identified by the given JID.
 
         :param jid: The JID (Jabber ID) of the group to be locked/unlocked.
-        :type jid: JID
+        :type jid: JID | str
         :param locked: The new locked status of the group. True to lock the group, False to unlock.
         :type locked: bool
         :raises SetGroupLockedError: If the operation fails, an error with the reason for the failure is raised.
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         err = self.__client.SetGroupLocked(
             self.uuid, jid_proto, len(jid_proto), locked
@@ -2672,12 +2683,12 @@ class NewClient:
         if err:
             raise SetGroupLockedError(err)
 
-    def set_group_topic(self, jid: JID, previous_id: str, new_id: str, topic: str):
+    def set_group_topic(self, jid: JID | str, previous_id: str, new_id: str, topic: str):
         """
         Set the topic of a group in a chat application.
 
         :param jid: The unique identifier of the group
-        :type jid: JID
+        :type jid: JID | str
         :param previous_id: The previous identifier of the topic
         :type previous_id: str
         :param new_id: The new identifier for the topic
@@ -2686,6 +2697,7 @@ class NewClient:
         :type topic: str
         :raises SetGroupTopicError: If there is an error setting the group topic
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         err = self.__client.SetGroupTopic(
             self.uuid,
@@ -2738,14 +2750,15 @@ class NewClient:
         if err:
             raise SetStatusMessageError(err)
 
-    def subscribe_presence(self, jid: JID):
+    def subscribe_presence(self, jid: JID | str):
         """
         This method is used to subscribe to the presence of a certain JID (Jabber ID).
 
         :param jid: The Jabber ID (JID) that we want to subscribe to.
-        :type jid: JID
+        :type jid: JID | str
         :raises SubscribePresenceError: If there is an error while subscribing to the presence of the JID.
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         err = self.__client.SubscribePresence(
             self.uuid, jid_proto, len(jid_proto)
@@ -2753,14 +2766,15 @@ class NewClient:
         if err:
             raise SubscribePresenceError(err)
 
-    def unfollow_newsletter(self, jid: JID):
+    def unfollow_newsletter(self, jid: JID | str):
         """
         Unfollows a newsletter by providing the JID (Jabber ID) of the newsletter.
 
         :param jid: The Jabber ID of the newsletter to unfollow.
-        :type jid: JID
+        :type jid: JID | str
         :raises UnfollowNewsletterError: If there is an error while attempting to unfollow the newsletter.
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         err = self.__client.UnfollowNewsletter(
             self.uuid, jid_proto, len(jid_proto)
@@ -2768,16 +2782,18 @@ class NewClient:
         if err:
             raise UnfollowNewsletterError(err)
 
-    def unlink_group(self, parent: JID, child: JID):
+    def unlink_group(self, parent: JID | str, child: JID | str):
         """
         This method is used to unlink a child group from a parent group.
 
         :param parent: The JID of the parent group from which the child group is to be unlinked.
-        :type parent: JID
+        :type parent: JID | str
         :param child: The JID of the child group which is to be unlinked from the parent group.
-        :type child: JID
+        :type child: JID | str
         :raises UnlinkGroupError: If there is an error while unlinking the child group from the parent group.
         """
+        parent = normalize_jid(parent)
+        child = normalize_jid(child)
         parent_proto = parent.SerializeToString()
         child_proto = child.SerializeToString()
         err = self.__client.UnlinkGroup(
@@ -2786,18 +2802,19 @@ class NewClient:
         if err:
             raise UnlinkGroupError(err)
 
-    def update_blocklist(self, jid: JID, action: BlocklistAction) -> Blocklist:
+    def update_blocklist(self, jid: JID | str, action: BlocklistAction) -> Blocklist:
         """
         Function to update the blocklist with a given action on a specific JID.
 
         :param jid: The Jabber ID (JID) of the user to be blocked or unblocked.
-        :type jid: JID
+        :type jid: JID | str
         :param action: The action to be performed (block or unblock) on the JID.
         :type action: BlocklistAction
         :raises UpdateBlocklistError: If there is an error while updating the blocklist.
         :return: The updated blocklist.
         :rtype: Blocklist
         """
+        jid = normalize_jid(jid)
         jid_proto = jid.SerializeToString()
         bytes_ptr = self.__client.UpdateBlocklist(
             self.uuid, jid_proto, len(jid_proto), action.value.encode()
@@ -2810,22 +2827,24 @@ class NewClient:
         return model.Blocklist
 
     def update_group_participants(
-        self, jid: JID, participants_changes: List[JID], action: ParticipantChange
+        self, jid: JID | str, participants_changes: List[JID | str], action: ParticipantChange
     ) -> RepeatedCompositeFieldContainer[GroupParticipant]:
         """
         This method is used to update the list of participants in a group.
         It takes in the group's JID, a list of participant changes, and an action to perform.
 
         :param jid: The JID (Jabber ID) of the group to update.
-        :type jid: JID
+        :type jid: JID | str
         :param participants_changes: A list of JIDs representing the participants to be added or removed.
-        :type participants_changes: List[JID]
+        :type participants_changes: List[JID | str]
         :param action: The action to perform (add, remove, promote or demote participants).
         :type action: ParticipantChange
         :raises UpdateGroupParticipantsError: This error is raised if there is a problem updating the group participants.
         :return: A list of the updated group participants.
         :rtype: RepeatedCompositeFieldContainer[GroupParticipant]
         """
+        jid = normalize_jid(jid)
+        participants_changes = [normalize_jid(p) for p in participants_changes]
         jid_proto = jid.SerializeToString()
         jids_proto = neonize_proto.JIDArray(
             JIDS=participants_changes
@@ -2871,7 +2890,7 @@ class NewClient:
     def create_group(
         self,
         name: str,
-        participants: List[JID] = [],
+        participants: List[JID | str] = [],
         linked_parent: Optional[GroupLinkedParent] = None,
         group_parent: Optional[GroupParent] = None,
     ) -> GroupInfo:
@@ -2880,7 +2899,7 @@ class NewClient:
         :param name: The name of the new group.
         :type name: str
         :param participants: Optional. A list of participant JIDs (Jabber Identifiers) to be included in the group. Defaults to an empty list.
-        :type participants: List[JID], optional
+        :type participants: List[JID | str], optional
         :param linked_parent: Optional. Information about a linked parent group, if applicable. Defaults to None.
         :type linked_parent: Optional[GroupLinkedParent], optional
         :param group_parent: Optional. Information about a parent group, if applicable. Defaults to None.
@@ -2888,6 +2907,7 @@ class NewClient:
         :return: Information about the newly created group.
         :rtype: GroupInfo
         """
+        participants = [normalize_jid(p) for p in participants]
         group_info = ReqCreateGroup(
             name=name, Participants=participants, CreateKey=self.generate_message_id()
         )
@@ -2973,16 +2993,17 @@ class NewClient:
             raise CreateNewsletterError(model.Error)
         return model.NewsletterMetadata
 
-    def follow_newsletter(self, jid: JID):
+    def follow_newsletter(self, jid: JID | str):
         """Follows a newsletter with the given JID.
 
         :param jid: The JID of the newsletter to follow.
-        :type jid: JID
+        :type jid: JID | str
         :return: None
         :rtype: None
         :raises FollowNewsletterError: If there is an error following the newsletter.
         """
 
+        jid = normalize_jid(jid)
         jidbyte = jid.SerializeToString()
         err = self.__client.FollowNewsletter(self.uuid, jidbyte, len(jidbyte)).decode()
         if err:
@@ -3167,16 +3188,17 @@ class NewClient:
             raise GetSubscribedNewslettersError(model.Error)
         return model.Newsletter
 
-    def get_user_devices(self, *jids: JID) -> RepeatedCompositeFieldContainer[JID]:
+    def get_user_devices(self, *jids: JID | str) -> RepeatedCompositeFieldContainer[JID]:
         """
         Retrieve devices associated with specified user JIDs.
 
         :param jids: Variable number of JIDs (Jabber Identifiers) of users.
-        :type jids: JID
+        :type jids: JID | str
         :raises GetUserDevicesError: If there is an error retrieving user devices.
         :return: Devices associated with the specified user JIDs.
         :rtype: RepeatedCompositeFieldContainer[JID]
         """
+        jids = [normalize_jid(jid) for jid in jids]
         jids_ = neonize_proto.JIDArray(JIDS=jids).SerializeToString()
         bytes_ptr = self.__client.GetUserDevices(self.uuid, jids_, len(jids_))
         protobytes = bytes_ptr.contents.get_bytes()
@@ -3256,16 +3278,17 @@ class NewClient:
             raise GetLinkedGroupParticipantsError(model.Error)
         return model.Participants
 
-    def get_newsletter_info(self, jid: JID) -> neonize_proto.NewsletterMetadata:
+    def get_newsletter_info(self, jid: JID | str) -> neonize_proto.NewsletterMetadata:
         """
         Fetches the metadata of a specific newsletter using its JID.
 
         :param jid: The unique identifier of the newsletter
-        :type jid: JID
+        :type jid: JID | str
         :raises GetNewsletterInfoError: If there is an error while fetching the newsletter information
         :return: The metadata of the requested newsletter
         :rtype: neonize_proto.NewsletterMetadata
         """
+        jid = normalize_jid(jid)
         jidbyte = jid.SerializeToString()
         bytes_ptr = self.__client.GetNewsletterInfo(self.uuid, jidbyte, len(jidbyte))
         protobytes = bytes_ptr.contents.get_bytes()
