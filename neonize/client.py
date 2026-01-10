@@ -187,7 +187,7 @@ from .utils.enum import (
 )
 from .utils.ffmpeg import FFmpeg
 from .utils.iofile import get_bytes_from_name_or_url, prepare_zip_file_content
-from .utils.jid import Jid2String, JIDToNonAD, build_jid, jid_is_lid, normalized_jid
+from .utils.jid import Jid2String, JIDToNonAD, build_jid, jid_is_lid, normalize_jid
 from .utils.sticker import convert_to_sticker, convert_to_webp
 
 _log_ = logging.getLogger(__name__)
@@ -2038,7 +2038,7 @@ class NewClient:
         :return: A string indicating the result or status of the presence information sending.
         :rtype: str
         """
-        jid = normalized_jid(jid)
+        jid = normalize_jid(jid)
         jidbyte = jid.SerializeToString()
         return self.__client.SendChatPresence(
             self.uuid, jidbyte, len(jidbyte), state.value, media.value
