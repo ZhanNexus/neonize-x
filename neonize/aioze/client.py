@@ -709,7 +709,13 @@ class NewAClient:
         extra_len = len(extra_params) if extra_params is not None else 0
 
         bytes_ptr = await self.__client.SendMessage(
-            self.uuid, to_bytes, len(to_bytes), message_bytes, len(message_bytes),extra_params,extra_len,
+            self.uuid,
+            to_bytes,
+            len(to_bytes),
+            message_bytes,
+            len(message_bytes),
+            extra_params,
+            extra_len,
         )
         protobytes = bytes_ptr.contents.get_bytes()
         free_bytes(bytes_ptr)
@@ -2924,7 +2930,9 @@ class NewAClient:
         if err:
             raise UnlinkGroupError(err)
 
-    async def update_blocklist(self, jid: JID | str, action: BlocklistAction) -> Blocklist:
+    async def update_blocklist(
+        self, jid: JID | str, action: BlocklistAction
+    ) -> Blocklist:
         """
         Function to update the blocklist with a given action on a specific JID.
 
@@ -2949,7 +2957,10 @@ class NewAClient:
         return model.Blocklist
 
     async def update_group_participants(
-        self, jid: JID | str, participants_changes: List[JID | str], action: ParticipantChange
+        self,
+        jid: JID | str,
+        participants_changes: List[JID | str],
+        action: ParticipantChange,
     ) -> RepeatedCompositeFieldContainer[GroupParticipant]:
         """
         This method is used to update the list of participants in a group.
@@ -3410,7 +3421,9 @@ class NewAClient:
             raise GetLinkedGroupParticipantsError(model.Error)
         return model.GetLinkedGroupsParticipants
 
-    async def get_newsletter_info(self, jid: JID | str) -> neonize_proto.NewsletterMetadata:
+    async def get_newsletter_info(
+        self, jid: JID | str
+    ) -> neonize_proto.NewsletterMetadata:
         """
         Fetches the metadata of a specific newsletter using its JID.
 
