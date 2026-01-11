@@ -626,7 +626,7 @@ class NewClient:
                 msg = Message(extendedTextMessage=partial_msg)
         else:
             msg = message
-            
+
         if context_info is not None:
 
             def merge_additional_context_info(proto_obj):
@@ -657,7 +657,13 @@ class NewClient:
         extra_len = len(extra_params) if extra_params is not None else 0
 
         bytes_ptr = self.__client.SendMessage(
-            self.uuid, to_bytes, len(to_bytes), message_bytes, len(message_bytes),extra_params,extra_len,
+            self.uuid,
+            to_bytes,
+            len(to_bytes),
+            message_bytes,
+            len(message_bytes),
+            extra_params,
+            extra_len,
         )
         protobytes = bytes_ptr.contents.get_bytes()
         free_bytes(bytes_ptr)
@@ -732,7 +738,7 @@ class NewClient:
         add_msg_secret: bool = False,
     ) -> SendResponse:
         """Send a reply message to a specified JID."""
-        
+
         if to is None:
             if reply_privately:
                 sender = quoted.Info.MessageSource.Sender
@@ -741,7 +747,7 @@ class NewClient:
                 to = JIDToNonAD(sender)
             else:
                 to = quoted.Info.MessageSource.Chat
-    
+
         return self.send_message(
             to,
             self.build_reply_message(
@@ -772,7 +778,9 @@ class NewClient:
         """
         return self.send_message(chat, build_edit(chat, message_id, new_message))
 
-    def revoke_message(self, chat: JID | str, sender: JID | str, message_id: str) -> SendResponse:
+    def revoke_message(
+        self, chat: JID | str, sender: JID | str, message_id: str
+    ) -> SendResponse:
         """Revoke a message.
 
         :param chat: Chat ID
@@ -1712,13 +1720,13 @@ class NewClient:
         if ptt:
             with FFmpeg(buff) as ffmpeg:
                 buff = ffmpeg.to_ptt()
-                waveform = ffmpeg.get_audio_waveform(buff) 
+                waveform = ffmpeg.get_audio_waveform(buff)
 
         upload = self.upload(buff)
 
         with FFmpeg(buff) as ffmpeg:
             duration = int((ffmpeg.extract_info()).format.duration)
-            
+
         message = Message(
             audioMessage=AudioMessage(
                 URL=upload.url,
@@ -2201,7 +2209,9 @@ class NewClient:
             self.uuid, jidbuf, len(jidbuf), ctypes.create_string_buffer(name.encode())
         ).decode()
 
-    def set_group_photo(self, jid: JID | str, file_or_bytes: typing.Union[str, bytes]) -> str:
+    def set_group_photo(
+        self, jid: JID | str, file_or_bytes: typing.Union[str, bytes]
+    ) -> str:
         """Sets the photo of a group.
 
         :param jid: The JID (Jabber Identifier) of the group.
@@ -2614,7 +2624,9 @@ class NewClient:
         if err:
             raise SetDefaultDisappearingTimerError(err)
 
-    def set_disappearing_timer(self, jid: JID | str, timer: typing.Union[timedelta, int]):
+    def set_disappearing_timer(
+        self, jid: JID | str, timer: typing.Union[timedelta, int]
+    ):
         """
         Set a disappearing timer for a specific JID. The timer can be set as either a timedelta object or an integer.
         If a timedelta object is provided, it's converted into nanoseconds. If an integer is provided, it's interpreted as nanoseconds.
@@ -2683,7 +2695,9 @@ class NewClient:
         if err:
             raise SetGroupLockedError(err)
 
-    def set_group_topic(self, jid: JID | str, previous_id: str, new_id: str, topic: str):
+    def set_group_topic(
+        self, jid: JID | str, previous_id: str, new_id: str, topic: str
+    ):
         """
         Set the topic of a group in a chat application.
 
@@ -2827,7 +2841,10 @@ class NewClient:
         return model.Blocklist
 
     def update_group_participants(
-        self, jid: JID | str, participants_changes: List[JID | str], action: ParticipantChange
+        self,
+        jid: JID | str,
+        participants_changes: List[JID | str],
+        action: ParticipantChange,
     ) -> RepeatedCompositeFieldContainer[GroupParticipant]:
         """
         This method is used to update the list of participants in a group.
@@ -3188,7 +3205,9 @@ class NewClient:
             raise GetSubscribedNewslettersError(model.Error)
         return model.Newsletter
 
-    def get_user_devices(self, *jids: JID | str) -> RepeatedCompositeFieldContainer[JID]:
+    def get_user_devices(
+        self, *jids: JID | str
+    ) -> RepeatedCompositeFieldContainer[JID]:
         """
         Retrieve devices associated with specified user JIDs.
 

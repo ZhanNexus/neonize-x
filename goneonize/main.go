@@ -74,7 +74,7 @@ func getByteByAddr(addr *C.uchar, size C.int) []byte {
 	// return result
 }
 
-// Get button type 
+// Get button type
 func getButtonTypeFromMessage(msg *waE2E.Message) string {
 	switch {
 	case msg.ViewOnceMessage != nil:
@@ -86,7 +86,7 @@ func getButtonTypeFromMessage(msg *waE2E.Message) string {
 	case msg.ButtonsMessage != nil:
 		return "buttons"
 	case msg.ListMessage != nil:
-		return "list"	
+		return "list"
 	case msg.InteractiveMessage != nil:
 		return "interactive"
 	default:
@@ -119,7 +119,7 @@ func GenerateWABinary(ctx context.Context, to types.JID, msg *waE2E.Message) *[]
 							if name == "payment_info" {
 								nativeFlowName = "payment_info"
 							} else if name == "payment_key_info" {
-							    nativeFlowName = "payment_key_info"
+								nativeFlowName = "payment_key_info"
 							}
 
 							bizNode := waBinary.Node{
@@ -435,7 +435,6 @@ func SendMessage(
 	messageByte *C.uchar, messageSize C.int,
 	extraByte *C.uchar, extraSize C.int,
 ) *C.struct_BytesReturn {
-
 	client := clients[C.GoString(id)]
 	return_ := defproto.SendMessageReturnFunction{}
 
@@ -471,7 +470,7 @@ func SendMessage(
 	bypassExtra := Bypass(client, jid, &message)
 
 	// ===== Merge bypass and extra params =====
-	finalExtra := bypassExtra 
+	finalExtra := bypassExtra
 	if protoExtra != nil {
 		if protoExtra.ID != "" {
 			finalExtra.ID = protoExtra.ID

@@ -17,6 +17,7 @@ def JIDToNonAD(jid: JID) -> JID:
     new_jid.Device = 0
     return new_jid
 
+
 def normalize_jid(jid: JID | str) -> JID:
     """Normalize jid
     :param to: StrJID or ObjJID
@@ -27,15 +28,17 @@ def normalize_jid(jid: JID | str) -> JID:
         return jid
     raise TypeError("Invalid JID")
 
+
 def StrToJID(jid: str) -> JID:
     """Converts string JID to object JID.
-    
+
     :param jid: String JID to be converted.
     :type jid: str
     :return: JID Object
     :rtype: JID
     """
-    return build_jid(jid.split("@")[0],server=jid.split("@")[1])
+    return build_jid(jid.split("@")[0], server=jid.split("@")[1])
+
 
 def Jid2String(jid: JID) -> str:
     """Converts a Jabber Identifier (JID) to a string.
